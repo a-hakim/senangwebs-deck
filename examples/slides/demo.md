@@ -114,4 +114,4 @@ This layout places an image on the right side while text stays on the left.
 
 # Thank You!
 
-Made with  using SenangWebs Deck
+Made with ❤️ using SenangWebs Deck
