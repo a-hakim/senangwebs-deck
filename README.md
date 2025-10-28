@@ -2,7 +2,7 @@
 
 A modern, lightweight JavaScript library for creating beautiful web-based presentations with multiple input formats (HTML, Markdown, JSON).
 
-## 🚀 Features
+## Features
 
 - **Multiple Input Formats**: Create slides using HTML attributes, Markdown, or JSON
 - **10+ Built-in Layouts**: Cover, two-column, center, quote, image layouts, and more
@@ -15,7 +15,7 @@ A modern, lightweight JavaScript library for creating beautiful web-based presen
 - **Plugin System**: Extend functionality with plugins (notes, timer, etc.)
 - **Accessibility**: WCAG 2.1 compliant with full keyboard navigation
 
-## 📦 Installation
+## Installation
 
 ### Via NPM
 
@@ -33,7 +33,7 @@ npm install @senangwebs/deck
 <script src="https://cdn.jsdelivr.net/npm/@senangwebs/deck/dist/swd.js"></script>
 ```
 
-## 🎯 Quick Start
+## Quick Start
 
 ### HTML Attributes
 
@@ -131,14 +131,14 @@ const deck = new SWD('#presentation', {
 });
 ```
 
-## 📖 Documentation
+## Documentation
 
 - [Getting Started Guide](docs/getting-started.md)
 - [Markdown Format Guide](docs/markdown-format.md)
 - [API Documentation](docs/api.md)
 - [Examples](examples/)
 
-## 🎨 Available Layouts
+## Available Layouts
 
 - `cover` - Full-screen title slide
 - `default` - Single column content
@@ -151,7 +151,7 @@ const deck = new SWD('#presentation', {
 - `image-left` - Image left, content right
 - `full-image` - Full-screen image with overlay
 
-## 🎭 Available Themes
+## Available Themes
 
 - `light` - Clean, bright theme
 - `dark` - Dark mode
@@ -161,7 +161,7 @@ const deck = new SWD('#presentation', {
 - `creative` - Bold and artistic
 - `academic` - Traditional scholarly
 
-## ⌨️ Keyboard Shortcuts
+## Keyboard Shortcuts
 
 - `→` / `Space` - Next slide
 - `←` - Previous slide
@@ -172,18 +172,16 @@ const deck = new SWD('#presentation', {
 - `P` - Pause auto-slide
 - `Esc` - Exit fullscreen/overview
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
+## License
 
 MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [Marked.js](https://marked.js.org/) - Markdown parsing
 - [Prism.js](https://prismjs.com/) - Syntax highlighting
 - [DOMPurify](https://github.com/cure53/DOMPurify) - HTML sanitization
-
-**Made with ❤️ by SenangWebs**
