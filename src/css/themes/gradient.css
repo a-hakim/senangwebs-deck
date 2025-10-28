@@ -1,0 +1,38 @@
+/**
+ * Gradient Theme
+ */
+
+.swd-theme-gradient {
+  --swd-primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --swd-primary-text: #ffffff;
+  --swd-secondary-text: #f0f0f0;
+  --swd-accent-color: #ffd700;
+  --swd-border-color: rgba(255, 255, 255, 0.2);
+}
+
+.swd-theme-gradient .swd-wrapper {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.swd-theme-gradient h1,
+.swd-theme-gradient h2,
+.swd-theme-gradient h3,
+.swd-theme-gradient h4,
+.swd-theme-gradient h5,
+.swd-theme-gradient h6 {
+  color: #ffffff;
+}
+
+.swd-theme-gradient code {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffd700;
+}
+
+.swd-theme-gradient pre {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.swd-theme-gradient .swd-layout-section {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffffff;
+}

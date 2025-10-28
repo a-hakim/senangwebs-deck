@@ -1,0 +1,176 @@
+{
+  "slides": [
+    {
+      "layout": "cover",
+      "title": "Welcome to SWD",
+      "subtitle": "JSON Edition",
+      "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    },
+    {
+      "layout": "default",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What is SenangWebs Deck?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A modern presentation library that supports multiple formats."
+        },
+        {
+          "type": "list",
+          "items": [
+            "HTML attributes",
+            "Markdown",
+            "JSON data (you're looking at it!)"
+          ]
+        }
+      ]
+    },
+    {
+      "layout": "two-cols",
+      "left": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Left Column"
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the left side of a two-column layout."
+        },
+        {
+          "type": "list",
+          "items": ["Point one", "Point two", "Point three"]
+        }
+      ],
+      "right": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Right Column"
+        },
+        {
+          "type": "paragraph",
+          "text": "And this is the right side!"
+        },
+        {
+          "type": "code",
+          "language": "javascript",
+          "code": "const swd = new SWD('#presentation', {\n  source: 'json',\n  data: slidesData\n});"
+        }
+      ]
+    },
+    {
+      "layout": "center",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Centered Content"
+        },
+        {
+          "type": "paragraph",
+          "text": "Everything here is perfectly centered"
+        },
+        {
+          "type": "paragraph",
+          "text": "Perfect for important messages"
+        }
+      ]
+    },
+    {
+      "layout": "quote",
+      "quote": "The only way to do great work is to love what you do.",
+      "author": "Steve Jobs"
+    },
+    {
+      "layout": "three-cols",
+      "col1": [
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Column 1"
+        },
+        {
+          "type": "paragraph",
+          "text": "First section content"
+        }
+      ],
+      "col2": [
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Column 2"
+        },
+        {
+          "type": "paragraph",
+          "text": "Second section content"
+        }
+      ],
+      "col3": [
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Column 3"
+        },
+        {
+          "type": "paragraph",
+          "text": "Third section content"
+        }
+      ]
+    },
+    {
+      "layout": "section",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Features"
+        }
+      ]
+    },
+    {
+      "layout": "default",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Key Features"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            "Easy to Use - Simple syntax",
+            "Flexible - Multiple formats",
+            "Beautiful - 7 built-in themes",
+            "Responsive - Works everywhere"
+          ]
+        }
+      ]
+    },
+    {
+      "layout": "image-right",
+      "image": "https://via.placeholder.com/400",
+      "imageAlt": "Sample Image",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Image on Right"
+        },
+        {
+          "type": "paragraph",
+          "text": "This layout places an image on the right side while text stays on the left."
+        }
+      ]
+    },
+    {
+      "layout": "cover",
+      "title": "Thank You!",
+      "subtitle": "Made with ❤️ using SenangWebs Deck"
+    }
+  ]
+}

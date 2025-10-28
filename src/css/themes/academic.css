@@ -1,0 +1,70 @@
+/**
+ * Academic Theme
+ */
+
+.swd-theme-academic {
+  --swd-primary-bg: #f5f5f0;
+  --swd-primary-text: #1a1a1a;
+  --swd-secondary-text: #4a4a4a;
+  --swd-accent-color: #8b0000;
+  --swd-border-color: #d4d4ce;
+  --swd-font-family: 'Times New Roman', Times, serif;
+  --swd-heading-font: 'Times New Roman', Times, serif;
+}
+
+.swd-theme-academic h1,
+.swd-theme-academic h2,
+.swd-theme-academic h3 {
+  color: #8b0000;
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 2px solid #8b0000;
+  padding-bottom: 0.5rem;
+}
+
+.swd-theme-academic .swd-layout-section {
+  background: #8b0000;
+  color: #f5f5f0;
+}
+
+.swd-theme-academic code {
+  background: #e8e8e3;
+  color: #1a1a1a;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.swd-theme-academic pre {
+  background: #e8e8e3;
+  border: 1px solid #8b0000;
+  font-size: 0.85em;
+}
+
+.swd-theme-academic blockquote {
+  border-left: 4px solid #8b0000;
+  background: rgba(139, 0, 0, 0.05);
+  font-style: italic;
+  padding: 1rem 1.5rem;
+}
+
+.swd-theme-academic ul,
+.swd-theme-academic ol {
+  line-height: 1.8;
+}
+
+.swd-theme-academic table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.swd-theme-academic th,
+.swd-theme-academic td {
+  border: 1px solid #8b0000;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.swd-theme-academic th {
+  background: #8b0000;
+  color: #f5f5f0;
+}

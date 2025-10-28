@@ -1,0 +1,25 @@
+/**
+ * Dark Theme
+ */
+
+.swd-theme-dark {
+  --swd-primary-bg: #1a1a1a;
+  --swd-primary-text: #ffffff;
+  --swd-secondary-text: #b0b0b0;
+  --swd-accent-color: #4a9eff;
+  --swd-border-color: #333333;
+}
+
+.swd-theme-dark code {
+  background: #2d2d2d;
+  color: #f8f8f2;
+}
+
+.swd-theme-dark pre {
+  background: #2d2d2d;
+}
+
+.swd-theme-dark .swd-layout-section {
+  background: #4a9eff;
+  color: #ffffff;
+}

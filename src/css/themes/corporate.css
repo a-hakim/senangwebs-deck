@@ -1,0 +1,39 @@
+/**
+ * Corporate Theme
+ */
+
+.swd-theme-corporate {
+  --swd-primary-bg: #ffffff;
+  --swd-primary-text: #2c3e50;
+  --swd-secondary-text: #5d6d7e;
+  --swd-accent-color: #2874a6;
+  --swd-border-color: #d5d8dc;
+  --swd-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --swd-heading-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.swd-theme-corporate h1,
+.swd-theme-corporate h2,
+.swd-theme-corporate h3 {
+  color: #1a5490;
+  font-weight: 600;
+}
+
+.swd-theme-corporate .swd-layout-section {
+  background: #2874a6;
+  color: #ffffff;
+}
+
+.swd-theme-corporate code {
+  background: #ebf5fb;
+  color: #1a5490;
+}
+
+.swd-theme-corporate pre {
+  background: #ebf5fb;
+  border: 1px solid #aed6f1;
+}
+
+.swd-theme-corporate blockquote {
+  border-left-color: #2874a6;
+}

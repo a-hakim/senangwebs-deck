@@ -1,0 +1,23 @@
+/**
+ * Three Columns Layout Styles
+ */
+
+.swd-layout-three-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 3rem;
+  align-items: start;
+}
+
+.swd-layout-three-cols .swd-col {
+  min-width: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .swd-layout-three-cols {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

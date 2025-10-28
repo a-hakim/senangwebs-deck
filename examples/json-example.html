@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWD Example - JSON</title>
+  <link rel="stylesheet" href="../dist/swd.css">
+</head>
+<body>
+  <!-- Presentation Container -->
+  <div id="presentation"></div>
+
+  <!-- Load SWD Library -->
+  <script src="../dist/swd.js"></script>
+  <script>
+    // Initialize presentation with JSON
+    const deck = new SWD('#presentation', {
+      source: 'json',
+      jsonUrl: './data/demo.json',
+      theme: 'dark',
+      transition: 'fade',
+      keyboard: true,
+      controls: true,
+      progress: true
+    });
+  </script>
+</body>
+</html>

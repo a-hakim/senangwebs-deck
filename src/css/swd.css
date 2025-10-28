@@ -10,9 +10,21 @@
 /* Layout Styles */
 @import './layouts/default.css';
 @import './layouts/cover.css';
+@import './layouts/center.css';
+@import './layouts/two-cols.css';
+@import './layouts/three-cols.css';
+@import './layouts/quote.css';
+@import './layouts/section.css';
+@import './layouts/image-layouts.css';
 
 /* Theme Styles */
 @import './themes/light.css';
+@import './themes/dark.css';
+@import './themes/gradient.css';
+@import './themes/minimal.css';
+@import './themes/corporate.css';
+@import './themes/creative.css';
+@import './themes/academic.css';
 
 /* Component Styles */
 @import './components/controls.css';

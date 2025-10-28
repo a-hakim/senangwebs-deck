@@ -1,0 +1,16 @@
+/**
+ * Center Layout Styles
+ */
+
+.swd-layout-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 3rem;
+}
+
+.swd-layout-center > * {
+  max-width: 800px;
+}

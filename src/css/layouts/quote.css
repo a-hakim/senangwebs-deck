@@ -1,0 +1,35 @@
+/**
+ * Quote Layout Styles
+ */
+
+.swd-layout-quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4rem;
+}
+
+.swd-layout-quote blockquote,
+.swd-layout-quote .swd-quote-text {
+  font-size: 2.5rem;
+  font-style: italic;
+  line-height: 1.4;
+  margin: 0 0 2rem 0;
+  border: none;
+  padding: 0;
+  max-width: 900px;
+}
+
+.swd-layout-quote cite,
+.swd-layout-quote .swd-quote-author {
+  font-size: 1.5rem;
+  font-style: normal;
+  color: var(--swd-secondary-text);
+}
+
+.swd-layout-quote cite::before,
+.swd-layout-quote .swd-quote-author::before {
+  content: '— ';
+}
