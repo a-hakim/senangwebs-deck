@@ -1,7 +1,5 @@
----
-layout: cover
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
----
+﻿<!-- slide: cover -->
+<!-- background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) -->
 
 # Welcome to SWD
 ## Markdown Edition
@@ -9,8 +7,8 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
 Beautiful presentations made simple
 
 ---
-layout: default
----
+
+<!-- slide: default -->
 
 ## What is SenangWebs Deck?
 
@@ -21,8 +19,8 @@ A modern presentation library that supports:
 - JSON data
 
 ---
-layout: two-cols
----
+
+<!-- slide: two-cols -->
 
 ## Left Column
 
@@ -32,7 +30,7 @@ This is the left side of a two-column layout.
 - Point two
 - Point three
 
-::right::
+<!-- column -->
 
 ## Right Column
 
@@ -46,8 +44,8 @@ const swd = new SWD('#presentation', {
 ```
 
 ---
-layout: center
----
+
+<!-- slide: center -->
 
 ## Centered Content
 
@@ -56,41 +54,42 @@ Everything here is perfectly centered
 Perfect for important messages
 
 ---
-layout: quote
----
+
+<!-- slide: quote -->
 
 The only way to do great work is to love what you do.
 
-— Steve Jobs
+ Steve Jobs
 
 ---
-layout: three-cols
----
 
-::col-1::
+<!-- slide: three-cols -->
 
 ### Column 1
+
 First section content
 
-::col-2::
+<!-- column -->
 
 ### Column 2
+
 Second section content
 
-::col-3::
+<!-- column -->
 
 ### Column 3
+
 Third section content
 
 ---
-layout: section
----
+
+<!-- slide: section -->
 
 # Features
 
 ---
-layout: default
----
+
+<!-- slide: default -->
 
 ## Key Features
 
@@ -100,8 +99,8 @@ layout: default
 4. **Responsive** - Works everywhere
 
 ---
-layout: image-right
----
+
+<!-- slide: image-right -->
 
 ## Image on Right
 
@@ -110,9 +109,9 @@ This layout places an image on the right side while text stays on the left.
 ![Sample Image](https://placehold.co/600x400)
 
 ---
-layout: cover
----
+
+<!-- slide: cover -->
 
 # Thank You!
 
-Made with ❤️ using SenangWebs Deck
+Made with  using SenangWebs Deck

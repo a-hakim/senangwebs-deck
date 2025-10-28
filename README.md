@@ -77,15 +77,33 @@ npm install @senangwebs/deck
 ### Markdown
 
 ```html
-<div id="presentation" data-swd-source="markdown">
-    layout: cover background: gradient-blue # Welcome to SWD Beautiful
-    presentations made easy layout: default ## Getting Started Create amazing
-    slides with minimal effort.
-</div>
+<div id="presentation" data-swd-source="markdown"></div>
 
 <script>
-    const deck = new SWD('#presentation');
+    const deck = new SWD('#presentation', {
+        source: 'markdown',
+        markdownUrl: './slides.md',
+        theme: 'light'
+    });
 </script>
+```
+
+**slides.md:**
+```markdown
+<!-- slide: cover -->
+<!-- background: gradient-blue -->
+
+# Welcome to SWD
+
+Beautiful presentations made easy
+
+---
+
+<!-- slide: default -->
+
+## Getting Started
+
+Create amazing slides with minimal effort.
 ```
 
 ### JSON
@@ -116,6 +134,7 @@ const deck = new SWD('#presentation', {
 ## 📖 Documentation
 
 - [Getting Started Guide](docs/getting-started.md)
+- [Markdown Format Guide](docs/markdown-format.md)
 - [API Documentation](docs/api.md)
 - [Examples](examples/)
 

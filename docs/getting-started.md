@@ -127,17 +127,15 @@ Perfect for rapid prototyping and text-heavy presentations.
 Create a `slides.md` file:
 
 ```markdown
----
-layout: cover
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
----
+<!-- slide: cover -->
+<!-- background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) -->
 
 # My Presentation
 ## Welcome to SWD
 
 ---
-layout: default
----
+
+<!-- slide: default -->
 
 ## First Topic
 
@@ -146,22 +144,22 @@ layout: default
 - Point three
 
 ---
-layout: two-cols
----
+
+<!-- slide: two-cols -->
 
 ## Left Side
 
 Content on the left
 
-::right::
+<!-- column -->
 
 ## Right Side
 
 Content on the right
 
 ---
-layout: center
----
+
+<!-- slide: center -->
 
 ## Thank You!
 ```
@@ -183,10 +181,12 @@ Load it in your HTML:
 **Markdown Syntax:**
 
 - `---` separates slides
-- Frontmatter (between two `---` at the start of a slide) defines slide properties
-- `::right::` splits content in two-column layouts
-- `::col-1::`, `::col-2::`, `::col-3::` define columns in three-column layouts
+- `<!-- slide: layout-name -->` defines the slide layout
+- `<!-- background: value -->` sets the background
+- `<!-- column -->` splits content in two-column and three-column layouts
 - Standard markdown syntax for formatting (headings, lists, bold, italic, code, etc.)
+
+For complete markdown format documentation, see the [Markdown Format Guide](markdown-format.md).
 
 ### 3. JSON (Data-Driven)
 

@@ -78,53 +78,14 @@ class MarkdownParser {
    * @returns {Array<string>} - Array of slide markdown
    */
   splitSlides(markdown) {
-    // First, normalize line endings
-    const normalized = markdown.replace(/\r\n/g, '\n');
+    // Normalize line endings
+    const normalized = markdown.replace(/\r\n/g, '\n').trim();
     
-    // Split by slide separator (--- that's NOT part of frontmatter)
-    // We'll use a more sophisticated approach:
-    // Split by --- followed by newline, but handle frontmatter correctly
-    const slideTexts = [];
-    let currentSlide = '';
-    const lines = normalized.split('\n');
-    let inFrontmatter = false;
-    let frontmatterCount = 0;
+    // Split by horizontal rule (---) with surrounding whitespace
+    // This is now unambiguous as we use HTML comments for metadata
+    const slides = normalized.split(/\n---\n+/);
     
-    for (let i = 0; i < lines.length; i += 1) {
-      const line = lines[i];
-      
-      // Check if this is a --- line
-      if (line.trim() === '---') {
-        // If we're at the start of content or after some content, this might be frontmatter
-        if (currentSlide.trim() === '' || (currentSlide.trim() !== '' && !inFrontmatter && frontmatterCount === 0)) {
-          // Starting frontmatter
-          inFrontmatter = true;
-          frontmatterCount += 1;
-          currentSlide = `${currentSlide}${line}\n`;
-        } else if (inFrontmatter && frontmatterCount === 1) {
-          // Ending frontmatter
-          inFrontmatter = false;
-          frontmatterCount += 1;
-          currentSlide = `${currentSlide}${line}\n`;
-        } else {
-          // This is a slide separator
-          if (currentSlide.trim().length > 0) {
-            slideTexts.push(currentSlide.trim());
-          }
-          currentSlide = '';
-          frontmatterCount = 0;
-        }
-      } else {
-        currentSlide = `${currentSlide}${line}\n`;
-      }
-    }
-    
-    // Add the last slide
-    if (currentSlide.trim().length > 0) {
-      slideTexts.push(currentSlide.trim());
-    }
-    
-    return slideTexts;
+    return slides.filter((slide) => slide.trim().length > 0);
   }
 
   /**
@@ -141,12 +102,16 @@ class MarkdownParser {
       attributes: {},
     };
 
-    // Parse frontmatter if present
-    const { frontmatter, content } = this.parseFrontmatter(slideText);
+    // Parse metadata from HTML comments (but keep original text for column parsing)
+    const frontmatter = this.extractMetadata(slideText);
 
     // Apply frontmatter data
     if (frontmatter.layout) {
       slideData.layout = frontmatter.layout;
+    }
+    if (frontmatter.slide) {
+      // Support both 'slide:' and 'layout:' for backwards compatibility
+      slideData.layout = frontmatter.slide;
     }
     if (frontmatter.background) {
       slideData.background = frontmatter.background;
@@ -159,101 +124,124 @@ class MarkdownParser {
     slideData.attributes = { ...frontmatter };
 
     // Parse content based on layout
+    // For column layouts, parse BEFORE removing comments
     if (slideData.layout === 'two-cols') {
-      this.parseTwoColumns(content, slideData);
+      this.parseTwoColumns(slideText, slideData);
     } else if (slideData.layout === 'three-cols') {
-      this.parseThreeColumns(content, slideData);
-    } else if (slideData.layout === 'quote') {
-      this.parseQuote(content, slideData);
-    } else if (slideData.layout === 'image-right' || slideData.layout === 'image-left') {
-      this.parseImageLayout(content, slideData);
+      this.parseThreeColumns(slideText, slideData);
     } else {
-      // Default: convert markdown to HTML
-      slideData.content = marked.parse(content);
+      // For other layouts, remove metadata comments and parse
+      const content = this.cleanMetadata(slideText);
+      
+      if (slideData.layout === 'quote') {
+        this.parseQuote(content, slideData);
+      } else if (slideData.layout === 'image-right' || slideData.layout === 'image-left') {
+        this.parseImageLayout(content, slideData);
+      } else {
+        // Default: convert markdown to HTML
+        slideData.content = marked.parse(content);
+      }
     }
 
     return slideData;
   }
 
   /**
-   * Parse frontmatter from slide text
-   * @param {string} slideText - Slide text with optional frontmatter
-   * @returns {Object} - { frontmatter, content }
+   * Extract metadata from HTML comments
+   * @param {string} slideText - Slide text with HTML comments
+   * @returns {Object} - Metadata object
    */
-  parseFrontmatter(slideText) {
-    const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-    const match = slideText.match(frontmatterRegex);
+  extractMetadata(slideText) {
+    const metadata = {};
 
-    if (match) {
-      const frontmatterText = match[1];
-      const content = match[2];
-      const frontmatter = this.parseFrontmatterYAML(frontmatterText);
-      return { frontmatter, content };
+    // Extract all HTML comment metadata
+    // Pattern: <!-- key: value -->
+    const metadataRegex = /<!--\s*(\w+):\s*(.+?)\s*-->/g;
+    let match;
+
+    // eslint-disable-next-line no-cond-assign
+    while ((match = metadataRegex.exec(slideText)) !== null) {
+      const key = match[1];
+      let value = match[2].trim();
+
+      // Remove quotes if present
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+
+      metadata[key] = value;
     }
 
-    return { frontmatter: {}, content: slideText };
+    return metadata;
   }
 
   /**
-   * Parse YAML-like frontmatter
-   * @param {string} text - Frontmatter text
-   * @returns {Object} - Parsed frontmatter
+   * Remove metadata HTML comments from content
+   * @param {string} slideText - Slide text with HTML comments
+   * @returns {string} - Clean content
    */
-  parseFrontmatterYAML(text) {
-    const frontmatter = {};
-    const lines = text.split('\n');
+  cleanMetadata(slideText) {
+    // Remove metadata comments (<!-- key: value -->)
+    return slideText.replace(/<!--\s*\w+:\s*.+?\s*-->/g, '').trim();
+  }
 
-    lines.forEach((line) => {
-      const match = line.match(/^(\w+):\s*(.+)$/);
-      if (match) {
-        const key = match[1];
-        let value = match[2].trim();
-
-        // Remove quotes if present
-        if (
-          (value.startsWith('"') && value.endsWith('"')) ||
-          (value.startsWith("'") && value.endsWith("'"))
-        ) {
-          value = value.slice(1, -1);
-        }
-
-        frontmatter[key] = value;
-      }
-    });
-
-    return frontmatter;
+  /**
+   * Remove column marker comments from content
+   * @param {string} text - Text with column markers
+   * @returns {string} - Clean content
+   */
+  cleanColumnMarkers(text) {
+    // Remove <!-- column --> markers
+    return text.replace(/<!--\s*column\s*-->/gi, '').trim();
   }
 
   /**
    * Parse two-column content
-   * @param {string} content - Slide content
+   * @param {string} slideText - Slide content with HTML comments
    * @param {Object} slideData - Slide data object to modify
    */
-  parseTwoColumns(content, slideData) {
-    // Support both ::right:: and :: right formats (non-capturing groups)
-    const parts = content.split(/::(?:\s*)right(?:\s*)::/i);
-    slideData.left = marked.parse(parts[0] || '');
-    slideData.right = marked.parse(parts[1] || '');
+  parseTwoColumns(slideText, slideData) {
+    // First, remove metadata comments but keep column markers
+    const contentWithMarkers = this.cleanMetadata(slideText);
+    
+    // Split by <!-- column --> marker
+    const parts = contentWithMarkers.split(/<!--\s*column\s*-->/i);
+    
+    if (parts.length >= 2) {
+      slideData.left = marked.parse(parts[0].trim() || '');
+      slideData.right = marked.parse(parts[1].trim() || '');
+    } else {
+      // Fallback: if no marker, use all as left
+      slideData.left = marked.parse(contentWithMarkers);
+      slideData.right = '';
+    }
+    
     // Don't include the marker in content
     slideData.content = '';
   }
 
   /**
    * Parse three-column content
-   * @param {string} content - Slide content
+   * @param {string} slideText - Slide content with HTML comments
    * @param {Object} slideData - Slide data object to modify
    */
-  parseThreeColumns(content, slideData) {
-    // Support formats like ::col-1::, ::col-2::, ::col-3:: or :: col-1, etc. (non-capturing groups)
-    const parts = content.split(/::(?:\s*)col-[123](?:\s*)::/i);
-    // Filter out empty parts
-    const filteredParts = parts.filter(part => part && part.trim());
+  parseThreeColumns(slideText, slideData) {
+    // First, remove metadata comments but keep column markers
+    const contentWithMarkers = this.cleanMetadata(slideText);
     
+    // Split by <!-- column --> markers
+    const parts = contentWithMarkers.split(/<!--\s*column\s*-->/i);
+    
+    // We expect 3 parts for three columns
     slideData.columns = [
-      marked.parse(filteredParts[0] || ''),
-      marked.parse(filteredParts[1] || ''),
-      marked.parse(filteredParts[2] || ''),
+      marked.parse((parts[0] || '').trim()),
+      marked.parse((parts[1] || '').trim()),
+      marked.parse((parts[2] || '').trim()),
     ];
+    
     // Don't include the markers in content
     slideData.content = '';
   }
