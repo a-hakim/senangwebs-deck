@@ -66,7 +66,16 @@ class Renderer {
     if (slideData.background) {
       const bg = document.createElement('div');
       bg.className = 'swd-slide-background';
-      bg.style.backgroundImage = `url(${slideData.background})`;
+      
+      // Check if background is a URL or CSS value (gradient, color, etc.)
+      if (slideData.background.match(/^(https?:\/\/|\.\/|\.\.\/|\/)/)) {
+        // It's a URL, use backgroundImage
+        bg.style.backgroundImage = `url(${slideData.background})`;
+      } else {
+        // It's a CSS value (gradient, color, etc.), use background
+        bg.style.background = slideData.background;
+      }
+      
       slide.appendChild(bg);
     }
 

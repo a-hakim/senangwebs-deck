@@ -107,7 +107,7 @@ layout: image-right
 
 This layout places an image on the right side while text stays on the left.
 
-![Sample Image](https://via.placeholder.com/400)
+![Sample Image](https://placehold.co/600x400)
 
 ---
 layout: cover

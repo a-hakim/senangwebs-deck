@@ -78,9 +78,53 @@ class MarkdownParser {
    * @returns {Array<string>} - Array of slide markdown
    */
   splitSlides(markdown) {
-    // Split by horizontal rule (---)
-    const slides = markdown.split(/\n---\n/);
-    return slides.filter((slide) => slide.trim().length > 0);
+    // First, normalize line endings
+    const normalized = markdown.replace(/\r\n/g, '\n');
+    
+    // Split by slide separator (--- that's NOT part of frontmatter)
+    // We'll use a more sophisticated approach:
+    // Split by --- followed by newline, but handle frontmatter correctly
+    const slideTexts = [];
+    let currentSlide = '';
+    const lines = normalized.split('\n');
+    let inFrontmatter = false;
+    let frontmatterCount = 0;
+    
+    for (let i = 0; i < lines.length; i += 1) {
+      const line = lines[i];
+      
+      // Check if this is a --- line
+      if (line.trim() === '---') {
+        // If we're at the start of content or after some content, this might be frontmatter
+        if (currentSlide.trim() === '' || (currentSlide.trim() !== '' && !inFrontmatter && frontmatterCount === 0)) {
+          // Starting frontmatter
+          inFrontmatter = true;
+          frontmatterCount += 1;
+          currentSlide = `${currentSlide}${line}\n`;
+        } else if (inFrontmatter && frontmatterCount === 1) {
+          // Ending frontmatter
+          inFrontmatter = false;
+          frontmatterCount += 1;
+          currentSlide = `${currentSlide}${line}\n`;
+        } else {
+          // This is a slide separator
+          if (currentSlide.trim().length > 0) {
+            slideTexts.push(currentSlide.trim());
+          }
+          currentSlide = '';
+          frontmatterCount = 0;
+        }
+      } else {
+        currentSlide = `${currentSlide}${line}\n`;
+      }
+    }
+    
+    // Add the last slide
+    if (currentSlide.trim().length > 0) {
+      slideTexts.push(currentSlide.trim());
+    }
+    
+    return slideTexts;
   }
 
   /**
@@ -186,10 +230,10 @@ class MarkdownParser {
    * @param {Object} slideData - Slide data object to modify
    */
   parseTwoColumns(content, slideData) {
-    // Support both ::right:: and :: right formats
-    const parts = content.split(/::(\s*)right(\s*)::/i);
+    // Support both ::right:: and :: right formats (non-capturing groups)
+    const parts = content.split(/::(?:\s*)right(?:\s*)::/i);
     slideData.left = marked.parse(parts[0] || '');
-    slideData.right = marked.parse(parts[parts.length - 1] || '');
+    slideData.right = marked.parse(parts[1] || '');
     // Don't include the marker in content
     slideData.content = '';
   }
@@ -200,12 +244,10 @@ class MarkdownParser {
    * @param {Object} slideData - Slide data object to modify
    */
   parseThreeColumns(content, slideData) {
-    // Support formats like ::col-1::, ::col-2::, ::col-3:: or :: col-1, etc.
-    const parts = content.split(/::(\s*)col-[123](\s*)::/i);
-    // Filter out empty parts and capture group matches
-    const filteredParts = parts.filter(part => 
-      part && part.trim() && !part.match(/^\s*$/)
-    );
+    // Support formats like ::col-1::, ::col-2::, ::col-3:: or :: col-1, etc. (non-capturing groups)
+    const parts = content.split(/::(?:\s*)col-[123](?:\s*)::/i);
+    // Filter out empty parts
+    const filteredParts = parts.filter(part => part && part.trim());
     
     slideData.columns = [
       marked.parse(filteredParts[0] || ''),
