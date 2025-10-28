@@ -343,25 +343,77 @@ class SWD extends EventEmitter {
 
   /**
    * Auto-initialize all presentations on page
-   * @param {string} selector - Container selector (default: '[data-swd]')
+   * @param {string} selector - Container selector (default: '[data-swd-id]')
    * @param {Object} options - Default options for all presentations
    */
-  static autoInit(selector = '[data-swd]', options = {}) {
+  static autoInit(selector = '[data-swd-id]', options = {}) {
     const containers = document.querySelectorAll(selector);
     const instances = [];
 
     containers.forEach((container) => {
-      const instance = new SWD(container, options);
+      // Read configuration from data attributes
+      const dataConfig = SWD.readDataAttributes(container);
+      
+      // Merge options: defaults < data attributes < passed options
+      const config = { ...dataConfig, ...options };
+      
+      const instance = new SWD(container, config);
       instances.push(instance);
     });
 
     return instances;
+  }
+
+  /**
+   * Read configuration from data attributes
+   * @param {HTMLElement} element - Element to read attributes from
+   * @returns {Object} - Configuration object
+   */
+  static readDataAttributes(element) {
+    const config = {};
+    const { dataset } = element;
+
+    // Map data attributes to config properties
+    if (dataset.swdTheme) config.theme = dataset.swdTheme;
+    if (dataset.swdTransition) config.transition = dataset.swdTransition;
+    if (dataset.swdSource) config.source = dataset.swdSource;
+    if (dataset.swdMarkdownUrl) config.markdownUrl = dataset.swdMarkdownUrl;
+    if (dataset.swdJsonUrl) config.jsonUrl = dataset.swdJsonUrl;
+    
+    // Boolean attributes
+    if (dataset.swdKeyboard) config.keyboard = dataset.swdKeyboard !== 'false';
+    if (dataset.swdControl || dataset.swdControls) {
+      config.controls = (dataset.swdControl || dataset.swdControls) !== 'false';
+    }
+    if (dataset.swdProgress) config.progress = dataset.swdProgress !== 'false';
+    if (dataset.swdLoop) config.loop = dataset.swdLoop !== 'false';
+    if (dataset.swdAutoplay) config.autoplay = dataset.swdAutoplay !== 'false';
+    
+    // Numeric attributes
+    if (dataset.swdAutoplayDelay) {
+      config.autoplayDelay = parseInt(dataset.swdAutoplayDelay, 10);
+    }
+    if (dataset.swdTransitionSpeed) {
+      config.transitionSpeed = parseInt(dataset.swdTransitionSpeed, 10);
+    }
+
+    return config;
   }
 }
 
 // Export for use in browser and modules
 if (typeof window !== 'undefined') {
   window.SWD = SWD;
+  
+  // Auto-initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      SWD.autoInit();
+    });
+  } else {
+    // DOM is already ready
+    SWD.autoInit();
+  }
 }
 
 export default SWD;
