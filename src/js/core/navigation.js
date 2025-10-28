@@ -3,6 +3,8 @@
  * @module core/navigation
  */
 
+import KeyboardHandler from '../utils/keyboard.js';
+
 /**
  * Navigation controller class
  */
@@ -11,6 +13,7 @@ class Navigation {
     this.presentation = presentation;
     this.config = config;
     this.autoPlayInterval = null;
+    this.keyboardHandler = null;
   }
 
   /**
@@ -19,13 +22,17 @@ class Navigation {
   init() {
     // Setup keyboard navigation
     if (this.config.keyboard) {
-      this.setupKeyboard();
+      this.keyboardHandler = new KeyboardHandler(this.presentation, this.config);
+      this.keyboardHandler.init();
     }
 
     // Setup touch navigation
     if (this.config.touch) {
       this.setupTouch();
     }
+
+    // Show first slide
+    this.updateSlideDisplay(0);
 
     // Start auto-play if configured
     if (this.config.autoSlide > 0) {
@@ -121,29 +128,8 @@ class Navigation {
    * Setup keyboard navigation
    */
   setupKeyboard() {
-    document.addEventListener('keydown', (e) => {
-      switch (e.key) {
-        case 'ArrowRight':
-        case ' ':
-          e.preventDefault();
-          this.next();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          this.prev();
-          break;
-        case 'Home':
-          e.preventDefault();
-          this.goTo(0);
-          break;
-        case 'End':
-          e.preventDefault();
-          this.goTo(this.presentation.state.slides.length - 1);
-          break;
-        default:
-          break;
-      }
-    });
+    // Keyboard handling is now done by KeyboardHandler utility
+    // This method is kept for backwards compatibility
   }
 
   /**
@@ -184,7 +170,11 @@ class Navigation {
    */
   destroy() {
     this.stopAutoPlay();
-    // Remove event listeners (will be implemented)
+
+    // Cleanup keyboard handler
+    if (this.keyboardHandler) {
+      this.keyboardHandler.destroy();
+    }
   }
 }
 
