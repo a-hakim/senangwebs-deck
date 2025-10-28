@@ -186,10 +186,12 @@ class MarkdownParser {
    * @param {Object} slideData - Slide data object to modify
    */
   parseTwoColumns(content, slideData) {
-    const parts = content.split('::right::');
+    // Support both ::right:: and :: right formats
+    const parts = content.split(/::(\s*)right(\s*)::/i);
     slideData.left = marked.parse(parts[0] || '');
-    slideData.right = marked.parse(parts[1] || '');
-    slideData.content = `${slideData.left}::right::${slideData.right}`;
+    slideData.right = marked.parse(parts[parts.length - 1] || '');
+    // Don't include the marker in content
+    slideData.content = '';
   }
 
   /**
@@ -198,13 +200,20 @@ class MarkdownParser {
    * @param {Object} slideData - Slide data object to modify
    */
   parseThreeColumns(content, slideData) {
-    const parts = content.split(/::col-[123]::/);
+    // Support formats like ::col-1::, ::col-2::, ::col-3:: or :: col-1, etc.
+    const parts = content.split(/::(\s*)col-[123](\s*)::/i);
+    // Filter out empty parts and capture group matches
+    const filteredParts = parts.filter(part => 
+      part && part.trim() && !part.match(/^\s*$/)
+    );
+    
     slideData.columns = [
-      marked.parse(parts[1] || ''),
-      marked.parse(parts[2] || ''),
-      marked.parse(parts[3] || ''),
+      marked.parse(filteredParts[0] || ''),
+      marked.parse(filteredParts[1] || ''),
+      marked.parse(filteredParts[2] || ''),
     ];
-    slideData.content = slideData.columns.join('');
+    // Don't include the markers in content
+    slideData.content = '';
   }
 
   /**
@@ -246,8 +255,9 @@ class MarkdownParser {
     const match = content.match(imgRegex);
 
     if (match) {
-      slideData.image = match[2];
-      slideData.imageAlt = match[1];
+      const [, imageAlt, image] = match;
+      slideData.image = image;
+      slideData.imageAlt = imageAlt;
       // Remove image from content
       const textContent = content.replace(imgRegex, '');
       slideData.content = marked.parse(textContent);
