@@ -11,39 +11,102 @@
   <div id="presentation">
     
     <!-- Slide 1: Cover -->
-    <div data-swd-page data-swd-layout="cover">
-      <h1>Welcome to SenangWebs Deck</h1>
-      <p>A modern presentation library for the web</p>
+    <div data-swd-page data-swd-layout="cover" data-swd-background="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+      <h1>Welcome to SWD</h1>
+      <h2>HTML Edition</h2>
+      <p>Beautiful presentations made simple</p>
     </div>
 
-    <!-- Slide 2: Default Layout -->
+    <!-- Slide 2: What is SenangWebs Deck? -->
     <div data-swd-page data-swd-layout="default">
-      <h2>Getting Started</h2>
-      <p>Create beautiful presentations with ease using:</p>
+      <h2>What is SenangWebs Deck?</h2>
+      <p>A modern presentation library that supports:</p>
       <ul>
-        <li>HTML attributes</li>
+        <li><strong>HTML attributes</strong> (you're looking at it!)</li>
         <li>Markdown</li>
         <li>JSON data</li>
       </ul>
     </div>
 
-    <!-- Slide 3: Features -->
-    <div data-swd-page data-swd-layout="default">
-      <h2>Key Features</h2>
-      <ul>
-        <li>10+ built-in layouts</li>
-        <li>7 beautiful themes</li>
-        <li>Smooth transitions</li>
-        <li>Keyboard & touch navigation</li>
-        <li>Export to PDF/HTML/JSON</li>
-        <li>Plugin system</li>
-      </ul>
+    <!-- Slide 3: Two Columns Layout -->
+    <div data-swd-page data-swd-layout="two-cols">
+      <div data-swd-column>
+        <h2>Left Column</h2>
+        <p>This is the left side of a two-column layout.</p>
+        <ul>
+          <li>Point one</li>
+          <li>Point two</li>
+          <li>Point three</li>
+        </ul>
+      </div>
+      <div data-swd-column>
+        <h2>Right Column</h2>
+        <p>And this is the right side!</p>
+        <pre><code class="language-javascript">const swd = new SWD('#presentation', {
+  theme: 'light',
+  transition: 'slide'
+});</code></pre>
+      </div>
     </div>
 
-    <!-- Slide 4: Thank You -->
+    <!-- Slide 4: Center Layout -->
+    <div data-swd-page data-swd-layout="center">
+      <h2>Centered Content</h2>
+      <p>Everything here is perfectly centered</p>
+      <p>Perfect for important messages</p>
+    </div>
+
+    <!-- Slide 5: Quote Layout -->
+    <div data-swd-page data-swd-layout="quote">
+      <blockquote>
+        <p>The only way to do great work is to love what you do.</p>
+        <footer>— Steve Jobs</footer>
+      </blockquote>
+    </div>
+
+    <!-- Slide 6: Three Columns Layout -->
+    <div data-swd-page data-swd-layout="three-cols">
+      <div data-swd-column>
+        <h3>Column 1</h3>
+        <p>First section content</p>
+      </div>
+      <div data-swd-column>
+        <h3>Column 2</h3>
+        <p>Second section content</p>
+      </div>
+      <div data-swd-column>
+        <h3>Column 3</h3>
+        <p>Third section content</p>
+      </div>
+    </div>
+
+    <!-- Slide 7: Section Layout -->
+    <div data-swd-page data-swd-layout="section">
+      <h1>Features</h1>
+    </div>
+
+    <!-- Slide 8: Key Features -->
+    <div data-swd-page data-swd-layout="default">
+      <h2>Key Features</h2>
+      <ol>
+        <li><strong>Easy to Use</strong> - Simple syntax</li>
+        <li><strong>Flexible</strong> - Multiple formats</li>
+        <li><strong>Beautiful</strong> - 7 built-in themes</li>
+        <li><strong>Responsive</strong> - Works everywhere</li>
+      </ol>
+    </div>
+
+    <!-- Slide 9: Image on Right Layout -->
+    <div data-swd-page data-swd-layout="image-right">
+      <h2>Image on Right</h2>
+      <p>This layout places an image on the right side while text stays on the left.</p>
+      <img src="https://placehold.co/600x400" alt="Sample Image">
+    </div>
+
+    <!-- Slide 10: Thank You -->
     <div data-swd-page data-swd-layout="cover">
       <h1>Thank You!</h1>
-      <p>Start building amazing presentations today</p>
+      <p>Made with ❤️ using SenangWebs Deck</p>
     </div>
 
   </div>

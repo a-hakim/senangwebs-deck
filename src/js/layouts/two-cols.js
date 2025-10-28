@@ -13,8 +13,22 @@ const twoColsLayout = {
     const content = document.createElement('div');
     content.className = 'swd-slide-content swd-layout-two-cols';
 
-    // Check if content has left/right data
-    if (slideData.left && slideData.right) {
+    // Check if content has columns array (from data-swd-column attributes)
+    if (slideData.columns && Array.isArray(slideData.columns) && slideData.columns.length >= 2) {
+      const [leftContent, rightContent] = slideData.columns;
+      
+      const leftCol = document.createElement('div');
+      leftCol.className = 'swd-col swd-col-left';
+      leftCol.innerHTML = leftContent;
+
+      const rightCol = document.createElement('div');
+      rightCol.className = 'swd-col swd-col-right';
+      rightCol.innerHTML = rightContent;
+
+      content.appendChild(leftCol);
+      content.appendChild(rightCol);
+    } else if (slideData.left && slideData.right) {
+      // Check if content has left/right data
       const leftCol = document.createElement('div');
       leftCol.className = 'swd-col swd-col-left';
       leftCol.innerHTML = slideData.left;

@@ -30,10 +30,32 @@ class HtmlParser {
         attributes: this.parseAttributes(element),
       };
 
+      // Parse columns for multi-column layouts
+      const columns = this.parseColumns(element);
+      if (columns.length > 0) {
+        slideData.columns = columns;
+      }
+
       slides.push(slideData);
     });
 
     return slides;
+  }
+
+  /**
+   * Parse columns from slide element
+   * @param {HTMLElement} element - Slide element
+   * @returns {Array} - Array of column HTML strings
+   */
+  parseColumns(element) {
+    const columns = [];
+    const columnElements = element.querySelectorAll('[data-swd-column]');
+
+    columnElements.forEach((col) => {
+      columns.push(col.innerHTML);
+    });
+
+    return columns;
   }
 
   /**
