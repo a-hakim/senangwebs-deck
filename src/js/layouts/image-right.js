@@ -33,9 +33,10 @@ const imageRightLayout = {
       const imgMatch = contentStr.match(/<img[^>]+>/);
 
       if (imgMatch) {
-        const textContent = contentStr.replace(imgMatch[0], '');
+        const [imgTag] = imgMatch;
+        const textContent = contentStr.replace(imgTag, '');
         textCol.innerHTML = textContent;
-        imageCol.innerHTML = imgMatch[0];
+        imageCol.innerHTML = imgTag;
       } else {
         textCol.innerHTML = contentStr;
       }

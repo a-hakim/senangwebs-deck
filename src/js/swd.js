@@ -113,7 +113,7 @@ class SWD extends EventEmitter {
       this.emit('ready', this);
 
       if (this.config.dev) {
-        console.log('SWD: Presentation initialized successfully');
+        // console.log('SWD: Presentation initialized successfully');
       }
     } catch (error) {
       this.emit('error', error);
@@ -313,7 +313,7 @@ class SWD extends EventEmitter {
     this.emit('afterDestroy');
 
     if (this.config.dev) {
-      console.log('SWD: Presentation destroyed');
+      // console.log('SWD: Presentation destroyed');
     }
   }
 
