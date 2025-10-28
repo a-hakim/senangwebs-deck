@@ -169,7 +169,7 @@ class JsonParser {
       html += `<h1>${this.escapeHTML(slideData.title)}</h1>`;
     }
     if (slideData.subtitle) {
-      html += `<p>${this.escapeHTML(slideData.subtitle)}</p>`;
+      html += `<h2>${this.escapeHTML(slideData.subtitle)}</h2>`;
     }
     if (slideData.content) {
       html += this.buildContent(slideData.content);

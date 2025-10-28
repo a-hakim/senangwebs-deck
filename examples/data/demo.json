@@ -4,7 +4,13 @@
       "layout": "cover",
       "title": "Welcome to SWD",
       "subtitle": "JSON Edition",
-      "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+      "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Beautiful presentations made simple"
+        }
+      ]
     },
     {
       "layout": "default",
@@ -170,7 +176,12 @@
     {
       "layout": "cover",
       "title": "Thank You!",
-      "subtitle": "Made with ❤️ using SenangWebs Deck"
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Made with ❤️ using SenangWebs Deck"
+        }
+      ]
     }
   ]
 }

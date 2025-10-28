@@ -29,7 +29,7 @@
   color: var(--swd-secondary-text);
 }
 
-.swd-layout-quote cite::before,
+/* .swd-layout-quote cite::before,
 .swd-layout-quote .swd-quote-author::before {
   content: '— ';
-}
+} */
