@@ -34,7 +34,7 @@ class TouchHandler {
    */
   init() {
     if (this.config.touch !== false && this.isTouchDevice()) {
-      const container = this.presentation.container;
+      const { container } = this.presentation;
 
       container.addEventListener('touchstart', this.boundTouchStart, {
         passive: false,
@@ -233,7 +233,7 @@ class TouchHandler {
    * Destroy touch handler
    */
   destroy() {
-    const container = this.presentation.container;
+    const { container } = this.presentation;
 
     container.removeEventListener('touchstart', this.boundTouchStart);
     container.removeEventListener('touchmove', this.boundTouchMove);

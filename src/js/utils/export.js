@@ -23,7 +23,7 @@ class ExportUtil {
     }
 
     // Store current state
-    const currentSlide = this.presentation.state.currentSlide;
+    const { currentSlide } = this.presentation.state;
 
     // Add print class to container
     this.presentation.container.classList.add('swd-print-mode');
@@ -196,7 +196,7 @@ ${script}
     // Get inline styles
     const styleTags = document.querySelectorAll('style');
     styleTags.forEach((style) => {
-      styles += style.textContent + '\n';
+      styles += `${style.textContent}\n`;
     });
 
     return styles;

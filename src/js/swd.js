@@ -189,7 +189,7 @@ class SWD extends EventEmitter {
    */
   enterFullscreen() {
     if (!this.state.initialized || !this.fullscreen) return;
-    return this.fullscreen.enter();
+    this.fullscreen.enter();
   }
 
   /**
@@ -197,7 +197,7 @@ class SWD extends EventEmitter {
    */
   exitFullscreen() {
     if (!this.state.initialized || !this.fullscreen) return;
-    return this.fullscreen.exit();
+    this.fullscreen.exit();
   }
 
   /**
@@ -239,7 +239,7 @@ class SWD extends EventEmitter {
    */
   exportHTML() {
     if (!this.state.initialized || !this.exportUtil) return;
-    return this.exportUtil.toHTML();
+    this.exportUtil.toHTML();
   }
 
   /**
@@ -247,7 +247,7 @@ class SWD extends EventEmitter {
    */
   exportJSON() {
     if (!this.state.initialized || !this.exportUtil) return;
-    return this.exportUtil.toJSON();
+    this.exportUtil.toJSON();
   }
 
   /**
