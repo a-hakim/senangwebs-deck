@@ -8,6 +8,10 @@ import { DefaultConfig, mergeConfig } from './core/config.js';
 import Parser from './core/parser.js';
 import Renderer from './core/renderer.js';
 import Navigation from './core/navigation.js';
+import TouchHandler from './utils/touch.js';
+import Fullscreen from './utils/fullscreen.js';
+import ExportUtil from './utils/export.js';
+import Transitions from './utils/transitions.js';
 import '../css/swd.css';
 
 /**
@@ -49,6 +53,10 @@ class SWD extends EventEmitter {
     this.parser = null;
     this.renderer = null;
     this.navigation = null;
+    this.touchHandler = null;
+    this.fullscreen = null;
+    this.exportUtil = null;
+    this.transitions = null;
 
     // Auto-initialize if configured
     if (this.config.autoInit !== false) {
@@ -79,9 +87,24 @@ class SWD extends EventEmitter {
       this.renderer = new Renderer(this.config);
       this.renderer.render(this.container, this.state.slides);
 
+      // Initialize transitions
+      this.transitions = new Transitions(this, this.config);
+      this.transitions.init();
+
       // Initialize navigation
       this.navigation = new Navigation(this, this.config);
       this.navigation.init();
+
+      // Initialize touch handler
+      this.touchHandler = new TouchHandler(this, this.config);
+      this.touchHandler.init();
+
+      // Initialize fullscreen
+      this.fullscreen = new Fullscreen(this, this.config);
+      this.fullscreen.init();
+
+      // Initialize export utility
+      this.exportUtil = new ExportUtil(this, this.config);
 
       // Mark as initialized
       this.state.initialized = true;
@@ -157,16 +180,90 @@ class SWD extends EventEmitter {
    * Toggle fullscreen mode
    */
   toggleFullscreen() {
-    // Implementation will be added in fullscreen utility
-    this.emit('toggleFullscreen');
+    if (!this.state.initialized || !this.fullscreen) return;
+    this.fullscreen.toggle();
+  }
+
+  /**
+   * Enter fullscreen mode
+   */
+  enterFullscreen() {
+    if (!this.state.initialized || !this.fullscreen) return;
+    return this.fullscreen.enter();
+  }
+
+  /**
+   * Exit fullscreen mode
+   */
+  exitFullscreen() {
+    if (!this.state.initialized || !this.fullscreen) return;
+    return this.fullscreen.exit();
+  }
+
+  /**
+   * Set transition type
+   * @param {string} type - Transition type ('none', 'slide', 'fade', 'zoom', 'flip')
+   */
+  setTransition(type) {
+    if (!this.state.initialized || !this.transitions) return;
+    this.transitions.setTransition(type);
+  }
+
+  /**
+   * Set transition speed
+   * @param {number|string} speed - Speed in ms or 'slow'/'normal'/'fast'
+   */
+  setTransitionSpeed(speed) {
+    if (!this.state.initialized || !this.transitions) return;
+    this.transitions.setSpeed(speed);
   }
 
   /**
    * Toggle overview mode
    */
   toggleOverview() {
-    // Implementation will be added in overview utility
+    // Overview mode will be implemented in overview utility
     this.emit('toggleOverview');
+  }
+
+  /**
+   * Export to PDF
+   */
+  exportPDF() {
+    if (!this.state.initialized || !this.exportUtil) return;
+    this.exportUtil.toPDF();
+  }
+
+  /**
+   * Export to HTML
+   */
+  exportHTML() {
+    if (!this.state.initialized || !this.exportUtil) return;
+    return this.exportUtil.toHTML();
+  }
+
+  /**
+   * Export to JSON
+   */
+  exportJSON() {
+    if (!this.state.initialized || !this.exportUtil) return;
+    return this.exportUtil.toJSON();
+  }
+
+  /**
+   * Download HTML file
+   */
+  downloadHTML() {
+    if (!this.state.initialized || !this.exportUtil) return;
+    this.exportUtil.downloadHTML();
+  }
+
+  /**
+   * Download JSON file
+   */
+  downloadJSON() {
+    if (!this.state.initialized || !this.exportUtil) return;
+    this.exportUtil.downloadJSON();
   }
 
   /**
@@ -180,6 +277,16 @@ class SWD extends EventEmitter {
     // Cleanup navigation
     if (this.navigation) {
       this.navigation.destroy();
+    }
+
+    // Cleanup touch handler
+    if (this.touchHandler) {
+      this.touchHandler.destroy();
+    }
+
+    // Cleanup fullscreen
+    if (this.fullscreen) {
+      this.fullscreen.destroy();
     }
 
     // Cleanup renderer

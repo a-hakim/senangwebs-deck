@@ -1,0 +1,27 @@
+/**
+ * Print Styles - For PDF export
+ */
+
+@media print {
+  .swd-print-mode .swd-slide {
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  .swd-print-mode .swd-slide.swd-print-slide {
+    position: relative !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .swd-controls,
+  .swd-progress,
+  .swd-slide-numbers {
+    display: none !important;
+  }
+}

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SenangWebs Deck - Transitions Demo</title>
+  <link rel="stylesheet" href="../dist/swd.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    .demo-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .demo-controls h3 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .demo-controls label {
+      display: block;
+      margin: 8px 0;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .demo-controls select,
+    .demo-controls button {
+      width: 100%;
+      padding: 6px 10px;
+      margin-top: 3px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .demo-controls button {
+      background: #007acc;
+      color: white;
+      border: none;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .demo-controls button:hover {
+      background: #005a9e;
+    }
+
+    .demo-controls hr {
+      margin: 12px 0;
+      border: none;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <h3>🎨 Transition Demo</h3>
+    
+    <label>
+      Transition Type:
+      <select id="transitionType">
+        <option value="slide">Slide</option>
+        <option value="fade">Fade</option>
+        <option value="zoom">Zoom</option>
+        <option value="flip">Flip</option>
+        <option value="none">None</option>
+      </select>
+    </label>
+
+    <label>
+      Speed:
+      <select id="transitionSpeed">
+        <option value="fast">Fast (300ms)</option>
+        <option value="normal" selected>Normal (500ms)</option>
+        <option value="slow">Slow (800ms)</option>
+      </select>
+    </label>
+
+    <hr>
+
+    <label>
+      Theme:
+      <select id="theme">
+        <option value="light" selected>Light</option>
+        <option value="dark">Dark</option>
+        <option value="gradient">Gradient</option>
+        <option value="minimal">Minimal</option>
+        <option value="corporate">Corporate</option>
+        <option value="creative">Creative</option>
+        <option value="academic">Academic</option>
+      </select>
+    </label>
+
+    <hr>
+
+    <button id="toggleFullscreen">🔲 Fullscreen</button>
+    <button id="exportPDF">📄 Export PDF</button>
+  </div>
+
+  <!-- Presentation Container -->
+  <div id="presentation">
+    <!-- Slide 1: Cover -->
+    <div data-swd-page data-swd-layout="cover">
+      <h1>SenangWebs Deck</h1>
+      <h2>Transition Animations Demo</h2>
+      <p>Press the arrow keys to navigate</p>
+    </div>
+
+    <!-- Slide 2: Slide Transition -->
+    <div data-swd-page data-swd-layout="center">
+      <h1>Slide Transition</h1>
+      <p>The classic sliding animation</p>
+      <p>Slides move horizontally with smooth motion</p>
+      <p>← Try navigating back and forth →</p>
+    </div>
+
+    <!-- Slide 3: Fade Transition -->
+    <div data-swd-page data-swd-layout="center">
+      <h1>Fade Transition</h1>
+      <p>Smooth cross-fade between slides</p>
+      <p>Perfect for subtle transitions</p>
+      <p>Change the transition type above to see it in action</p>
+    </div>
+
+    <!-- Slide 4: Zoom Transition -->
+    <div data-swd-page data-swd-layout="center">
+      <h1>Zoom Transition</h1>
+      <p>Dramatic zoom in/out effect</p>
+      <p>Creates depth and visual interest</p>
+      <p>Great for emphasizing content</p>
+    </div>
+
+    <!-- Slide 5: Flip Transition -->
+    <div data-swd-page data-swd-layout="center">
+      <h1>Flip Transition</h1>
+      <p>3D flip animation</p>
+      <p>Adds a playful, modern touch</p>
+      <p>Uses CSS 3D transforms</p>
+    </div>
+
+    <!-- Slide 6: Two Column Layout -->
+    <div data-swd-page data-swd-layout="two-cols">
+      <div data-swd-col="left">
+        <h2>Transitions Work</h2>
+        <p>Transitions work seamlessly with all layouts:</p>
+        <ul>
+          <li>Cover</li>
+          <li>Center</li>
+          <li>Two Columns</li>
+          <li>Three Columns</li>
+          <li>Quote</li>
+        </ul>
+      </div>
+      <div data-swd-col="right">
+        <h2>Features</h2>
+        <p>Additional features:</p>
+        <ul>
+          <li>Multiple speeds</li>
+          <li>GPU acceleration</li>
+          <li>Reduced motion support</li>
+          <li>Mobile optimized</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Slide 7: Quote Layout -->
+    <div data-swd-page data-swd-layout="quote">
+      <blockquote>
+        "Transitions should enhance the presentation, not distract from the content."
+      </blockquote>
+      <cite>— SenangWebs Design Philosophy</cite>
+    </div>
+
+    <!-- Slide 8: Image Layout -->
+    <div data-swd-page data-swd-layout="image-right">
+      <div data-swd-content>
+        <h2>Performance</h2>
+        <p>All transitions are optimized for performance:</p>
+        <ul>
+          <li>GPU-accelerated transforms</li>
+          <li>Hardware acceleration</li>
+          <li>Smooth 60 FPS animations</li>
+          <li>Low memory footprint</li>
+        </ul>
+      </div>
+      <div data-swd-image>
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+          ⚡
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Accessibility -->
+    <div data-swd-page data-swd-layout="center">
+      <h1>Accessibility First</h1>
+      <p>Respects user preferences:</p>
+      <ul>
+        <li><code>prefers-reduced-motion</code> support</li>
+        <li>Keyboard navigation</li>
+        <li>Screen reader friendly</li>
+        <li>Focus management</li>
+      </ul>
+    </div>
+
+    <!-- Slide 10: The End -->
+    <div data-swd-page data-swd-layout="cover">
+      <h1>Try Different Transitions!</h1>
+      <p>Use the controls in the top-right corner</p>
+      <p>Switch between slide, fade, zoom, and flip</p>
+      <p>Adjust the speed to your liking</p>
+    </div>
+  </div>
+
+  <script src="../dist/swd.js"></script>
+  <script>
+    // Initialize presentation
+    const deck = new SWD('#presentation', {
+      transition: 'slide',
+      transitionSpeed: 'normal',
+      theme: 'light',
+      keyboard: true,
+      touch: true,
+      controls: true,
+      progress: true,
+      loop: true
+    });
+
+    // Transition type control
+    document.getElementById('transitionType').addEventListener('change', (e) => {
+      deck.setTransition(e.target.value);
+    });
+
+    // Transition speed control
+    document.getElementById('transitionSpeed').addEventListener('change', (e) => {
+      deck.setTransitionSpeed(e.target.value);
+    });
+
+    // Theme control
+    document.getElementById('theme').addEventListener('change', (e) => {
+      const container = document.getElementById('presentation');
+      // Remove old theme classes
+      container.className = container.className.replace(/swd-theme-\w+/g, '');
+      // Add new theme
+      container.classList.add(`swd-theme-${e.target.value}`);
+    });
+
+    // Fullscreen control
+    document.getElementById('toggleFullscreen').addEventListener('click', () => {
+      deck.toggleFullscreen();
+    });
+
+    // Export PDF control
+    document.getElementById('exportPDF').addEventListener('click', () => {
+      deck.exportPDF();
+    });
+
+    // Listen to transition events
+    deck.on('transitionStart', (data) => {
+      console.log('Transition started:', data);
+    });
+
+    deck.on('transitionEnd', (data) => {
+      console.log('Transition completed:', data);
+    });
+
+    // Listen to slide changes
+    deck.on('afterSlideChange', (data) => {
+      console.log('Slide changed:', data.from, '→', data.to);
+    });
+
+    // Listen to fullscreen changes
+    deck.on('fullscreenChange', (data) => {
+      const btn = document.getElementById('toggleFullscreen');
+      btn.textContent = data.isFullscreen ? '🔳 Exit Fullscreen' : '🔲 Fullscreen';
+    });
+  </script>
+</body>
+</html>

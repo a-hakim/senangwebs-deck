@@ -55,6 +55,13 @@ class Renderer {
     slide.setAttribute('data-index', index);
     slide.setAttribute('data-layout', slideData.layout || 'default');
 
+    // Add initial state classes
+    if (index === 0) {
+      slide.classList.add('swd-slide-active', 'active');
+    } else {
+      slide.classList.add('swd-slide-hidden', 'future');
+    }
+
     // Apply background
     if (slideData.background) {
       const bg = document.createElement('div');

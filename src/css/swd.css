@@ -29,6 +29,8 @@
 /* Component Styles */
 @import './components/controls.css';
 @import './components/progress.css';
+@import './components/transitions.css';
+@import './components/print.css';
 
 /* Core Presentation Styles */
 .swd-wrapper {
@@ -54,16 +56,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Slide visibility states */
+.swd-slide-hidden {
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--swd-transition-speed) ease,
-    visibility 0s var(--swd-transition-speed);
+  pointer-events: none;
+}
+
+.swd-slide-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .swd-slide.active {
   opacity: 1;
   visibility: visible;
-  transition-delay: 0s;
   z-index: 2;
 }
 

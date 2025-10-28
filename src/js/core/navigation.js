@@ -72,7 +72,7 @@ class Navigation {
    * Go to specific slide
    * @param {number} index - Slide index
    */
-  goTo(index) {
+  async goTo(index) {
     const { slides, currentSlide } = this.presentation.state;
 
     // Validate index
@@ -84,6 +84,11 @@ class Navigation {
       return;
     }
 
+    // Don't navigate if currently transitioning
+    if (this.presentation.transitions && this.presentation.transitions.isActive()) {
+      return;
+    }
+
     // Emit before change event
     this.presentation.emit('beforeSlideChange', {
       from: currentSlide,
@@ -91,14 +96,15 @@ class Navigation {
     });
 
     // Update state
+    const previousSlide = currentSlide;
     this.presentation.state.currentSlide = index;
 
-    // Update DOM
-    this.updateSlideDisplay(index);
+    // Update DOM with transitions
+    await this.updateSlideDisplay(index, previousSlide);
 
     // Emit after change event
     this.presentation.emit('afterSlideChange', {
-      from: currentSlide,
+      from: previousSlide,
       to: index,
     });
   }
@@ -106,10 +112,34 @@ class Navigation {
   /**
    * Update slide display
    * @param {number} index - Current slide index
+   * @param {number} previousIndex - Previous slide index
    */
-  updateSlideDisplay(index) {
+  async updateSlideDisplay(index, previousIndex = -1) {
     const slides = this.presentation.container.querySelectorAll('.swd-slide');
+    
+    if (slides.length === 0) return;
 
+    const oldSlide = previousIndex >= 0 ? slides[previousIndex] : null;
+    const newSlide = slides[index];
+    const direction = index > previousIndex ? 'forward' : 'backward';
+
+    // Apply transition if available
+    if (this.presentation.transitions && oldSlide) {
+      await this.presentation.transitions.applyTransition(oldSlide, newSlide, direction);
+    } else {
+      // Fallback: simple class toggle without transition
+      slides.forEach((slide, i) => {
+        if (i === index) {
+          slide.classList.add('swd-slide-active');
+          slide.classList.remove('swd-slide-hidden');
+        } else {
+          slide.classList.remove('swd-slide-active');
+          slide.classList.add('swd-slide-hidden');
+        }
+      });
+    }
+
+    // Update past/future classes
     slides.forEach((slide, i) => {
       if (i === index) {
         slide.classList.add('active');
