@@ -1,0 +1,22 @@
+/**
+ * Cover Layout Styles
+ */
+
+.swd-layout-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 3rem;
+}
+
+.swd-layout-cover h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.swd-layout-cover p {
+  font-size: 1.5rem;
+  color: var(--swd-secondary-text);
+}

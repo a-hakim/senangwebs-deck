@@ -16,10 +16,10 @@ This document outlines the complete development roadmap for building the SenangW
 
 ### 1.1 Repository Initialization
 - [x] Create Git repository structure
-- [ ] Initialize npm package (`npm init`)
-- [ ] Set up `.gitignore` for Node.js projects
-- [ ] Create basic `README.md`
-- [ ] Add `LICENSE` file (MIT)
+- [x] Initialize npm package (`npm init`)
+- [x] Set up `.gitignore` for Node.js projects
+- [x] Create basic `README.md`
+- [x] Add `LICENSE` file (MIT)
 - [ ] Set up GitHub repository with proper description
 
 ### 1.2 Development Dependencies Installation
@@ -43,10 +43,10 @@ npm install dompurify
 - [x] `webpack.config.js` - Build configuration
 - [ ] `webpack.dev.js` - Development configuration
 - [ ] `webpack.prod.js` - Production configuration
-- [ ] `.babelrc` - Babel transpilation settings
-- [ ] `.eslintrc.json` - Code linting rules
-- [ ] `.prettierrc` - Code formatting rules
-- [ ] `jest.config.js` - Testing configuration
+- [x] `.babelrc` - Babel transpilation settings
+- [x] `.eslintrc.json` - Code linting rules
+- [x] `.prettierrc` - Code formatting rules
+- [x] `jest.config.js` - Testing configuration
 - [ ] `tsconfig.json` (optional) - TypeScript definitions
 
 ### 1.5 Package.json Scripts

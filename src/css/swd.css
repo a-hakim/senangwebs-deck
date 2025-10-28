@@ -1,0 +1,84 @@
+/**
+ * SenangWebs Deck - Main CSS Entry Point
+ */
+
+/* Base Styles */
+@import './base/reset.css';
+@import './base/variables.css';
+@import './base/typography.css';
+
+/* Layout Styles */
+@import './layouts/default.css';
+@import './layouts/cover.css';
+
+/* Theme Styles */
+@import './themes/light.css';
+
+/* Component Styles */
+@import './components/controls.css';
+@import './components/progress.css';
+
+/* Core Presentation Styles */
+.swd-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--swd-primary-bg);
+}
+
+.swd-slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.swd-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--swd-transition-speed) ease,
+    visibility 0s var(--swd-transition-speed);
+}
+
+.swd-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+  z-index: 2;
+}
+
+.swd-slide.past {
+  transform: translateX(-100%);
+}
+
+.swd-slide.future {
+  transform: translateX(100%);
+}
+
+.swd-slide-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.swd-slide-content {
+  position: relative;
+  z-index: 1;
+  max-width: 90%;
+  max-height: 90%;
+  padding: 2rem;
+}

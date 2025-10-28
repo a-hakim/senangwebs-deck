@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWD Example - HTML Attributes</title>
+  <link rel="stylesheet" href="../dist/swd.css">
+</head>
+<body>
+  <!-- Presentation Container -->
+  <div id="presentation">
+    
+    <!-- Slide 1: Cover -->
+    <div data-swd-page data-swd-layout="cover">
+      <h1>Welcome to SenangWebs Deck</h1>
+      <p>A modern presentation library for the web</p>
+    </div>
+
+    <!-- Slide 2: Default Layout -->
+    <div data-swd-page data-swd-layout="default">
+      <h2>Getting Started</h2>
+      <p>Create beautiful presentations with ease using:</p>
+      <ul>
+        <li>HTML attributes</li>
+        <li>Markdown</li>
+        <li>JSON data</li>
+      </ul>
+    </div>
+
+    <!-- Slide 3: Features -->
+    <div data-swd-page data-swd-layout="default">
+      <h2>Key Features</h2>
+      <ul>
+        <li>10+ built-in layouts</li>
+        <li>7 beautiful themes</li>
+        <li>Smooth transitions</li>
+        <li>Keyboard & touch navigation</li>
+        <li>Export to PDF/HTML/JSON</li>
+        <li>Plugin system</li>
+      </ul>
+    </div>
+
+    <!-- Slide 4: Thank You -->
+    <div data-swd-page data-swd-layout="cover">
+      <h1>Thank You!</h1>
+      <p>Start building amazing presentations today</p>
+    </div>
+
+  </div>
+
+  <!-- Load SWD Library -->
+  <script src="../dist/swd.js"></script>
+  <script>
+    // Initialize presentation
+    const deck = new SWD('#presentation', {
+      theme: 'light',
+      transition: 'slide',
+      keyboard: true,
+      controls: true,
+      progress: true
+    });
+  </script>
+</body>
+</html>

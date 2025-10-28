@@ -1,0 +1,24 @@
+/**
+ * Progress Bar Styles
+ */
+
+.swd-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: var(--swd-z-controls);
+}
+
+.swd-progress-bar {
+  height: 100%;
+  background: var(--swd-accent-color);
+  transition: width var(--swd-transition-speed) ease;
+}
+
+.swd-progress.top {
+  bottom: auto;
+  top: 0;
+}

@@ -1,0 +1,11 @@
+/**
+ * Light Theme
+ */
+
+.swd-theme-light {
+  --swd-primary-bg: #ffffff;
+  --swd-primary-text: #000000;
+  --swd-secondary-text: #666666;
+  --swd-accent-color: #0066cc;
+  --swd-border-color: #e0e0e0;
+}

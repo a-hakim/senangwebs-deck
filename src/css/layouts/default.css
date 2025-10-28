@@ -1,0 +1,16 @@
+/**
+ * Default Layout Styles
+ */
+
+.swd-layout-default {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  text-align: left;
+}
+
+.swd-layout-default h1,
+.swd-layout-default h2 {
+  margin-bottom: 2rem;
+}

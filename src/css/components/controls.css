@@ -1,0 +1,37 @@
+/**
+ * Navigation Controls Styles
+ */
+
+.swd-controls {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: var(--swd-z-controls);
+  display: flex;
+  gap: 1rem;
+}
+
+.swd-control-button {
+  background: var(--swd-accent-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--swd-transition-fast);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.swd-control-button:hover {
+  background: #0052a3;
+  transform: scale(1.1);
+}
+
+.swd-control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
