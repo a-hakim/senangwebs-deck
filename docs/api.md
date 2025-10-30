@@ -76,9 +76,10 @@ const deck = new SWD('#presentation', {
 - **Description:** Transition animation between slides
 
 #### `transitionSpeed`
-- **Type:** `number`
-- **Default:** `300`
-- **Description:** Duration of transitions in milliseconds
+- **Type:** `string` or `number`
+- **Default:** `'normal'`
+- **Values:** `'fast'` (300ms), `'normal'` (500ms), `'slow'` (800ms), or custom number in milliseconds
+- **Description:** Duration/speed of transitions
 
 ### UI Options
 

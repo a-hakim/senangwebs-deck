@@ -250,8 +250,8 @@ const deck = new SWD('#presentation', {
   // Transition: 'slide', 'fade', 'zoom', 'flip', 'none'
   transition: 'slide',
   
-  // Duration of transitions (in ms)
-  transitionSpeed: 300,
+  // Transition speed: 'fast' (300ms), 'normal' (500ms), 'slow' (800ms), or number in ms
+  transitionSpeed: 'normal',
   
   // Show navigation controls
   controls: true,

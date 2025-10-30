@@ -57,12 +57,6 @@ npm run build:dev      # Development build with source maps
 npm run dev            # Dev server with hot reload at localhost:8080
 ```
 
-### Testing
-```bash
-npm test              # Run Jest with coverage (80% threshold)
-npm run test:watch    # Watch mode for TDD
-```
-
 ### Code Style
 - **ESLint**: Airbnb base config + Prettier
 - **Naming**: kebab-case for CSS classes/layouts, camelCase for JS, data-swd-* for HTML attributes

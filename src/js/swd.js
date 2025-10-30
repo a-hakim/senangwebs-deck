@@ -12,6 +12,8 @@ import TouchHandler from './utils/touch.js';
 import Fullscreen from './utils/fullscreen.js';
 import ExportUtil from './utils/export.js';
 import Transitions from './utils/transitions.js';
+import Controls from './utils/controls.js';
+import Progress from './utils/progress.js';
 import '../css/swd.css';
 
 /**
@@ -57,6 +59,8 @@ class SWD extends EventEmitter {
     this.fullscreen = null;
     this.exportUtil = null;
     this.transitions = null;
+    this.controls = null;
+    this.progress = null;
 
     // Auto-initialize if configured
     if (this.config.autoInit !== false) {
@@ -105,6 +109,14 @@ class SWD extends EventEmitter {
       // Initialize fullscreen
       this.fullscreen = new Fullscreen(this, this.config);
       this.fullscreen.init();
+
+      // Initialize controls
+      this.controls = new Controls(this, this.config);
+      this.controls.init();
+
+      // Initialize progress bar
+      this.progress = new Progress(this, this.config);
+      this.progress.init();
 
       // Initialize export utility
       this.exportUtil = new ExportUtil(this, this.config);
@@ -290,6 +302,16 @@ class SWD extends EventEmitter {
     // Cleanup fullscreen
     if (this.fullscreen) {
       this.fullscreen.destroy();
+    }
+
+    // Cleanup controls
+    if (this.controls) {
+      this.controls.destroy();
+    }
+
+    // Cleanup progress bar
+    if (this.progress) {
+      this.progress.destroy();
     }
 
     // Cleanup renderer
