@@ -26,14 +26,6 @@
   ],
   "author": "a-hakim",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/senangwebs/deck.git"
-  },
-  "bugs": {
-    "url": "https://github.com/senangwebs/deck/issues"
-  },
-  "homepage": "https://github.com/senangwebs/deck#readme",
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
