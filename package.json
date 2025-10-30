@@ -1,12 +1,12 @@
 {
-  "name": "@senangwebs/deck",
+  "name": "senangwebs-deck",
   "version": "1.0.0",
   "description": "A modern, lightweight JavaScript library for creating beautiful web-based presentations with multiple input formats (HTML, Markdown, JSON)",
   "main": "dist/swd.js",
   "module": "dist/swd.esm.js",
   "style": "dist/swd.css",
   "scripts": {
-    "dev": "webpack serve --mode development --open",
+    "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "lint": "eslint src/**/*.js",

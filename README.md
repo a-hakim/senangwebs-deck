@@ -20,7 +20,7 @@ A modern, lightweight JavaScript library for creating beautiful web-based presen
 ### Via NPM
 
 ```bash
-npm install @senangwebs/deck
+npm install senangwebs-deck
 ```
 
 ### Via CDN
@@ -28,9 +28,9 @@ npm install @senangwebs/deck
 ```html
 <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@senangwebs/deck/dist/swd.css"
+    href="https://cdn.jsdelivr.net/npm/senangwebs-deck/dist/swd.css"
 />
-<script src="https://cdn.jsdelivr.net/npm/@senangwebs/deck/dist/swd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/senangwebs-deck/dist/swd.js"></script>
 ```
 
 ## Quick Start
@@ -43,7 +43,7 @@ npm install @senangwebs/deck
     <head>
         <link
             rel="stylesheet"
-            href="node_modules/@senangwebs/deck/dist/swd.css"
+            href="node_modules/senangwebs-deck/dist/swd.css"
         />
     </head>
     <body>
@@ -63,7 +63,7 @@ npm install @senangwebs/deck
             </div>
         </div>
 
-        <script src="node_modules/@senangwebs/deck/dist/swd.js"></script>
+        <script src="node_modules/senangwebs-deck/dist/swd.js"></script>
         <script>
             const deck = new SWD('#presentation', {
                 theme: 'light',

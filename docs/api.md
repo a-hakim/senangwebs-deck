@@ -762,7 +762,7 @@ await deck.reload();
 TypeScript definitions are included:
 
 ```typescript
-import SWD, { SWDConfig, SWDState } from '@senangwebs/deck';
+import SWD, { SWDConfig, SWDState } from 'senangwebs-deck';
 
 const config: SWDConfig = {
   theme: 'gradient',
@@ -776,4 +776,3 @@ const deck = new SWD('#presentation', config);
 
 - [Getting Started Guide](getting-started.md)
 - [Examples](../examples/)
-- [GitHub Repository](https://github.com/senangwebs/deck)

@@ -16,14 +16,14 @@ Welcome to SenangWebs Deck (SWD)! This guide will help you create your first pre
 ### Option 1: NPM (Recommended)
 
 ```bash
-npm install @senangwebs/deck
+npm install senangwebs-deck
 ```
 
 Then import in your project:
 
 ```javascript
-import SWD from '@senangwebs/deck';
-import '@senangwebs/deck/dist/swd.css';
+import SWD from 'senangwebs-deck';
+import 'senangwebs-deck/dist/swd.css';
 ```
 
 ### Option 2: CDN
@@ -31,8 +31,8 @@ import '@senangwebs/deck/dist/swd.css';
 Include the CSS and JS files directly in your HTML:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@senangwebs/deck/dist/swd.css">
-<script src="https://cdn.jsdelivr.net/npm/@senangwebs/deck/dist/swd.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/senangwebs-deck/dist/swd.css">
+<script src="https://cdn.jsdelivr.net/npm/senangwebs-deck/dist/swd.js"></script>
 ```
 
 ### Option 3: Download
@@ -55,14 +55,14 @@ Download the latest release from [GitHub releases](https://github.com/senangwebs
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My First Presentation</title>
-  <link rel="stylesheet" href="node_modules/@senangwebs/deck/dist/swd.css">
+  <link rel="stylesheet" href="node_modules/senangwebs-deck/dist/swd.css">
 </head>
 <body>
   <div id="presentation">
     <!-- Your slides will go here -->
   </div>
 
-  <script src="node_modules/@senangwebs/deck/dist/swd.js"></script>
+  <script src="node_modules/senangwebs-deck/dist/swd.js"></script>
   <script>
     const deck = new SWD('#presentation', {
       theme: 'light',
