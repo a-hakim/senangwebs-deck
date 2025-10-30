@@ -429,8 +429,6 @@ Now that you've created your first presentation, explore more advanced features:
 
 - [API Documentation](api.md) - Detailed API reference
 - [Examples](../examples/) - Sample presentations
-- [Themes](themes.md) - Customize themes
-- [Plugins](plugins.md) - Extend functionality
 
 ## Tips and Best Practices
 
@@ -462,7 +460,3 @@ Now that you've created your first presentation, explore more advanced features:
 
 - **Documentation**: Check our full [API documentation](api.md)
 - **Examples**: Browse the [examples folder](../examples/)
-- **Issues**: Report bugs on [GitHub Issues](https://github.com/senangwebs/deck/issues)
-- **Discussions**: Join discussions on [GitHub Discussions](https://github.com/senangwebs/deck/discussions)
-
-Happy presenting! 🎉

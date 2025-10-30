@@ -27,6 +27,7 @@ Next slide content...
 ## Available Metadata
 
 ### `slide` (Required for non-default layouts)
+
 Specifies the slide layout.
 
 ```markdown
@@ -38,6 +39,7 @@ Specifies the slide layout.
 **Available layouts**: `cover`, `default`, `center`, `two-cols`, `three-cols`, `section`, `quote`, `image-right`, `image-left`, `full-image`
 
 ### `background`
+
 Sets the slide background (image URL, gradient, or color).
 
 ```markdown
@@ -47,6 +49,7 @@ Sets the slide background (image URL, gradient, or color).
 ```
 
 ### `overlay`
+
 Adds an overlay on the background.
 
 ```markdown
@@ -54,6 +57,7 @@ Adds an overlay on the background.
 ```
 
 ### Custom Metadata
+
 You can add any custom metadata for your own use:
 
 ```markdown
@@ -115,6 +119,7 @@ const code = 'example';
 ```
 
 ---
+
 ```
 
 ### Three-Column Layout
@@ -315,55 +320,6 @@ contact@example.com
 - Code blocks with syntax highlighting work perfectly
 - Images can use relative or absolute URLs
 - You can mix layouts freely within one presentation
-
-## Differences from Old Format
-
-### Old Format (YAML Frontmatter - Deprecated)
-```markdown
----
-layout: cover
-background: gradient
----
-
-# Title
-```
-
-### New Format (HTML Comments)
-```markdown
-<!-- slide: cover -->
-<!-- background: gradient -->
-
-# Title
-```
-
-**Why the change?**
-- ✅ Unambiguous parsing (no dual meaning for `---`)
-- ✅ More robust and reliable
-- ✅ Easier to implement and maintain
-- ✅ Cleaner in markdown preview tools
-- ✅ Familiar syntax for developers
-- ✅ No conflicts with content
-
-## Migration Guide
-
-To convert old format to new format:
-
-1. Replace YAML frontmatter blocks with HTML comments:
-   ```
-   ---
-   layout: value
-   ---
-   ```
-   becomes:
-   ```
-   <!-- slide: value -->
-   ```
-
-2. Replace column markers:
-   - `::right::` → `<!-- column -->`
-   - `::col-1::`, `::col-2::`, `::col-3::` → `<!-- column -->`
-
-3. Keep `---` only as slide separators
 
 ## See Also
 

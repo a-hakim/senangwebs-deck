@@ -87,6 +87,9 @@ class SWD extends EventEmitter {
       this.renderer = new Renderer(this.config);
       this.renderer.render(this.container, this.state.slides);
 
+      // Store wrapper reference for transitions and other utilities
+      this.wrapper = this.container.querySelector('.swd-wrapper');
+
       // Initialize transitions
       this.transitions = new Transitions(this, this.config);
       this.transitions.init();
