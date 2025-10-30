@@ -82,26 +82,6 @@ export const DefaultConfig = {
   // RTL mode
   rtl: false,
 
-  // Code highlighting
-  highlightCode: true,
-
-  // Code theme
-  codeTheme: 'default', // Prism.js theme name
-
-  // Supported code languages
-  codeLanguages: [
-    'javascript',
-    'python',
-    'java',
-    'html',
-    'css',
-    'php',
-    'sql',
-    'bash',
-    'json',
-    'xml',
-  ],
-
   // Fragment animations
   fragments: true,
 

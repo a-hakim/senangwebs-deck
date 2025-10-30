@@ -46,7 +46,6 @@
   "dependencies": {
     "core-js": "^3.46.0",
     "dompurify": "^3.3.0",
-    "marked": "^15.0.12",
-    "prismjs": "^1.30.0"
+    "marked": "^15.0.12"
   }
 }

@@ -9,7 +9,6 @@ A modern, lightweight JavaScript library for creating beautiful web-based presen
 - **7 Beautiful Themes**: Light, dark, gradient, minimal, corporate, creative, and academic
 - **Smooth Transitions**: Slide, fade, zoom, flip animations
 - **Keyboard & Touch Navigation**: Full keyboard shortcuts and swipe gestures
-- **Syntax Highlighting**: Beautiful code blocks with Prism.js
 - **Export Options**: Export to PDF, HTML, or JSON
 - **Responsive Design**: Works on desktop, tablet, and mobile
 - **Plugin System**: Extend functionality with plugins (notes, timer, etc.)
@@ -183,5 +182,4 @@ MIT License - see the [LICENSE](LICENSE) file for details.
 ## Acknowledgments
 
 - [Marked.js](https://marked.js.org/) - Markdown parsing
-- [Prism.js](https://prismjs.com/) - Syntax highlighting
 - [DOMPurify](https://github.com/cure53/DOMPurify) - HTML sanitization
