@@ -5,10 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SWD Example - JSON</title>
   <link rel="stylesheet" href="../dist/swd.css">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-  <!-- Presentation Container -->
-  <div id="presentation"></div>
+
+  <main class="w-full h-screen bg-gray-200 flex items-center justify-center">
+    <div class="container shadow-lg">
+      <!-- Presentation Container -->
+      <div id="presentation" class="aspect-video"></div>
+    </div>
+  </main>
 
   <!-- Load SWD Library -->
   <script src="../dist/swd.js"></script>

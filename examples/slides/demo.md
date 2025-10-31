@@ -1,5 +1,4 @@
 ﻿<!-- slide: cover -->
-<!-- background: linear-gradient(90deg,rgba(0, 115, 112, 1) 0%, rgba(0, 255, 153, 1) 100%) -->
 
 # Welcome to SWD
 ## Markdown Edition

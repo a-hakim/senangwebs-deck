@@ -21,6 +21,9 @@
 
 .swd-theme-corporate .swd-layout-section {
   background: #2874a6;
+}
+
+.swd-theme-corporate .swd-layout-section * {
   color: #ffffff;
 }
 

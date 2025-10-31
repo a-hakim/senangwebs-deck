@@ -3,7 +3,7 @@
  */
 
 .swd-controls {
-  position: fixed;
+  position: absolute;
   bottom: 2rem;
   right: 2rem;
   z-index: var(--swd-z-controls, 100);
@@ -51,7 +51,7 @@
 
 .swd-control-prev:hover,
 .swd-control-next:hover {
-  background: var(--swd-accent-hover, #005a9e);
+  background: var(--swd-accent-color, #005a9e);
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }

@@ -26,14 +26,17 @@
 
 .swd-theme-creative .swd-layout-section {
   background: #ff6b6b;
+  transform: rotate(-3deg);
+}
+
+.swd-theme-creative .swd-layout-section * {
   color: #ffffff;
-  transform: rotate(-1deg);
+  transform: rotate(+3deg);
 }
 
 .swd-theme-creative code {
   background: #ffe0b2;
   color: #d84315;
-  border: 2px dashed #ff6b6b;
 }
 
 .swd-theme-creative pre {

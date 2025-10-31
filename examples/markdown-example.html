@@ -1,28 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SWD Example - Markdown</title>
-  <link rel="stylesheet" href="../dist/swd.css">
-</head>
-<body>
-  <!-- Presentation Container -->
-  <div id="presentation" data-swd-source="markdown"></div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SWD Example - Markdown</title>
+        <link rel="stylesheet" href="../dist/swd.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <main
+            class="w-full h-screen bg-gray-200 flex items-center justify-center"
+        >
+            <div class="container shadow-lg">
+                <!-- Presentation Container -->
+                <div
+                    id="presentation"
+                    data-swd-source="markdown"
+                    class="aspect-video"
+                ></div>
+            </div>
+        </main>
 
-  <!-- Load SWD Library -->
-  <script src="../dist/swd.js"></script>
-  <script>
-    // Initialize presentation with markdown
-    const deck = new SWD('#presentation', {
-      source: 'markdown',
-      markdownUrl: './slides/demo.md',
-      theme: 'academic',
-      transition: 'slide',
-      keyboard: true,
-      controls: true,
-      progress: true
-    });
-  </script>
-</body>
+        <!-- Load SWD Library -->
+        <script src="../dist/swd.js"></script>
+        <script>
+            // Initialize presentation with markdown
+            const deck = new SWD('#presentation', {
+                source: 'markdown',
+                markdownUrl: './slides/demo.md',
+                theme: 'academic',
+                transition: 'slide',
+                keyboard: true,
+                controls: true,
+                progress: true,
+            });
+        </script>
+    </body>
 </html>

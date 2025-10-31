@@ -24,6 +24,9 @@
 
 .swd-theme-academic .swd-layout-section {
   background: #8b0000;
+}
+
+.swd-theme-academic .swd-layout-section * {
   color: #f5f5f0;
 }
 
