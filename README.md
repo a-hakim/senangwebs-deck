@@ -13,7 +13,6 @@ A modern, lightweight JavaScript library for creating beautiful web-based presen
 - **Keyboard & Touch Navigation**: Full keyboard shortcuts and swipe gestures
 - **Export Options**: Export to PDF, HTML, or JSON
 - **Responsive Design**: Works on desktop, tablet, and mobile
-- **Plugin System**: Extend functionality with plugins (notes, timer, etc.)
 - **Accessibility**: WCAG 2.1 compliant with full keyboard navigation
 
 ## Installation
