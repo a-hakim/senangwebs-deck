@@ -2,6 +2,8 @@
 
 A modern, lightweight JavaScript library for creating beautiful web-based presentations with multiple input formats (HTML, Markdown, JSON).
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+
 ![SenangWebs Deck Preview](https://raw.githubusercontent.com/a-hakim/senangwebs-deck/master/swd_preview.png)
 
 ## Features
