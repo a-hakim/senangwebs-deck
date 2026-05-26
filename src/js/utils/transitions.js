@@ -205,7 +205,7 @@ export default class Transitions {
 
       if (newSlide) {
         newSlide.classList.remove('swd-slide-hidden');
-        newSlide.classList.add(`swd-${zoomClass}`);
+        newSlide.classList.add(`swd-${zoomClass}`, 'swd-transition-in');
       }
 
       // Wait for animation to complete
@@ -218,7 +218,7 @@ export default class Transitions {
 
         // Activate new slide
         if (newSlide) {
-          newSlide.classList.remove(`swd-${zoomClass}`);
+          newSlide.classList.remove(`swd-${zoomClass}`, 'swd-transition-in');
           newSlide.classList.add('swd-slide-active');
         }
 

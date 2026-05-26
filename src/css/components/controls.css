@@ -33,6 +33,23 @@
   padding: 0 2rem;
 }
 
+/* RTL configuration: position is bottom-left by default */
+.swd-rtl .swd-controls {
+  right: auto;
+  left: 2rem;
+}
+
+.swd-rtl .swd-controls[data-position="bottom-left"] {
+  left: auto;
+  right: 2rem;
+}
+
+/* RTL SVG arrows: rotate 180deg to point to the correct side */
+.swd-rtl .swd-control-prev svg,
+.swd-rtl .swd-control-next svg {
+  transform: rotate(180deg);
+}
+
 .swd-control-prev,
 .swd-control-next {
   background: var(--swd-accent-color, #007acc);

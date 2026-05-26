@@ -31,6 +31,8 @@
 @import './components/progress.css';
 @import './components/transitions.css';
 @import './components/print.css';
+@import './components/overview.css';
+@import './components/fragments.css';
 
 /* Core Presentation Styles */
 .swd-wrapper {
@@ -79,11 +81,35 @@
 }
 
 .swd-slide.past {
-  transform: translateX(-100%);
+  transform: translateZ(0);
 }
 
 .swd-slide.future {
+  transform: translateZ(0);
+}
+
+/* Only translate past/future slides for slide transition */
+.swd-wrapper[data-transition="slide"] .swd-slide.past {
+  transform: translateX(-100%);
+}
+
+.swd-wrapper[data-transition="slide"] .swd-slide.future {
   transform: translateX(100%);
+}
+
+/* RTL translations: past is translate right, future is translate left */
+.swd-rtl.swd-wrapper[data-transition="slide"] .swd-slide.past {
+  transform: translateX(100%);
+}
+
+.swd-rtl.swd-wrapper[data-transition="slide"] .swd-slide.future {
+  transform: translateX(-100%);
+}
+
+/* Keyboard visible focus state for a11y */
+.swd-wrapper :focus-visible {
+  outline: 3px solid var(--swd-accent-color, #007acc) !important;
+  outline-offset: 2px !important;
 }
 
 .swd-slide-background {

@@ -1,0 +1,37 @@
+/* Fragment Animations */
+.fragment {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease !important;
+}
+
+.fragment.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Style variants */
+.fragment.fade-in.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.fragment.slide-in {
+  transform: translateY(20px);
+}
+
+.fragment.slide-in.visible {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.fragment.zoom-in {
+  transform: scale(0.5);
+}
+
+.fragment.zoom-in.visible {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}

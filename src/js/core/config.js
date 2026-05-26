@@ -94,6 +94,10 @@ export const DefaultConfig = {
   // Auto-initialize
   autoInit: true,
 
+  // Auto-play options (for data attributes mapping)
+  autoplay: false,
+  autoplayDelay: 3000,
+
   // Plugins
   plugins: [],
 

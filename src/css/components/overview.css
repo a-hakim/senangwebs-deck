@@ -1,0 +1,71 @@
+/* Overview Grid Layout */
+.swd-overview-mode {
+  overflow-y: auto !important;
+}
+
+.swd-overview-mode .swd-slides {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 20px !important;
+  padding: 40px !important;
+  height: auto !important;
+  min-height: 100% !important;
+  box-sizing: border-box !important;
+  perspective: none !important;
+}
+
+.swd-overview-mode .swd-slide {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  border: 3px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: hidden !important;
+  z-index: 5 !important;
+}
+
+.swd-overview-mode .swd-slide:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  border-color: var(--swd-accent-color, #0066cc) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.swd-overview-mode .swd-slide.swd-slide-active {
+  border-color: var(--swd-accent-color, #0066cc) !important;
+  outline: 3px solid var(--swd-accent-color, #0066cc) !important;
+  outline-offset: 2px !important;
+  z-index: 10 !important;
+}
+
+/* Adjust slide contents inside overview grid */
+.swd-overview-mode .swd-slide-content {
+  transform: scale(0.55) !important;
+  transform-origin: center center !important;
+  width: 180% !important;
+  height: 180% !important;
+  max-width: none !important;
+  max-height: none !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Disable controls and progress bar in overview mode */
+.swd-overview-mode .swd-controls,
+.swd-overview-mode .swd-progress,
+.swd-overview-mode .swd-slide-number {
+  display: none !important;
+}

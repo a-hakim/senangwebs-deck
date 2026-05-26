@@ -78,13 +78,37 @@ class MarkdownParser {
    * @returns {Array<string>} - Array of slide markdown
    */
   splitSlides(markdown) {
-    // Normalize line endings
-    const normalized = markdown.replace(/\r\n/g, '\n').trim();
-    
-    // Split by horizontal rule (---) with surrounding whitespace
-    // This is now unambiguous as we use HTML comments for metadata
-    const slides = normalized.split(/\n---\n+/);
-    
+    const normalized = markdown.replace(/\r\n/g, '\n');
+    const lines = normalized.split('\n');
+    const slides = [];
+    let currentSlide = [];
+    let inCodeBlock = false;
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+
+      // Toggle code block state
+      if (trimmed.startsWith('```')) {
+        inCodeBlock = !inCodeBlock;
+      }
+
+      // Slide separator: --- on a line by itself, outside code blocks
+      const isSeparator = !inCodeBlock && /^---$/.test(trimmed);
+
+      if (isSeparator) {
+        if (currentSlide.length > 0) {
+          slides.push(currentSlide.join('\n'));
+          currentSlide = [];
+        }
+      } else {
+        currentSlide.push(line);
+      }
+    });
+
+    if (currentSlide.length > 0) {
+      slides.push(currentSlide.join('\n'));
+    }
+
     return slides.filter((slide) => slide.trim().length > 0);
   }
 

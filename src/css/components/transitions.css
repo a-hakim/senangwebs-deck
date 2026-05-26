@@ -33,12 +33,12 @@
 }
 
 /* Slide Left (Forward) */
-.swd-transition-out.slide-left {
+.swd-slide.swd-transition-out.slide-left {
   transform: translateX(-100%);
   opacity: 0;
 }
 
-.swd-transition-in.slide-left {
+.swd-slide.swd-transition-in.slide-left {
   transform: translateX(100%);
   opacity: 0;
   animation: slideInFromRight var(--swd-transition-speed) var(--swd-transition-timing) forwards;
@@ -52,12 +52,12 @@
 }
 
 /* Slide Right (Backward) */
-.swd-transition-out.slide-right {
+.swd-slide.swd-transition-out.slide-right {
   transform: translateX(100%);
   opacity: 0;
 }
 
-.swd-transition-in.slide-right {
+.swd-slide.swd-transition-in.slide-right {
   transform: translateX(-100%);
   opacity: 0;
   animation: slideInFromLeft var(--swd-transition-speed) var(--swd-transition-timing) forwards;
@@ -75,18 +75,25 @@
   transition: opacity var(--swd-transition-speed) var(--swd-transition-timing);
 }
 
-.swd-fade-out {
-  opacity: 0;
+.swd-slide.swd-fade-out {
+  animation: fadeOut var(--swd-transition-speed) var(--swd-transition-timing) forwards;
 }
 
-.swd-fade-in {
+.swd-slide.swd-fade-in {
   opacity: 0;
+  z-index: 3; /* Ensure incoming slide is above the outgoing slide */
   animation: fadeIn var(--swd-transition-speed) var(--swd-transition-timing) forwards;
 }
 
 @keyframes fadeIn {
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
   }
 }
 
@@ -97,13 +104,19 @@
 }
 
 /* Zoom Out (old slide) */
-.swd-zoom-out {
-  transform: scale(0.8);
-  opacity: 0;
+.swd-slide.swd-zoom-out:not(.swd-transition-in) {
+  animation: zoomToScaleDown var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+}
+
+@keyframes zoomToScaleDown {
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
 }
 
 /* Zoom In (new slide - forward) */
-.swd-zoom-in {
+.swd-slide.swd-zoom-in {
   transform: scale(1.2);
   opacity: 0;
   animation: zoomIn var(--swd-transition-speed) var(--swd-transition-timing) forwards;
@@ -117,7 +130,7 @@
 }
 
 /* Zoom Out (new slide - backward) */
-.swd-zoom-out.swd-transition-in {
+.swd-slide.swd-zoom-out.swd-transition-in {
   transform: scale(0.8);
   opacity: 0;
   animation: zoomOut var(--swd-transition-speed) var(--swd-transition-timing) forwards;
@@ -139,12 +152,12 @@
 }
 
 /* Flip Left (Forward) */
-.swd-flip-out.flip-left {
+.swd-slide.swd-flip-out.flip-left {
   transform: rotateY(-90deg);
   opacity: 0;
 }
 
-.swd-flip-in.flip-left {
+.swd-slide.swd-flip-in.flip-left {
   transform: rotateY(90deg);
   opacity: 0;
   animation: flipInFromRight var(--swd-transition-speed) var(--swd-transition-timing) forwards;
@@ -158,12 +171,12 @@
 }
 
 /* Flip Right (Backward) */
-.swd-flip-out.flip-right {
+.swd-slide.swd-flip-out.flip-right {
   transform: rotateY(90deg);
   opacity: 0;
 }
 
-.swd-flip-in.flip-right {
+.swd-slide.swd-flip-in.flip-right {
   transform: rotateY(-90deg);
   opacity: 0;
   animation: flipInFromLeft var(--swd-transition-speed) var(--swd-transition-timing) forwards;

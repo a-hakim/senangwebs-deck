@@ -253,11 +253,26 @@ const deck = new SWD('#presentation', {
   // Transition speed: 'fast' (300ms), 'normal' (500ms), 'slow' (800ms), or number in ms
   transitionSpeed: 'normal',
   
+  // Slide aspect ratio: '16:9', '4:3', '16:10'
+  aspectRatio: '16:9',
+  
   // Show navigation controls
   controls: true,
   
+  // Controls position: 'bottom-right', 'bottom-left', 'edges'
+  controlsPosition: 'bottom-right',
+  
   // Show progress bar
   progress: true,
+  
+  // Progress bar position: 'bottom', 'top'
+  progressPosition: 'bottom',
+  
+  // Show slide numbers
+  slideNumbers: true,
+  
+  // Slide number format: 'h/v', 'h.v', 'c/t', 'c'
+  slideNumberFormat: 'h/v',
   
   // Enable keyboard navigation
   keyboard: true,
@@ -265,11 +280,23 @@ const deck = new SWD('#presentation', {
   // Enable touch/swipe gestures
   touch: true,
   
-  // Auto-slide interval (0 = disabled)
+  // Enable mouse wheel scroll navigation
+  mouseWheel: false,
+  
+  // Auto-slide interval in ms (0 = disabled)
   autoSlide: 0,
+  
+  // Pause auto-sliding on hover
+  autoSlideStoppable: true,
   
   // Loop through slides
   loop: false,
+  
+  // Enable URL hash navigation (e.g. #/slide-1)
+  hash: true,
+  
+  // RTL layout mode
+  rtl: false,
   
   // Auto-initialize (set to false for manual init)
   autoInit: true
@@ -308,10 +335,10 @@ deck.next();
 deck.prev();
 
 // Go to first slide
-deck.first();
+deck.goToFirst();
 
 // Go to last slide
-deck.last();
+deck.goToLast();
 
 // Get current slide index
 const currentIndex = deck.getCurrentSlide();

@@ -12,6 +12,7 @@ export const defaultShortcuts = {
   ArrowLeft: 'prev',
   ArrowUp: 'prev',
   Space: 'next',
+  ' ': 'next',
   PageDown: 'next',
   PageUp: 'prev',
   Home: 'first',
@@ -73,6 +74,7 @@ class KeyboardHandler {
    * @returns {boolean} - True if typing context
    */
   isTypingContext(target) {
+    if (!target || !target.tagName) return false;
     const tagName = target.tagName.toLowerCase();
     return (
       tagName === 'input' ||

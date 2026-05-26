@@ -43,7 +43,41 @@
 
 /* Print: hide progress bar */
 @media print {
-  .swd-progress {
+  .swd-progress,
+  .swd-slide-number {
     display: none;
   }
+}
+
+/* Slide Numbering Styles */
+.swd-slide-number {
+  position: absolute;
+  bottom: 2.75rem; /* Vertically centered with control buttons */
+  right: 2rem;
+  font-family: var(--swd-font-sans, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--swd-primary-color, #333);
+  opacity: 0.6;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.3s ease;
+}
+
+/* If controls are in bottom-right, adjust slide number position to the left */
+.swd-wrapper:not(.swd-overview-mode) .swd-controls[data-position="bottom-right"] ~ .swd-slide-number {
+  right: 10.5rem; /* 168px - safely to the left of the 104px wide control buttons + 2rem margin + gap */
+}
+
+/* If RTL is active and controls are in bottom-right, move slide number to the left of wrapper */
+.swd-rtl.swd-wrapper:not(.swd-overview-mode) .swd-controls[data-position="bottom-right"] ~ .swd-slide-number {
+  left: 10.5rem;
+  right: auto;
+}
+
+/* If RTL is active and controls are flipped to left, slide number stays at right */
+.swd-rtl.swd-wrapper:not(.swd-overview-mode) .swd-controls:not([data-position="bottom-right"]) ~ .swd-slide-number {
+  right: 2rem;
+  left: auto;
 }

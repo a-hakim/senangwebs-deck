@@ -3,6 +3,8 @@
  * @module parsers/json-parser
  */
 
+import DOMPurify from 'dompurify';
+
 /**
  * JSON Parser class
  */
@@ -166,10 +168,10 @@ class JsonParser {
   buildCoverContent(slideData) {
     let html = '';
     if (slideData.title) {
-      html += `<h1>${this.escapeHTML(slideData.title)}</h1>`;
+      html += `<h1>${this.sanitizeHTML(slideData.title)}</h1>`;
     }
     if (slideData.subtitle) {
-      html += `<h2>${this.escapeHTML(slideData.subtitle)}</h2>`;
+      html += `<h2>${this.sanitizeHTML(slideData.subtitle)}</h2>`;
     }
     if (slideData.content) {
       html += this.buildContent(slideData.content);
@@ -183,9 +185,9 @@ class JsonParser {
    * @returns {string} - HTML content
    */
   buildQuoteContent(normalized) {
-    let html = `<blockquote>${this.escapeHTML(normalized.quote)}</blockquote>`;
+    let html = `<blockquote>${this.sanitizeHTML(normalized.quote)}</blockquote>`;
     if (normalized.author) {
-      html += `<cite>${this.escapeHTML(normalized.author)}</cite>`;
+      html += `<cite>${this.sanitizeHTML(normalized.author)}</cite>`;
     }
     return html;
   }
@@ -199,7 +201,7 @@ class JsonParser {
     if (!content) return '';
 
     if (typeof content === 'string') {
-      return this.escapeHTML(content);
+      return this.sanitizeHTML(content);
     }
 
     if (Array.isArray(content)) {
@@ -221,22 +223,22 @@ class JsonParser {
    */
   buildContentItem(item) {
     if (typeof item === 'string') {
-      return `<p>${this.escapeHTML(item)}</p>`;
+      return `<p>${this.sanitizeHTML(item)}</p>`;
     }
 
     if (item.type === 'heading') {
       const level = item.level || 2;
-      return `<h${level}>${this.escapeHTML(item.text)}</h${level}>`;
+      return `<h${level}>${this.sanitizeHTML(item.text)}</h${level}>`;
     }
 
     if (item.type === 'paragraph') {
-      return `<p>${this.escapeHTML(item.text)}</p>`;
+      return `<p>${this.sanitizeHTML(item.text)}</p>`;
     }
 
     if (item.type === 'list') {
       const tag = item.ordered ? 'ol' : 'ul';
       const items = (item.items || [])
-        .map((li) => `<li>${this.escapeHTML(li)}</li>`)
+        .map((li) => `<li>${this.sanitizeHTML(li)}</li>`)
         .join('');
       return `<${tag}>${items}</${tag}>`;
     }
@@ -279,7 +281,7 @@ class JsonParser {
     if (tableData.headers) {
       html += '<thead><tr>';
       tableData.headers.forEach((header) => {
-        html += `<th>${this.escapeHTML(header)}</th>`;
+        html += `<th>${this.sanitizeHTML(header)}</th>`;
       });
       html += '</tr></thead>';
     }
@@ -289,7 +291,7 @@ class JsonParser {
       tableData.rows.forEach((row) => {
         html += '<tr>';
         row.forEach((cell) => {
-          html += `<td>${this.escapeHTML(cell)}</td>`;
+          html += `<td>${this.sanitizeHTML(cell)}</td>`;
         });
         html += '</tr>';
       });
@@ -311,6 +313,16 @@ class JsonParser {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  /**
+   * Sanitize HTML securely using DOMPurify
+   * @param {string} text - HTML string to sanitize
+   * @returns {string} - Sanitized HTML string
+   */
+  sanitizeHTML(text) {
+    if (typeof text !== 'string') return '';
+    return DOMPurify.sanitize(text);
   }
 }
 

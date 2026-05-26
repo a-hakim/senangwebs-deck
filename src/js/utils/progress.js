@@ -12,6 +12,7 @@ class Progress {
     this.config = config;
     this.progressElement = null;
     this.progressBar = null;
+    this.slideNumberElement = null;
   }
 
   /**
@@ -54,6 +55,13 @@ class Progress {
     // Append to wrapper
     wrapper.appendChild(this.progressElement);
 
+    // Create slide numbers element if configured
+    if (this.config.slideNumbers !== false) {
+      this.slideNumberElement = document.createElement('div');
+      this.slideNumberElement.className = 'swd-slide-number';
+      wrapper.appendChild(this.slideNumberElement);
+    }
+
     // Initial update
     this.update();
   }
@@ -87,12 +95,35 @@ class Progress {
     // Calculate progress percentage
     const progress = ((currentSlide + 1) / totalSlides) * 100;
 
-    // Update bar width
+    // Update progress bar width
     this.progressBar.style.width = `${progress}%`;
 
     // Update ARIA attributes
     this.progressBar.setAttribute('aria-valuenow', Math.round(progress));
     this.progressBar.setAttribute('aria-valuetext', `Slide ${currentSlide + 1} of ${totalSlides}`);
+
+    // Update slide number UI
+    if (this.slideNumberElement) {
+      const format = this.config.slideNumberFormat || 'h/v';
+      let text = '';
+
+      switch (format) {
+        case 'c/t':
+        case 'h/v':
+          text = `${currentSlide + 1} / ${totalSlides}`;
+          break;
+        case 'c':
+          text = `${currentSlide + 1}`;
+          break;
+        case 'h.v':
+          text = `${currentSlide + 1}.${totalSlides}`;
+          break;
+        default:
+          text = `${currentSlide + 1} / ${totalSlides}`;
+      }
+
+      this.slideNumberElement.textContent = text;
+    }
   }
 
   /**
@@ -132,8 +163,12 @@ class Progress {
     if (this.progressElement && this.progressElement.parentNode) {
       this.progressElement.parentNode.removeChild(this.progressElement);
     }
+    if (this.slideNumberElement && this.slideNumberElement.parentNode) {
+      this.slideNumberElement.parentNode.removeChild(this.slideNumberElement);
+    }
     this.progressElement = null;
     this.progressBar = null;
+    this.slideNumberElement = null;
   }
 }
 

@@ -26,6 +26,12 @@ class Renderer {
     const wrapper = document.createElement('div');
     wrapper.className = 'swd-wrapper';
 
+    // Set RTL if configured
+    if (this.config.rtl) {
+      wrapper.setAttribute('dir', 'rtl');
+      wrapper.classList.add('swd-rtl');
+    }
+
     // Create slides container
     const slidesContainer = document.createElement('div');
     slidesContainer.className = 'swd-slides';

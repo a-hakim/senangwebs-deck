@@ -81,6 +81,22 @@ const deck = new SWD('#presentation', {
 - **Values:** `'fast'` (300ms), `'normal'` (500ms), `'slow'` (800ms), or custom number in milliseconds
 - **Description:** Duration/speed of transitions
 
+#### `aspectRatio`
+- **Type:** `string`
+- **Default:** `'16:9'`
+- **Values:** `'16:9'`, `'4:3'`, `'16:10'`
+- **Description:** Slide aspect ratio
+
+#### `parallax`
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** Enable parallax background effect (placeholder config)
+
+#### `rtl`
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** Enable Right-to-Left (RTL) layout mode
+
 ### UI Options
 
 #### `controls`
@@ -88,15 +104,33 @@ const deck = new SWD('#presentation', {
 - **Default:** `true`
 - **Description:** Show navigation controls (arrows)
 
+#### `controlsPosition`
+- **Type:** `string`
+- **Default:** `'bottom-right'`
+- **Values:** `'bottom-right'`, `'bottom-left'`, `'edges'`
+- **Description:** Position of the navigation controls
+
 #### `progress`
 - **Type:** `boolean`
 - **Default:** `true`
 - **Description:** Show progress bar at the bottom
 
-#### `slideNumber`
+#### `progressPosition`
+- **Type:** `string`
+- **Default:** `'bottom'`
+- **Values:** `'bottom'`, `'top'`
+- **Description:** Position of the progress bar
+
+#### `slideNumbers`
 - **Type:** `boolean`
-- **Default:** `false`
+- **Default:** `true`
 - **Description:** Show slide numbers (e.g., "1/10")
+
+#### `slideNumberFormat`
+- **Type:** `string`
+- **Default:** `'h/v'`
+- **Values:** `'h/v'` (horizontal/vertical), `'h.v'`, `'c/t'` (current/total), `'c'` (current only)
+- **Description:** Format of the slide numbers
 
 ### Navigation Options
 
@@ -105,10 +139,20 @@ const deck = new SWD('#presentation', {
 - **Default:** `true`
 - **Description:** Enable keyboard navigation
 
+#### `keyboardShortcuts`
+- **Type:** `Object`
+- **Default:** `{}`
+- **Description:** Map keys to custom actions (e.g., `{ 'Shift+Enter': 'next' }`)
+
 #### `touch`
 - **Type:** `boolean`
 - **Default:** `true`
 - **Description:** Enable touch/swipe gestures
+
+#### `mouseWheel`
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** Enable mouse wheel scrolling to navigate slides
 
 #### `loop`
 - **Type:** `boolean`
@@ -120,6 +164,42 @@ const deck = new SWD('#presentation', {
 - **Default:** `0`
 - **Description:** Auto-advance interval in milliseconds (0 = disabled)
 
+#### `autoSlideStoppable`
+- **Type:** `boolean`
+- **Default:** `true`
+- **Description:** Pause auto-sliding when hovering over container
+
+#### `autoplay`
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** Enable autoplay on load (maps to autoSlide via autoplayDelay)
+
+#### `autoplayDelay`
+- **Type:** `number`
+- **Default:** `3000`
+- **Description:** Autoplay transition interval in milliseconds
+
+#### `fragments`
+- **Type:** `boolean`
+- **Default:** `true`
+- **Description:** Enable sequential step-by-step element rendering within slides
+
+#### `fragmentStyle`
+- **Type:** `string`
+- **Default:** `'fade-in'`
+- **Values:** `'fade-in'`, `'slide-in'`, `'zoom-in'`
+- **Description:** Transition effect used for fragment reveals
+
+#### `hash`
+- **Type:** `boolean`
+- **Default:** `true`
+- **Description:** Update and read slide index from URL hash (e.g. `#/slide-2`)
+
+#### `history`
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** Push slide changes to browser history (placeholder config)
+
 ### Other Options
 
 #### `autoInit`
@@ -127,15 +207,30 @@ const deck = new SWD('#presentation', {
 - **Default:** `true`
 - **Description:** Automatically initialize on creation
 
-#### `history`
-- **Type:** `boolean`
-- **Default:** `false`
-- **Description:** Push slide changes to browser history
-
 #### `overview`
 - **Type:** `boolean`
 - **Default:** `true`
-- **Description:** Enable overview mode
+- **Description:** Enable slide overview/grid view mode
+
+#### `fullscreen`
+- **Type:** `boolean`
+- **Default:** `true`
+- **Description:** Enable fullscreen mode support
+
+#### `a11y`
+- **Type:** `Object`
+- **Default:** `{ enabled: true, announceSlideChanges: true, focusVisible: true }`
+- **Description:** Configure accessibility parameters
+
+#### `export`
+- **Type:** `Object`
+- **Default:** `{ pdf: true, html: true, json: true }`
+- **Description:** Enable or disable specific presentation export formats
+
+#### `plugins`
+- **Type:** `Array`
+- **Default:** `[]`
+- **Description:** List of plugins to initialize on load
 
 #### `dev`
 - **Type:** `boolean`
@@ -147,14 +242,14 @@ const deck = new SWD('#presentation', {
 ### Navigation Methods
 
 #### `next()`
-Navigate to the next slide.
+Navigate to the next slide or advance the current slide's fragments.
 
 ```javascript
 deck.next();
 ```
 
 #### `prev()`
-Navigate to the previous slide.
+Navigate to the previous slide or revert the current slide's fragments.
 
 ```javascript
 deck.prev();
@@ -170,18 +265,18 @@ Navigate to a specific slide by index (0-based).
 deck.goTo(3); // Go to 4th slide
 ```
 
-#### `first()`
+#### `goToFirst()`
 Navigate to the first slide.
 
 ```javascript
-deck.first();
+deck.goToFirst();
 ```
 
-#### `last()`
+#### `goToLast()`
 Navigate to the last slide.
 
 ```javascript
-deck.last();
+deck.goToLast();
 ```
 
 ### State Methods
@@ -246,65 +341,84 @@ Toggle overview mode (shows all slides in a grid).
 deck.toggleOverview();
 ```
 
+#### `setTransition(type)`
+Change transition animation type dynamically.
+
+**Parameters:**
+- `type` (string) - Transition name: `'slide'`, `'fade'`, `'zoom'`, `'flip'`, or `'none'`
+
+```javascript
+deck.setTransition('fade');
+```
+
+#### `setTransitionSpeed(speed)`
+Change transition duration dynamically.
+
+**Parameters:**
+- `speed` (number | string) - Duration in ms or speed name: `'fast'`, `'normal'`, or `'slow'`
+
+```javascript
+deck.setTransitionSpeed('fast');
+```
+
 ### Playback Methods
 
-#### `play()`
-Start auto-playing slides (if `autoSlide` is configured).
+#### `start()`
+Start auto-playing slides (uses `autoSlide` interval).
 
 ```javascript
-deck.play();
+deck.start();
 ```
 
-#### `pause()`
-Pause auto-playing slides.
+#### `stop()`
+Stop/pause auto-playing slides.
 
 ```javascript
-deck.pause();
-```
-
-#### `togglePause()`
-Toggle play/pause state.
-
-```javascript
-deck.togglePause();
+deck.stop();
 ```
 
 ### Export Methods
 
-#### `exportToPDF()`
-Export presentation to PDF.
-
-**Returns:** `Promise<Blob>` - PDF blob
+#### `exportPDF()`
+Export presentation to PDF by triggering the browser print dialog (requires print CSS configuration).
 
 ```javascript
-deck.exportToPDF().then(blob => {
-  // Download or save the PDF
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'presentation.pdf';
-  a.click();
+deck.exportPDF();
+```
+
+#### `exportHTML()`
+Export presentation to standalone HTML string.
+
+**Returns:** `Promise<string>` - Standalone HTML document
+
+```javascript
+deck.exportHTML().then(html => {
+  console.log(html);
 });
 ```
 
-#### `exportToHTML()`
-Export presentation to standalone HTML.
+#### `exportJSON()`
+Export presentation structure and content as a JSON object.
 
-**Returns:** `string` - Complete HTML document
+**Returns:** `Object` - Presentation data
 
 ```javascript
-const html = deck.exportToHTML();
-// Save or download the HTML
+const data = deck.exportJSON();
+console.log(data);
 ```
 
-#### `exportToJSON()`
-Export presentation data to JSON.
-
-**Returns:** `Object` - JSON data
+#### `downloadHTML()`
+Generate and download the standalone HTML presentation file.
 
 ```javascript
-const json = deck.exportToJSON();
-console.log(json);
+deck.downloadHTML();
+```
+
+#### `downloadJSON()`
+Generate and download the JSON data of the presentation.
+
+```javascript
+deck.downloadJSON();
 ```
 
 ### Lifecycle Methods
@@ -325,187 +439,154 @@ await deck.init();
 ```
 
 #### `destroy()`
-Clean up and destroy the presentation instance.
+Clean up and destroy the presentation instance, restoring the container and removing listeners.
 
 ```javascript
 deck.destroy();
 ```
 
-#### `reload()`
-Reload the presentation (re-parse content and re-render).
-
-**Returns:** `Promise<void>`
-
-```javascript
-await deck.reload();
-```
-
-### Configuration Methods
-
-#### `configure(options)`
-Update configuration options dynamically.
-
-**Parameters:**
-- `options` (Object) - Configuration options to update
-
-```javascript
-deck.configure({
-  theme: 'dark',
-  transition: 'fade',
-  autoSlide: 5000
-});
-```
-
-#### `getConfig()`
-Get current configuration.
-
-**Returns:** `Object` - Configuration object
-
-```javascript
-const config = deck.getConfig();
-console.log(config.theme, config.transition);
-```
-
 ## Events
 
-Listen to events using the `on` method:
+Listen to events using the custom `EventEmitter` methods:
 
 ```javascript
-deck.on('eventName', (data) => {
-  // Handle event
-});
+// Register a callback for an event
+deck.on('eventName', (data) => { ... });
+
+// Register a one-time callback
+deck.once('eventName', (data) => { ... });
+
+// Remove a specific callback
+deck.off('eventName', handlerReference);
+
+// Remove all callbacks for an event (or all events if argument is omitted)
+deck.offAll('eventName');
 ```
 
 ### Available Events
 
-#### `ready`
-Fired when presentation is fully initialized and ready.
+#### Lifecycle Events
 
-```javascript
-deck.on('ready', () => {
-  console.log('Presentation is ready!');
-});
-```
-
-#### `beforeInit`
+##### `beforeInit`
 Fired before initialization starts.
 
-```javascript
-deck.on('beforeInit', (deck) => {
-  console.log('About to initialize...');
-});
-```
-
-#### `afterInit`
+##### `afterInit`
 Fired after initialization completes.
 
+##### `ready`
+Fired when presentation is fully initialized and ready.
+
+##### `beforeDestroy`
+Fired before destruction cleanup starts.
+
+##### `afterDestroy`
+Fired after destruction is complete.
+
+##### `error`
+Fired when an initialization or runtime error occurs.
+- **Data:** `Error` - The error object.
+
 ```javascript
-deck.on('afterInit', (deck) => {
-  console.log('Initialization complete!');
+deck.on('error', (err) => {
+  console.error('SWD Error:', err.message);
 });
 ```
 
-#### `slideChanged`
-Fired when the current slide changes.
+#### Slide Navigation Events
 
-**Data:**
-- `currentSlide` (number) - New slide index
-- `previousSlide` (number) - Previous slide index
+##### `beforeSlideChange`
+Fired before a slide transition starts.
+- **Data:** `{ from: number, to: number }`
 
-```javascript
-deck.on('slideChanged', (data) => {
-  console.log(`Moved from slide ${data.previousSlide} to ${data.currentSlide}`);
-});
-```
-
-#### `beforeSlideChange`
-Fired before slide transition starts.
-
-**Data:**
-- `currentSlide` (number) - Current slide index
-- `nextSlide` (number) - Next slide index
-
-```javascript
-deck.on('beforeSlideChange', (data) => {
-  console.log(`About to change to slide ${data.nextSlide}`);
-});
-```
-
-#### `afterSlideChange`
-Fired after slide transition completes.
-
-**Data:**
-- `currentSlide` (number) - New slide index
-- `previousSlide` (number) - Previous slide index
+##### `afterSlideChange`
+Fired after a slide transition completes.
+- **Data:** `{ from: number, to: number }`
 
 ```javascript
 deck.on('afterSlideChange', (data) => {
-  console.log(`Transition complete!`);
+  console.log(`Now viewing slide index: ${data.to}`);
 });
 ```
 
-#### `fullscreenChanged`
+#### Display & View Mode Events
+
+##### `fullscreenChange`
 Fired when fullscreen state changes.
+- **Data:** `{ isFullscreen: boolean }`
 
-**Data:**
-- `isFullscreen` (boolean) - New fullscreen state
+##### `enterFullscreen`
+Fired when entering fullscreen mode.
 
-```javascript
-deck.on('fullscreenChanged', (data) => {
-  console.log(`Fullscreen: ${data.isFullscreen}`);
-});
-```
+##### `exitFullscreen`
+Fired when exiting fullscreen mode.
 
-#### `overviewChanged`
-Fired when overview mode changes.
+##### `enterOverview`
+Fired when entering slide overview/grid mode.
 
-**Data:**
-- `isOverview` (boolean) - New overview state
+##### `exitOverview`
+Fired when exiting slide overview/grid mode.
 
-```javascript
-deck.on('overviewChanged', (data) => {
-  console.log(`Overview: ${data.isOverview}`);
-});
-```
+##### `transitionStart`
+Fired when a slide transition starts.
+- **Data:** `{ oldSlide: HTMLElement, newSlide: HTMLElement, direction: 'forward'|'backward' }`
 
-#### `pauseChanged`
-Fired when auto-play pause state changes.
+##### `transitionEnd`
+Fired when a slide transition completes.
+- **Data:** `{ oldSlide: HTMLElement, newSlide: HTMLElement, direction: 'forward'|'backward' }`
 
-**Data:**
-- `isPaused` (boolean) - New pause state
+##### `transitionChanged`
+Fired when the transition animation type is updated dynamically.
+- **Data:** `{ type: string }`
 
-```javascript
-deck.on('pauseChanged', (data) => {
-  console.log(`Paused: ${data.isPaused}`);
-});
-```
+##### `transitionSpeedChanged`
+Fired when the transition speed is updated dynamically.
+- **Data:** `{ speed: number|string }`
 
-#### `error`
-Fired when an error occurs.
+#### Interactions & Navigation Events
 
-**Data:**
-- `error` (Error) - Error object
+##### `touchStart`
+Fired when user begins a touch gesture.
 
-```javascript
-deck.on('error', (error) => {
-  console.error('Error:', error.message);
-});
-```
+##### `touchMove`
+Fired when user moves finger in touch gesture.
 
-### Removing Event Listeners
+##### `touchEnd`
+Fired when user ends touch gesture.
 
-```javascript
-// Save reference to handler
-const handler = (data) => {
-  console.log(data);
-};
+##### `swipe`
+Fired when user triggers a swipe gesture.
+- **Data:** `{ direction: 'left'|'right'|'up'|'down', distance: number, velocity: number }`
 
-// Add listener
-deck.on('slideChanged', handler);
+##### `swipeUp`
+Fired on a swipe up gesture.
 
-// Remove listener
-deck.off('slideChanged', handler);
-```
+##### `swipeDown`
+Fired on a swipe down gesture.
+
+##### `fragmentShown`
+Fired when a slide fragment is revealed/shown.
+- **Data:** `{ fragment: HTMLElement }`
+
+##### `fragmentHidden`
+Fired when a slide fragment is hidden/reverted.
+- **Data:** `{ fragment: HTMLElement }`
+
+##### `keyboardAction`
+Fired when custom keyboard action triggers.
+- **Data:** `{ action: string, event: KeyboardEvent }`
+
+#### Export Events
+
+##### `beforeExportPDF` / `afterExportPDF`
+Fired before/after exporting slides to PDF (using print utility).
+
+##### `beforeExportHTML` / `afterExportHTML`
+Fired before/after exporting slides to standalone HTML.
+- **Data on `afterExportHTML`:** `{ html: string }`
+
+##### `beforeExportJSON` / `afterExportJSON`
+Fired before/after exporting slide data to JSON.
+- **Data on `afterExportJSON`:** `{ data: Object }`
 
 ## Properties
 

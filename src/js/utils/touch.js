@@ -33,7 +33,7 @@ class TouchHandler {
    * Initialize touch handler
    */
   init() {
-    if (this.config.touch !== false && this.isTouchDevice()) {
+    if (this.config.touch !== false) {
       const { container } = this.presentation;
 
       container.addEventListener('touchstart', this.boundTouchStart, {
@@ -190,14 +190,24 @@ class TouchHandler {
     // Emit swipe event
     this.presentation.emit('swipe', { direction, distance, velocity });
 
+    const isRtl = this.config.rtl === true;
+
     // Perform navigation based on direction
     switch (direction) {
       case 'left':
-        this.presentation.next();
+        if (isRtl) {
+          this.presentation.prev();
+        } else {
+          this.presentation.next();
+        }
         break;
 
       case 'right':
-        this.presentation.prev();
+        if (isRtl) {
+          this.presentation.next();
+        } else {
+          this.presentation.prev();
+        }
         break;
 
       case 'up':

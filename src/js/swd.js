@@ -14,6 +14,7 @@ import ExportUtil from './utils/export.js';
 import Transitions from './utils/transitions.js';
 import Controls from './utils/controls.js';
 import Progress from './utils/progress.js';
+import Overview from './utils/overview.js';
 import '../css/swd.css';
 
 /**
@@ -41,6 +42,11 @@ class SWD extends EventEmitter {
     // Merge configuration
     this.config = mergeConfig(DefaultConfig, options);
 
+    // Map autoplay data attributes to autoSlide
+    if (this.config.autoplay && this.config.autoSlide === 0) {
+      this.config.autoSlide = this.config.autoplayDelay || 3000;
+    }
+
     // Initialize state
     this.state = {
       initialized: false,
@@ -61,6 +67,7 @@ class SWD extends EventEmitter {
     this.transitions = null;
     this.controls = null;
     this.progress = null;
+    this.overview = null;
 
     // Auto-initialize if configured
     if (this.config.autoInit !== false) {
@@ -118,6 +125,10 @@ class SWD extends EventEmitter {
       this.progress = new Progress(this, this.config);
       this.progress.init();
 
+      // Initialize overview utility
+      this.overview = new Overview(this, this.config);
+      this.overview.init();
+
       // Initialize export utility
       this.exportUtil = new ExportUtil(this, this.config);
 
@@ -158,7 +169,7 @@ class SWD extends EventEmitter {
    */
   goTo(index) {
     if (!this.state.initialized) return;
-    this.navigation.goTo(index);
+    return this.navigation.goTo(index);
   }
 
   /**
@@ -253,24 +264,24 @@ class SWD extends EventEmitter {
    * Export to HTML
    */
   exportHTML() {
-    if (!this.state.initialized || !this.exportUtil) return;
-    this.exportUtil.toHTML();
+    if (!this.state.initialized || !this.exportUtil) return null;
+    return this.exportUtil.toHTML();
   }
 
   /**
    * Export to JSON
    */
   exportJSON() {
-    if (!this.state.initialized || !this.exportUtil) return;
-    this.exportUtil.toJSON();
+    if (!this.state.initialized || !this.exportUtil) return null;
+    return this.exportUtil.toJSON();
   }
 
   /**
    * Download HTML file
    */
   downloadHTML() {
-    if (!this.state.initialized || !this.exportUtil) return;
-    this.exportUtil.downloadHTML();
+    if (!this.state.initialized || !this.exportUtil) return null;
+    return this.exportUtil.downloadHTML();
   }
 
   /**
@@ -312,6 +323,11 @@ class SWD extends EventEmitter {
     // Cleanup progress bar
     if (this.progress) {
       this.progress.destroy();
+    }
+
+    // Cleanup overview mode
+    if (this.overview) {
+      this.overview.destroy();
     }
 
     // Cleanup renderer

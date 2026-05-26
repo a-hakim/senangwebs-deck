@@ -59,9 +59,9 @@ class ExportUtil {
 
   /**
    * Export presentation to standalone HTML
-   * @returns {string} - HTML content
+   * @returns {Promise<string>} - HTML content
    */
-  toHTML() {
+  async toHTML() {
     if (!this.config.export || this.config.export.html === false) {
       console.warn('HTML export is disabled');
       return null;
@@ -76,7 +76,7 @@ class ExportUtil {
     const styles = this.getInlineStyles();
 
     // Get SWD script (simplified version)
-    const script = this.getInlineScript();
+    const script = await this.getInlineScript();
 
     // Build complete HTML
     const html = `<!DOCTYPE html>
@@ -103,8 +103,8 @@ ${script}
   /**
    * Download HTML file
    */
-  downloadHTML() {
-    const html = this.toHTML();
+  async downloadHTML() {
+    const html = await this.toHTML();
     if (!html) return;
 
     const blob = new Blob([html], { type: 'text/html' });
@@ -183,17 +183,25 @@ ${script}
   getInlineStyles() {
     let styles = '';
 
-    // Get styles from link tags
-    const links = document.querySelectorAll('link[rel="stylesheet"]');
-    links.forEach((link) => {
-      if (link.href.includes('swd.css')) {
-        // Would need to fetch and inline the CSS
-        // For now, we'll use a placeholder
-        styles += '/* SWD styles would be inlined here */\n';
-      }
-    });
+    try {
+      Array.from(document.styleSheets).forEach((sheet) => {
+        try {
+          // Inline rules if they belong to swd.css or same-origin styles
+          if (!sheet.href || sheet.href.includes('swd.css') || sheet.href.startsWith(window.location.origin)) {
+            const rules = Array.from(sheet.cssRules || sheet.rules);
+            rules.forEach((rule) => {
+              styles += `${rule.cssText}\n`;
+            });
+          }
+        } catch (e) {
+          // Silent catch for cross-origin sheet access constraints
+        }
+      });
+    } catch (e) {
+      console.warn('Error reading stylesheet rules:', e);
+    }
 
-    // Get inline styles
+    // Get inline style tags
     const styleTags = document.querySelectorAll('style');
     styleTags.forEach((style) => {
       styles += `${style.textContent}\n`;
@@ -203,19 +211,41 @@ ${script}
   }
 
   /**
-   * Get inline script
-   * @returns {string} - Script content
+   * Get inline script asynchronously
+   * @returns {Promise<string>} - Script tag string
    */
-  getInlineScript() {
+  async getInlineScript() {
     const config = JSON.stringify(this.config, null, 2);
+    let scriptContent = '';
+
+    const scripts = document.querySelectorAll('script');
+    for (const script of Array.from(scripts)) {
+      if (script.src && script.src.includes('swd.js')) {
+        try {
+          const response = await fetch(script.src);
+          if (response.ok) {
+            scriptContent = await response.text();
+            break;
+          }
+        } catch (e) {
+          // Fail gracefully to fallback
+        }
+      }
+    }
+
+    if (!scriptContent) {
+      scriptContent = `// SWD Library Fallback (Static view only)
+console.warn('SWD library javascript was not inlined');`;
+    }
 
     return `<script>
-  // SWD initialization
-  (function() {
-    const config = ${config};
-    // SWD library would be inlined here
-    console.log('SWD Presentation loaded');
-  })();
+${scriptContent}
+(function() {
+  const container = document.querySelector('[data-swd-id]') || document.body.firstElementChild;
+  if (container && typeof SWD !== 'undefined') {
+    new SWD(container, ${config});
+  }
+})();
 </script>`;
   }
 

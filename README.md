@@ -43,7 +43,7 @@ npm install senangwebs-deck
     <head>
         <link
             rel="stylesheet"
-            href="node_modules/senangwebs-deck/dist/swd.css"
+            href="https://cdn.jsdelivr.net/npm/senangwebs-deck/dist/swd.css"
         />
     </head>
     <body>
@@ -63,7 +63,7 @@ npm install senangwebs-deck
             </div>
         </div>
 
-        <script src="node_modules/senangwebs-deck/dist/swd.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/senangwebs-deck/dist/swd.js"></script>
         <script>
             const deck = new SWD('#presentation', {
                 theme: 'light',
@@ -83,12 +83,13 @@ npm install senangwebs-deck
     const deck = new SWD('#presentation', {
         source: 'markdown',
         markdownUrl: './slides.md',
-        theme: 'light'
+        theme: 'light',
     });
 </script>
 ```
 
 **slides.md:**
+
 ```markdown
 <!-- slide: cover -->
 <!-- background: gradient-blue -->
@@ -131,6 +132,39 @@ const deck = new SWD('#presentation', {
 });
 ```
 
+## Configuration & HTML Data Attributes
+
+Initialize slide configurations directly on the presentation container element using standard HTML attributes:
+
+| HTML Data Attribute | Config Option | Description & Options |
+| :--- | :--- | :--- |
+| `data-swd-theme` | `theme` | `light`, `dark`, `gradient`, `minimal`, `corporate`, `creative`, `academic` |
+| `data-swd-transition` | `transition` | `slide`, `fade`, `zoom`, `flip`, `none` |
+| `data-swd-transition-speed` | `transitionSpeed` | `fast` (300ms), `normal` (500ms), `slow` (800ms), or speed in ms |
+| `data-swd-keyboard` | `keyboard` | `true` or `false` to toggle keyboard shortcuts |
+| `data-swd-controls` | `controls` | `true` or `false` to toggle navigation UI controls |
+| `data-swd-progress` | `progress` | `true` or `false` to toggle progress bar UI |
+| `data-swd-loop` | `loop` | `true` or `false` to loop from last to first slide |
+| `data-swd-autoplay` | `autoplay` | `true` or `false` to auto-play presentation |
+| `data-swd-autoplay-delay` | `autoplayDelay` | Delay between slides in milliseconds (default: `3000`) |
+| `data-swd-source` | `source` | Source format: `html`, `markdown`, or `json` |
+| `data-swd-markdown-url` | `markdownUrl`| Path to external markdown slides file |
+| `data-swd-json-url` | `jsonUrl` | Path to external JSON slides file |
+
+Example:
+```html
+<div 
+  data-swd-id="presentation"
+  data-swd-theme="dark"
+  data-swd-transition="zoom"
+  data-swd-transition-speed="slow"
+  data-swd-controls="true"
+  data-swd-progress="true"
+>
+  <!-- slides go here -->
+</div>
+```
+
 ## Documentation
 
 - [Getting Started Guide](docs/getting-started.md)
@@ -163,14 +197,14 @@ const deck = new SWD('#presentation', {
 
 ## Keyboard Shortcuts
 
-- `→` / `Space` - Next slide
-- `←` - Previous slide
+- `→` / `↓` / `Space` / `PageDown` - Next slide (or next fragment)
+- `←` / `↑` / `PageUp` - Previous slide (or previous fragment)
 - `Home` - First slide
 - `End` - Last slide
-- `F` - Toggle fullscreen
-- `O` - Toggle overview mode
-- `P` - Pause auto-slide
-- `Esc` - Exit fullscreen/overview
+- `F` / `f` - Toggle fullscreen
+- `O` / `o` - Toggle overview mode
+- `P` / `p` - Pause/resume auto-slide
+- `Esc` - Exit fullscreen or overview mode
 
 ## Contributing
 
