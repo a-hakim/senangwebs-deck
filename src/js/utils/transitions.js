@@ -24,6 +24,23 @@ export const TransitionSpeeds = {
 };
 
 /**
+ * Normalize transition speed to milliseconds
+ * @param {number|string} speed - Named speed or custom milliseconds
+ * @returns {number} Speed in milliseconds
+ */
+export function normalizeTransitionSpeed(speed) {
+  if (typeof speed === 'string') {
+    return TransitionSpeeds[speed.toUpperCase()] || TransitionSpeeds.NORMAL;
+  }
+
+  if (typeof speed === 'number' && Number.isFinite(speed) && speed >= 0) {
+    return speed;
+  }
+
+  return TransitionSpeeds.NORMAL;
+}
+
+/**
  * Transition Utility Class
  */
 export default class Transitions {
@@ -32,7 +49,7 @@ export default class Transitions {
     this.config = config;
     this.isTransitioning = false;
     this.currentTransition = config.transition || TransitionTypes.SLIDE;
-    this.transitionSpeed = config.transitionSpeed || TransitionSpeeds.NORMAL;
+    this.transitionSpeed = normalizeTransitionSpeed(config.transitionSpeed);
   }
 
   /**
@@ -45,6 +62,7 @@ export default class Transitions {
       wrapper.classList.add('swd-transitions-enabled');
       wrapper.setAttribute('data-transition', this.currentTransition);
       wrapper.setAttribute('data-transition-speed', this.getSpeedClass());
+      wrapper.style.setProperty('--swd-transition-speed', `${this.transitionSpeed}ms`);
     }
   }
 
@@ -283,11 +301,7 @@ export default class Transitions {
    * @param {number|string} speed - Speed in ms or 'slow'/'normal'/'fast'
    */
   setSpeed(speed) {
-    if (typeof speed === 'string') {
-      this.transitionSpeed = TransitionSpeeds[speed.toUpperCase()] || TransitionSpeeds.NORMAL;
-    } else if (typeof speed === 'number') {
-      this.transitionSpeed = speed;
-    }
+    this.transitionSpeed = normalizeTransitionSpeed(speed);
 
     const { wrapper } = this.presentation;
     if (wrapper) {

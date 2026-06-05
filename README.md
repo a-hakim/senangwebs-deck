@@ -2,7 +2,7 @@
 
 A modern, lightweight JavaScript library for creating beautiful web-based presentations with multiple input formats (HTML, Markdown, JSON).
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ![SenangWebs Deck Preview](https://raw.githubusercontent.com/a-hakim/senangwebs-deck/master/swd_preview.png)
 
@@ -10,7 +10,7 @@ A modern, lightweight JavaScript library for creating beautiful web-based presen
 
 - **Multiple Input Formats**: Create slides using HTML attributes, Markdown, or JSON
 - **10+ Built-in Layouts**: Cover, two-column, center, quote, image layouts, and more
-- **7 Beautiful Themes**: Light, dark, gradient, minimal, corporate, creative, and academic
+- **10 Beautiful Themes**: Light, dark, gradient, minimal, corporate, creative, academic, ocean, forest, and mono
 - **Smooth Transitions**: Slide, fade, zoom, flip animations
 - **Keyboard & Touch Navigation**: Full keyboard shortcuts and swipe gestures
 - **Export Options**: Export to PDF, HTML, or JSON
@@ -140,9 +140,9 @@ Initialize slide configurations directly on the presentation container element u
 
 | HTML Data Attribute | Config Option | Description & Options |
 | :--- | :--- | :--- |
-| `data-swd-theme` | `theme` | `light`, `dark`, `gradient`, `minimal`, `corporate`, `creative`, `academic` |
+| `data-swd-theme` | `theme` | `light`, `dark`, `gradient`, `minimal`, `corporate`, `creative`, `academic`, `ocean`, `forest`, `mono` |
 | `data-swd-transition` | `transition` | `slide`, `fade`, `zoom`, `flip`, `none` |
-| `data-swd-transition-speed` | `transitionSpeed` | `fast` (300ms), `normal` (500ms), `slow` (800ms), or speed in ms |
+| `data-swd-transition-speed` | `transitionSpeed` | `fast` (300ms), `normal` (500ms), `slow` (800ms), or a custom speed in ms |
 | `data-swd-keyboard` | `keyboard` | `true` or `false` to toggle keyboard shortcuts |
 | `data-swd-controls` | `controls` | `true` or `false` to toggle navigation UI controls |
 | `data-swd-progress` | `progress` | `true` or `false` to toggle progress bar UI |
@@ -159,13 +159,15 @@ Example:
   data-swd-id="presentation"
   data-swd-theme="dark"
   data-swd-transition="zoom"
-  data-swd-transition-speed="slow"
+  data-swd-transition-speed="650"
   data-swd-controls="true"
   data-swd-progress="true"
 >
   <!-- slides go here -->
 </div>
 ```
+
+Named transition speeds and custom millisecond values work in both JavaScript options and HTML data attributes. For example, `transitionSpeed: 'slow'` and `data-swd-transition-speed="800"` both resolve to an 800ms transition.
 
 ## Documentation
 
@@ -196,6 +198,9 @@ Example:
 - `corporate` - Professional business
 - `creative` - Bold and artistic
 - `academic` - Traditional scholarly
+- `ocean` - Cool, polished blue-green gradients
+- `forest` - Calm natural palette for grounded content
+- `mono` - High-contrast monochrome for technical decks
 
 ## Keyboard Shortcuts
 

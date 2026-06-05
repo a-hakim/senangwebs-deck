@@ -1,7 +1,7 @@
+import 'core-js/modules/es.string.trim.js';
 import 'core-js/modules/web.dom-collections.iterator.js';
 import 'core-js/modules/es.regexp.exec.js';
 import 'core-js/modules/es.string.replace.js';
-import 'core-js/modules/es.string.trim.js';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import 'core-js/modules/es.array.sort.js';
@@ -215,7 +215,7 @@ const DefaultConfig = {
 
   // Transition speed
   transitionSpeed: 'normal',
-  // 'fast', 'normal', 'slow'
+  // 'fast', 'normal', 'slow', or milliseconds
 
   // Slide aspect ratio
   aspectRatio: '16:9',
@@ -317,8 +317,10 @@ function validateConfig(config) {
 
   // Validate transition speed
   const validSpeeds = ['fast', 'normal', 'slow'];
-  if (config.transitionSpeed && !validSpeeds.includes(config.transitionSpeed)) {
-    throw new Error("Invalid transition speed. Must be one of: ".concat(validSpeeds.join(', ')));
+  const isNamedSpeed = typeof config.transitionSpeed === 'string' && validSpeeds.includes(config.transitionSpeed);
+  const isNumericSpeed = typeof config.transitionSpeed === 'number' && Number.isFinite(config.transitionSpeed) && config.transitionSpeed >= 0;
+  if (config.transitionSpeed !== undefined && config.transitionSpeed !== null && config.transitionSpeed !== '' && !isNamedSpeed && !isNumericSpeed) {
+    throw new Error("Invalid transition speed. Must be one of: ".concat(validSpeeds.join(', '), ", or a non-negative number of milliseconds"));
   }
 
   // Validate aspect ratio
@@ -2886,6 +2888,21 @@ const TransitionSpeeds = {
 };
 
 /**
+ * Normalize transition speed to milliseconds
+ * @param {number|string} speed - Named speed or custom milliseconds
+ * @returns {number} Speed in milliseconds
+ */
+function normalizeTransitionSpeed(speed) {
+  if (typeof speed === 'string') {
+    return TransitionSpeeds[speed.toUpperCase()] || TransitionSpeeds.NORMAL;
+  }
+  if (typeof speed === 'number' && Number.isFinite(speed) && speed >= 0) {
+    return speed;
+  }
+  return TransitionSpeeds.NORMAL;
+}
+
+/**
  * Transition Utility Class
  */
 class Transitions {
@@ -2894,7 +2911,7 @@ class Transitions {
     this.config = config;
     this.isTransitioning = false;
     this.currentTransition = config.transition || TransitionTypes.SLIDE;
-    this.transitionSpeed = config.transitionSpeed || TransitionSpeeds.NORMAL;
+    this.transitionSpeed = normalizeTransitionSpeed(config.transitionSpeed);
   }
 
   /**
@@ -2909,6 +2926,7 @@ class Transitions {
       wrapper.classList.add('swd-transitions-enabled');
       wrapper.setAttribute('data-transition', this.currentTransition);
       wrapper.setAttribute('data-transition-speed', this.getSpeedClass());
+      wrapper.style.setProperty('--swd-transition-speed', "".concat(this.transitionSpeed, "ms"));
     }
   }
 
@@ -3146,11 +3164,7 @@ class Transitions {
    * @param {number|string} speed - Speed in ms or 'slow'/'normal'/'fast'
    */
   setSpeed(speed) {
-    if (typeof speed === 'string') {
-      this.transitionSpeed = TransitionSpeeds[speed.toUpperCase()] || TransitionSpeeds.NORMAL;
-    } else if (typeof speed === 'number') {
-      this.transitionSpeed = speed;
-    }
+    this.transitionSpeed = normalizeTransitionSpeed(speed);
     const {
       wrapper
     } = this.presentation;
@@ -4029,7 +4043,9 @@ class SWD extends EventEmitter {
       config.autoplayDelay = parseInt(dataset.swdAutoplayDelay, 10);
     }
     if (dataset.swdTransitionSpeed) {
-      config.transitionSpeed = parseInt(dataset.swdTransitionSpeed, 10);
+      const transitionSpeed = dataset.swdTransitionSpeed.trim();
+      const numericTransitionSpeed = Number(transitionSpeed);
+      config.transitionSpeed = Number.isFinite(numericTransitionSpeed) ? numericTransitionSpeed : transitionSpeed;
     }
     return config;
   }

@@ -1,0 +1,53 @@
+/**
+ * Forest Theme
+ */
+
+.swd-theme-forest {
+  --swd-primary-bg: #f6faf4;
+  --swd-primary-text: #163323;
+  --swd-secondary-text: #486450;
+  --swd-accent-color: #2f7d46;
+  --swd-border-color: #cfe2c7;
+  --swd-font-family: 'Aptos', 'Segoe UI', Arial, sans-serif;
+  --swd-heading-font: Georgia, 'Times New Roman', serif;
+}
+
+.swd-theme-forest .swd-wrapper {
+  background: linear-gradient(135deg, #f6faf4 0%, #e4f1dc 62%, #f8f2df 100%);
+}
+
+.swd-theme-forest h1,
+.swd-theme-forest h2,
+.swd-theme-forest h3 {
+  color: #245a33;
+}
+
+.swd-theme-forest .swd-layout-section {
+  background: #2f7d46;
+}
+
+.swd-theme-forest .swd-layout-section * {
+  color: #ffffff;
+}
+
+.swd-theme-forest code {
+  background: #e8f2e2;
+  color: #245a33;
+}
+
+.swd-theme-forest pre {
+  background: #eef6ea;
+  border-left: 4px solid #2f7d46;
+}
+
+.swd-theme-forest blockquote {
+  border-left: 5px solid #b28a2e;
+  background: rgba(178, 138, 46, 0.1);
+  color: #2b412f;
+  padding: 1rem 1.5rem;
+}
+
+.swd-theme-forest .swd-control-prev,
+.swd-theme-forest .swd-control-next {
+  background: #2f7d46;
+}

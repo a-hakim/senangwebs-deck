@@ -1,0 +1,56 @@
+/**
+ * Mono Theme
+ */
+
+.swd-theme-mono {
+  --swd-primary-bg: #ffffff;
+  --swd-primary-text: #111111;
+  --swd-secondary-text: #3f3f3f;
+  --swd-accent-color: #111111;
+  --swd-border-color: #d8d8d8;
+  --swd-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --swd-heading-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.swd-theme-mono h1,
+.swd-theme-mono h2,
+.swd-theme-mono h3 {
+  color: #111111;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.swd-theme-mono h2,
+.swd-theme-mono h3 {
+  border-bottom: 2px solid #111111;
+  padding-bottom: 0.35rem;
+}
+
+.swd-theme-mono .swd-layout-section {
+  background: #111111;
+}
+
+.swd-theme-mono .swd-layout-section * {
+  color: #ffffff;
+}
+
+.swd-theme-mono code {
+  background: #eeeeee;
+  color: #111111;
+}
+
+.swd-theme-mono pre {
+  background: #f4f4f4;
+  border: 1px solid #111111;
+}
+
+.swd-theme-mono blockquote {
+  border-left: 5px solid #111111;
+  background: #f6f6f6;
+  padding: 1rem 1.5rem;
+}
+
+.swd-theme-mono .swd-control-prev,
+.swd-theme-mono .swd-control-next {
+  background: #111111;
+}

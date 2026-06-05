@@ -94,7 +94,7 @@ Third section content
 
 1. **Easy to Use** - Simple syntax
 2. **Flexible** - Multiple formats
-3. **Beautiful** - 7 built-in themes
+3. **Beautiful** - 10 built-in themes
 4. **Responsive** - Works everywhere
 
 ---

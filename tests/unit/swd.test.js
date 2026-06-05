@@ -268,4 +268,37 @@ describe('SenangWebs Deck (SWD) Tests', () => {
 
     deck.destroy();
   });
+
+  test('Should normalize named and numeric transition speeds', async () => {
+    container.innerHTML = `
+      <div data-swd-page>Slide 1</div>
+      <div data-swd-page>Slide 2</div>
+    `;
+
+    const deck = new SWD(container, {
+      transitionSpeed: 650,
+      hash: false,
+      autoInit: false,
+    });
+    await deck.init();
+
+    const wrapper = container.querySelector('.swd-wrapper');
+    expect(deck.transitions.getSpeed()).toBe(650);
+    expect(wrapper.style.getPropertyValue('--swd-transition-speed')).toBe('650ms');
+
+    deck.setTransitionSpeed('slow');
+    expect(deck.transitions.getSpeed()).toBe(800);
+    expect(wrapper.getAttribute('data-transition-speed')).toBe('slow');
+    expect(wrapper.style.getPropertyValue('--swd-transition-speed')).toBe('800ms');
+
+    deck.destroy();
+  });
+
+  test('Should read named and numeric transition speed data attributes', () => {
+    container.setAttribute('data-swd-transition-speed', 'slow');
+    expect(SWD.readDataAttributes(container).transitionSpeed).toBe('slow');
+
+    container.setAttribute('data-swd-transition-speed', '650');
+    expect(SWD.readDataAttributes(container).transitionSpeed).toBe(650);
+  });
 });

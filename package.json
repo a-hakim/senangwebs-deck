@@ -1,6 +1,6 @@
 {
   "name": "senangwebs-deck",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A modern, lightweight JavaScript library for creating beautiful web-based presentations with multiple input formats (HTML, Markdown, JSON)",
   "main": "dist/swd.js",
   "module": "dist/swd.esm.js",

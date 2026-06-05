@@ -540,7 +540,7 @@ Fired when the transition animation type is updated dynamically.
 
 ##### `transitionSpeedChanged`
 Fired when the transition speed is updated dynamically.
-- **Data:** `{ speed: number|string }`
+- **Data:** `{ speed: number }` - Normalized milliseconds
 
 #### Interactions & Navigation Events
 
@@ -729,6 +729,9 @@ Available themes:
 - `corporate` - Professional business
 - `creative` - Bold and artistic
 - `academic` - Traditional scholarly
+- `ocean` - Cool, polished blue-green gradients
+- `forest` - Calm natural palette for grounded content
+- `mono` - High-contrast monochrome for technical decks
 
 Change theme dynamically:
 

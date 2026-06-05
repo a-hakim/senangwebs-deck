@@ -435,7 +435,11 @@ class SWD extends EventEmitter {
       config.autoplayDelay = parseInt(dataset.swdAutoplayDelay, 10);
     }
     if (dataset.swdTransitionSpeed) {
-      config.transitionSpeed = parseInt(dataset.swdTransitionSpeed, 10);
+      const transitionSpeed = dataset.swdTransitionSpeed.trim();
+      const numericTransitionSpeed = Number(transitionSpeed);
+      config.transitionSpeed = Number.isFinite(numericTransitionSpeed)
+        ? numericTransitionSpeed
+        : transitionSpeed;
     }
 
     return config;

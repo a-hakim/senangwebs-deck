@@ -26,7 +26,7 @@ export const DefaultConfig = {
   transition: 'slide', // 'slide', 'fade', 'zoom', 'flip', 'none'
 
   // Transition speed
-  transitionSpeed: 'normal', // 'fast', 'normal', 'slow'
+  transitionSpeed: 'normal', // 'fast', 'normal', 'slow', or milliseconds
 
   // Slide aspect ratio
   aspectRatio: '16:9', // '16:9', '4:3', '16:10'
@@ -149,9 +149,23 @@ export function validateConfig(config) {
 
   // Validate transition speed
   const validSpeeds = ['fast', 'normal', 'slow'];
-  if (config.transitionSpeed && !validSpeeds.includes(config.transitionSpeed)) {
+  const isNamedSpeed =
+    typeof config.transitionSpeed === 'string' &&
+    validSpeeds.includes(config.transitionSpeed);
+  const isNumericSpeed =
+    typeof config.transitionSpeed === 'number' &&
+    Number.isFinite(config.transitionSpeed) &&
+    config.transitionSpeed >= 0;
+
+  if (
+    config.transitionSpeed !== undefined &&
+    config.transitionSpeed !== null &&
+    config.transitionSpeed !== '' &&
+    !isNamedSpeed &&
+    !isNumericSpeed
+  ) {
     throw new Error(
-      `Invalid transition speed. Must be one of: ${validSpeeds.join(', ')}`
+      `Invalid transition speed. Must be one of: ${validSpeeds.join(', ')}, or a non-negative number of milliseconds`
     );
   }
 

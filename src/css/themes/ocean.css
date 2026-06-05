@@ -1,0 +1,53 @@
+/**
+ * Ocean Theme
+ */
+
+.swd-theme-ocean {
+  --swd-primary-bg: #f2fbff;
+  --swd-primary-text: #073047;
+  --swd-secondary-text: #315c70;
+  --swd-accent-color: #0087a8;
+  --swd-border-color: #b9e4ef;
+  --swd-font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --swd-heading-font: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.swd-theme-ocean .swd-wrapper {
+  background: linear-gradient(135deg, #f2fbff 0%, #d6f1f7 55%, #eef8ef 100%);
+}
+
+.swd-theme-ocean h1,
+.swd-theme-ocean h2,
+.swd-theme-ocean h3 {
+  color: #005f7a;
+  font-weight: 700;
+}
+
+.swd-theme-ocean .swd-layout-section {
+  background: linear-gradient(135deg, #006d8f 0%, #00a7a5 100%);
+}
+
+.swd-theme-ocean .swd-layout-section * {
+  color: #ffffff;
+}
+
+.swd-theme-ocean code {
+  background: rgba(0, 135, 168, 0.12);
+  color: #005f7a;
+}
+
+.swd-theme-ocean pre {
+  background: rgba(7, 48, 71, 0.08);
+  border: 1px solid #8ed4e5;
+}
+
+.swd-theme-ocean blockquote {
+  border-left: 5px solid #00a7a5;
+  background: rgba(255, 255, 255, 0.55);
+  padding: 1rem 1.5rem;
+}
+
+.swd-theme-ocean .swd-control-prev,
+.swd-theme-ocean .swd-control-next {
+  background: #0087a8;
+}
