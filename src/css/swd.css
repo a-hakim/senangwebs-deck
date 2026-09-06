@@ -39,98 +39,140 @@
 
 /* Core Presentation Styles */
 .swd-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--swd-primary-bg);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--swd-primary-bg);
+}
+
+/* Aspect ratio letterboxing (opt-in via aspectRatio config) */
+.swd-wrapper[data-aspect-ratio] {
+    container-type: size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.swd-wrapper[data-aspect-ratio='16:9'] {
+    --swd-aspect-ratio: 1.7778;
+}
+
+.swd-wrapper[data-aspect-ratio='4:3'] {
+    --swd-aspect-ratio: 1.3333;
+}
+
+.swd-wrapper[data-aspect-ratio='16:10'] {
+    --swd-aspect-ratio: 1.6;
+}
+
+.swd-wrapper[data-aspect-ratio] .swd-slides {
+    width: min(100cqw, calc(100cqh * var(--swd-aspect-ratio)));
+    height: min(100cqh, calc(100cqw / var(--swd-aspect-ratio)));
 }
 
 .swd-slides {
-  position: relative;
-  width: 100%;
-  height: 100%;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .swd-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Slide visibility states */
 .swd-slide-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .swd-slide-active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 2;
 }
 
 .swd-slide.active {
-  opacity: 1;
-  visibility: visible;
-  z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
 }
 
 .swd-slide.past {
-  transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 .swd-slide.future {
-  transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 /* Only translate past/future slides for slide transition */
-.swd-wrapper[data-transition="slide"] .swd-slide.past {
-  transform: translateX(-100%);
+.swd-wrapper[data-transition='slide'] .swd-slide.past {
+    transform: translateX(-100%);
 }
 
-.swd-wrapper[data-transition="slide"] .swd-slide.future {
-  transform: translateX(100%);
+.swd-wrapper[data-transition='slide'] .swd-slide.future {
+    transform: translateX(100%);
 }
 
 /* RTL translations: past is translate right, future is translate left */
-.swd-rtl.swd-wrapper[data-transition="slide"] .swd-slide.past {
-  transform: translateX(100%);
+.swd-rtl.swd-wrapper[data-transition='slide'] .swd-slide.past {
+    transform: translateX(100%);
 }
 
-.swd-rtl.swd-wrapper[data-transition="slide"] .swd-slide.future {
-  transform: translateX(-100%);
+.swd-rtl.swd-wrapper[data-transition='slide'] .swd-slide.future {
+    transform: translateX(-100%);
 }
 
 /* Keyboard visible focus state for a11y */
 .swd-wrapper :focus-visible {
-  outline: 3px solid var(--swd-accent-color, #007acc) !important;
-  outline-offset: 2px !important;
+    outline: 3px solid var(--swd-accent-color, #007acc) !important;
+    outline-offset: 2px !important;
 }
 
 .swd-slide-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.swd-slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    padding: 2rem;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .swd-slide-content {
-  position: relative;
-  z-index: 1;
-  max-width: 90%;
-  max-height: 90%;
-  padding: 2rem;
+    position: relative;
+    z-index: 1;
+    max-width: 90%;
+    max-height: 90%;
+    padding: 2rem;
 }

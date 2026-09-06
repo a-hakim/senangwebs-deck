@@ -3,104 +3,104 @@
  */
 
 .swd-controls {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: var(--swd-z-controls, 100);
-  display: flex;
-  gap: 0.5rem;
-  opacity: 1;
-  transition: opacity 0.3s ease;
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: var(--swd-z-controls, 100);
+    display: flex;
+    gap: 0.5rem;
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
 .swd-controls-hidden {
-  opacity: 0;
-  pointer-events: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* Position variants */
-.swd-controls[data-position="bottom-left"] {
-  right: auto;
-  left: 2rem;
+.swd-controls[data-position='bottom-left'] {
+    right: auto;
+    left: 2rem;
 }
 
-.swd-controls[data-position="edges"] {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  left: 0;
-  right: 0;
-  padding: 0 2rem;
+.swd-controls[data-position='edges'] {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding: 0 2rem;
 }
 
 /* RTL configuration: position is bottom-left by default */
 .swd-rtl .swd-controls {
-  right: auto;
-  left: 2rem;
+    right: auto;
+    left: 2rem;
 }
 
-.swd-rtl .swd-controls[data-position="bottom-left"] {
-  left: auto;
-  right: 2rem;
+.swd-rtl .swd-controls[data-position='bottom-left'] {
+    left: auto;
+    right: 2rem;
 }
 
 /* RTL SVG arrows: rotate 180deg to point to the correct side */
 .swd-rtl .swd-control-prev svg,
 .swd-rtl .swd-control-next svg {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .swd-control-prev,
 .swd-control-next {
-  background: var(--swd-accent-color, #007acc);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background: var(--swd-accent-color, #007acc);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .swd-control-prev:hover,
 .swd-control-next:hover {
-  background: var(--swd-accent-color, #005a9e);
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: var(--swd-accent-color, #005a9e);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .swd-control-prev:active,
 .swd-control-next:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 .swd-control-prev:disabled,
 .swd-control-next:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  transform: none;
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .swd-control-prev:disabled:hover,
 .swd-control-next:disabled:hover {
-  background: var(--swd-accent-color, #007acc);
-  transform: none;
+    background: var(--swd-accent-color, #007acc);
+    transform: none;
 }
 
 /* SVG icon sizing */
 .swd-control-prev svg,
 .swd-control-next svg {
-  width: 24px;
-  height: 24px;
+    width: 24px;
+    height: 24px;
 }
 
 /* Print: hide controls */
 @media print {
-  .swd-controls {
-    display: none;
-  }
+    .swd-controls {
+        display: none;
+    }
 }

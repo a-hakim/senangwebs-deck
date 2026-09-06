@@ -217,10 +217,8 @@ const DefaultConfig = {
   transitionSpeed: 'normal',
   // 'fast', 'normal', 'slow', or milliseconds
 
-  // Slide aspect ratio
-  aspectRatio: '16:9',
-  // '16:9', '4:3', '16:10'
-
+  // Slide aspect ratio (null = fill the container; '16:9', '4:3', '16:10')
+  aspectRatio: null,
   // Auto-slide interval (ms, 0 = disabled)
   autoSlide: 0,
   // Pause auto-slide on hover
@@ -403,6 +401,16 @@ class HtmlParser {
       if (columns.length > 0) {
         slideData.columns = columns;
       }
+
+      // Parse dedicated text/image content zones (image layouts)
+      const textZone = element.querySelector('[data-swd-content]');
+      const imageZone = element.querySelector('[data-swd-image]');
+      if (textZone) {
+        slideData.textContent = textZone.innerHTML;
+      }
+      if (imageZone) {
+        slideData.imageContent = imageZone.innerHTML;
+      }
       slides.push(slideData);
     });
     return slides;
@@ -458,10 +466,17 @@ class MarkdownParser {
   setupMarked() {
     marked.setOptions({
       breaks: true,
-      gfm: true,
-      headerIds: false,
-      mangle: false
+      gfm: true
     });
+  }
+
+  /**
+   * Parse markdown to HTML and sanitize the result
+   * @param {string} content - Markdown content
+   * @returns {string} - Sanitized HTML
+   */
+  parseMarkdown(content) {
+    return DOMPurify.sanitize(marked.parse(content || ''));
   }
 
   /**
@@ -593,7 +608,7 @@ class MarkdownParser {
         this.parseImageLayout(content, slideData);
       } else {
         // Default: convert markdown to HTML
-        slideData.content = marked.parse(content);
+        slideData.content = this.parseMarkdown(content);
       }
     }
     return slideData;
@@ -658,11 +673,11 @@ class MarkdownParser {
     // Split by <!-- column --> marker
     const parts = contentWithMarkers.split(/<!--\s*column\s*-->/i);
     if (parts.length >= 2) {
-      slideData.left = marked.parse(parts[0].trim() || '');
-      slideData.right = marked.parse(parts[1].trim() || '');
+      slideData.left = this.parseMarkdown(parts[0].trim() || '');
+      slideData.right = this.parseMarkdown(parts[1].trim() || '');
     } else {
       // Fallback: if no marker, use all as left
-      slideData.left = marked.parse(contentWithMarkers);
+      slideData.left = this.parseMarkdown(contentWithMarkers);
       slideData.right = '';
     }
 
@@ -683,7 +698,7 @@ class MarkdownParser {
     const parts = contentWithMarkers.split(/<!--\s*column\s*-->/i);
 
     // We expect 3 parts for three columns
-    slideData.columns = [marked.parse((parts[0] || '').trim()), marked.parse((parts[1] || '').trim()), marked.parse((parts[2] || '').trim())];
+    slideData.columns = [this.parseMarkdown((parts[0] || '').trim()), this.parseMarkdown((parts[1] || '').trim()), this.parseMarkdown((parts[2] || '').trim())];
 
     // Don't include the markers in content
     slideData.content = '';
@@ -712,7 +727,7 @@ class MarkdownParser {
     }
 
     // Also set content as HTML
-    slideData.content = marked.parse(content);
+    slideData.content = this.parseMarkdown(content);
   }
 
   /**
@@ -730,9 +745,9 @@ class MarkdownParser {
       slideData.imageAlt = imageAlt;
       // Remove image from content
       const textContent = content.replace(imgRegex, '');
-      slideData.content = marked.parse(textContent);
+      slideData.content = this.parseMarkdown(textContent);
     } else {
-      slideData.content = marked.parse(content);
+      slideData.content = this.parseMarkdown(content);
     }
   }
 }
@@ -849,6 +864,8 @@ class JsonParser {
       case 'image-left':
         normalized.image = slideData.image;
         normalized.imageAlt = slideData.imageAlt || '';
+        normalized.imageContent = slideData.imageContent ? this.sanitizeHTML(slideData.imageContent) : undefined;
+        normalized.textContent = slideData.textContent ? this.sanitizeHTML(slideData.textContent) : undefined;
         normalized.content = this.buildContent(slideData.content);
         break;
       case 'full-image':
@@ -861,7 +878,7 @@ class JsonParser {
 
     // Copy any additional attributes
     Object.keys(slideData).forEach(key => {
-      if (!['layout', 'content', 'background', 'overlay', 'left', 'right', 'col1', 'col2', 'col3', 'quote', 'author', 'image', 'imageAlt'].includes(key)) {
+      if (!['layout', 'content', 'background', 'overlay', 'left', 'right', 'col1', 'col2', 'col3', 'quote', 'author', 'image', 'imageAlt', 'imageContent', 'textContent'].includes(key)) {
         normalized.attributes[key] = slideData[key];
       }
     });
@@ -1184,17 +1201,11 @@ const threeColsLayout = {
         content.appendChild(col);
       });
     } else {
-      // Parse content for ::col-N:: markers
-      const contentStr = slideData.content || '';
-      const parts = contentStr.split(/::col-[123]::/);
-
-      // Create three columns
-      for (let i = 0; i < 3; i += 1) {
-        const col = document.createElement('div');
-        col.className = "swd-col swd-col-".concat(i + 1);
-        col.innerHTML = parts[i + 1] || '';
-        content.appendChild(col);
-      }
+      // Fallback: render all content in the first column
+      const col = document.createElement('div');
+      col.className = 'swd-col swd-col-1';
+      col.innerHTML = slideData.content || '';
+      content.appendChild(col);
     }
     return content;
   }
@@ -1274,7 +1285,11 @@ const imageRightLayout = {
     imageCol.className = 'swd-col swd-col-image';
 
     // Check if image and text are provided separately
-    if (slideData.image) {
+    if (slideData.imageContent) {
+      // Image column markup provided via [data-swd-image] (HTML source)
+      textCol.innerHTML = slideData.textContent || slideData.content || '';
+      imageCol.innerHTML = slideData.imageContent;
+    } else if (slideData.image) {
       textCol.innerHTML = slideData.content || '';
       const img = document.createElement('img');
       img.src = slideData.image;
@@ -1319,7 +1334,11 @@ const imageLeftLayout = {
     textCol.className = 'swd-col swd-col-text';
 
     // Check if image and text are provided separately
-    if (slideData.image) {
+    if (slideData.imageContent) {
+      // Image column markup provided via [data-swd-image] (HTML source)
+      imageCol.innerHTML = slideData.imageContent;
+      textCol.innerHTML = slideData.textContent || slideData.content || '';
+    } else if (slideData.image) {
       const img = document.createElement('img');
       img.src = slideData.image;
       img.alt = slideData.imageAlt || '';
@@ -1415,6 +1434,11 @@ class Renderer {
       wrapper.classList.add('swd-rtl');
     }
 
+    // Apply aspect ratio if configured
+    if (this.config.aspectRatio) {
+      wrapper.setAttribute('data-aspect-ratio', this.config.aspectRatio);
+    }
+
     // Create slides container
     const slidesContainer = document.createElement('div');
     slidesContainer.className = 'swd-slides';
@@ -1466,16 +1490,26 @@ class Renderer {
       slide.appendChild(bg);
     }
 
-    // Get layout renderer
+    // Get layout renderer (fall back to default layout for unknown names)
     const layoutName = slideData.layout || 'default';
-    const layoutRenderer = layouts[layoutName];
+    let layoutRenderer = layouts[layoutName];
     if (!layoutRenderer) {
-      throw new Error("Unknown layout: ".concat(layoutName));
+      // eslint-disable-next-line no-console
+      console.warn("SWD: Unknown layout \"".concat(layoutName, "\" on slide ").concat(index, ". Falling back to \"default\"."));
+      layoutRenderer = layouts.default;
     }
 
     // Render layout content
     const content = layoutRenderer.render(slideData);
     slide.appendChild(content);
+
+    // Apply overlay (parsed from all sources, rendered on top of background)
+    if (slideData.overlay) {
+      const overlay = document.createElement('div');
+      overlay.className = 'swd-slide-overlay';
+      overlay.innerHTML = slideData.overlay;
+      slide.appendChild(overlay);
+    }
     return slide;
   }
 
@@ -1500,7 +1534,6 @@ const defaultShortcuts = {
   ArrowDown: 'next',
   ArrowLeft: 'prev',
   ArrowUp: 'prev',
-  Space: 'next',
   ' ': 'next',
   PageDown: 'next',
   PageUp: 'prev',
@@ -1573,20 +1606,28 @@ class KeyboardHandler {
    * @returns {string} - Key identifier
    */
   getKeyIdentifier(event) {
-    // Handle special keys with modifiers
-    if (event.shiftKey && event.key !== 'Shift') {
-      return "Shift+".concat(event.key);
+    const {
+      key
+    } = event;
+    const isLetterKey = key.length === 1 && /[a-zA-Z]/.test(key);
+
+    // Handle keys with modifiers
+    if (event.ctrlKey && key !== 'Control') {
+      return "Ctrl+".concat(key);
     }
-    if (event.ctrlKey && event.key !== 'Control') {
-      return "Ctrl+".concat(event.key);
+    if (event.altKey && key !== 'Alt') {
+      return "Alt+".concat(key);
     }
-    if (event.altKey && event.key !== 'Alt') {
-      return "Alt+".concat(event.key);
+    if (event.metaKey && key !== 'Meta') {
+      return "Meta+".concat(key);
     }
-    if (event.metaKey && event.key !== 'Meta') {
-      return "Meta+".concat(event.key);
+
+    // Shift is only prefixed for non-letter keys: letters are already
+    // distinguished by case via event.key (e.g. shift+f produces 'F')
+    if (event.shiftKey && !isLetterKey && key !== 'Shift') {
+      return "Shift+".concat(key);
     }
-    return event.key;
+    return key;
   }
 
   /**
@@ -1734,7 +1775,8 @@ class Fragments {
     // Filter by visible status if specified
     if (visibleState === true) {
       return sortedElements.filter(el => el.classList.contains('visible'));
-    } else if (visibleState === false) {
+    }
+    if (visibleState === false) {
       return sortedElements.filter(el => !el.classList.contains('visible'));
     }
     return sortedElements;
@@ -1816,6 +1858,8 @@ class Navigation {
     this.presentation = presentation;
     this.config = config;
     this.autoPlayInterval = null;
+    this.autoPlayEnabled = false;
+    this.isUserPaused = false;
     this.keyboardHandler = null;
     this.isPausedByHover = false;
     this.boundHashChange = null;
@@ -2016,15 +2060,14 @@ class Navigation {
    * Setup keyboard navigation
    */
   setupKeyboard() {
-    // Keyboard handling is now done by KeyboardHandler utility
-    // This method is kept for backwards compatibility
+    // Keyboard handling is done by KeyboardHandler utility
   }
 
   /**
    * Setup touch navigation
    */
   setupTouch() {
-    // Touch navigation will be implemented in touch utility
+    // Touch navigation is handled by the TouchHandler utility
   }
 
   /**
@@ -2032,22 +2075,38 @@ class Navigation {
    */
   startAutoPlay() {
     if (this.config.autoSlide <= 0) return;
-    this.stopAutoPlay();
-    this.autoPlayInterval = setInterval(() => {
-      this.next();
-    }, this.config.autoSlide);
-    this.presentation.state.isPlaying = true;
+    this.autoPlayEnabled = true;
+    this.isUserPaused = false;
+    this.updateAutoPlayState();
   }
 
   /**
    * Stop auto-play
    */
   stopAutoPlay() {
-    if (this.autoPlayInterval) {
+    this.autoPlayEnabled = false;
+    this.isUserPaused = false;
+    this.updateAutoPlayState();
+  }
+
+  /**
+   * Single source of truth for the autoplay interval:
+   * runs only when autoplay is enabled, not user-paused and not hover-paused
+   */
+  updateAutoPlayState() {
+    const shouldRun = this.autoPlayEnabled && !this.isUserPaused && !this.isPausedByHover;
+    if (shouldRun) {
+      if (!this.autoPlayInterval) {
+        this.autoPlayInterval = setInterval(() => {
+          this.next();
+        }, this.config.autoSlide);
+      }
+      this.presentation.state.isPlaying = true;
+    } else if (this.autoPlayInterval) {
       clearInterval(this.autoPlayInterval);
       this.autoPlayInterval = null;
+      this.presentation.state.isPlaying = false;
     }
-    this.presentation.state.isPlaying = false;
   }
 
   /**
@@ -2072,11 +2131,13 @@ class Navigation {
    * Parse slide index from URL hash
    */
   readHash() {
-    const hash = window.location.hash;
+    const {
+      hash
+    } = window.location;
     const match = hash.match(/\/slide-(\d+)/);
     if (match) {
       const index = parseInt(match[1], 10) - 1;
-      if (!isNaN(index) && index >= 0 && index < this.presentation.getTotalSlides()) {
+      if (!Number.isNaN(index) && index >= 0 && index < this.presentation.getTotalSlides()) {
         this.goTo(index);
       }
     }
@@ -2097,26 +2158,21 @@ class Navigation {
       container
     } = this.presentation;
     this.boundMouseEnter = () => {
-      if (this.presentation.state.isPlaying) {
+      if (this.autoPlayEnabled && !this.isUserPaused) {
         this.isPausedByHover = true;
-        this.stopAutoPlay();
-        // Maintain state as playing, just temporarily suspended
-        this.presentation.state.isPlaying = true;
+        this.updateAutoPlayState();
       }
     };
     this.boundMouseLeave = () => {
       if (this.isPausedByHover) {
         this.isPausedByHover = false;
-        this.startAutoPlay();
+        this.updateAutoPlayState();
       }
     };
     container.addEventListener('mouseenter', this.boundMouseEnter);
     container.addEventListener('mouseleave', this.boundMouseLeave);
   }
 
-  /**
-   * Cleanup navigation
-   */
   /**
    * Setup Accessibility live announcements
    */
@@ -2680,8 +2736,9 @@ class ExportUtil {
     }
     this.presentation.emit('beforeExportHTML');
 
-    // Get container HTML
-    const containerHTML = this.presentation.container.outerHTML;
+    // Get container HTML; strip data-swd-id so the embedded library's
+    // autoInit() cannot find it (prevents double initialization)
+    const containerHTML = this.presentation.container.outerHTML.replace(/\s*data-swd-id=(["'])[^"']*\1/, '');
 
     // Get all CSS
     const styles = this.getInlineStyles();
@@ -2711,7 +2768,9 @@ class ExportUtil {
     link.href = url;
     link.download = 'presentation.html';
     link.click();
-    URL.revokeObjectURL(url);
+
+    // Defer revoking so the download has time to start
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   /**
@@ -2731,14 +2790,35 @@ class ExportUtil {
         transitionSpeed: this.config.transitionSpeed,
         aspectRatio: this.config.aspectRatio
       },
-      slides: this.presentation.state.slides.map(slide => ({
-        index: slide.index,
-        layout: slide.layout,
-        background: slide.background,
-        overlay: slide.overlay,
-        content: slide.content,
-        attributes: slide.attributes
-      })),
+      slides: this.presentation.state.slides.map(slide => {
+        const exported = {
+          index: slide.index,
+          layout: slide.layout,
+          background: slide.background,
+          overlay: slide.overlay,
+          content: slide.content,
+          attributes: slide.attributes
+        };
+
+        // Preserve column/quote/image data so JSON export → re-import
+        // round-trips without losing layout information
+        if (slide.left !== undefined) exported.left = slide.left;
+        if (slide.right !== undefined) exported.right = slide.right;
+        if (slide.columns !== undefined) {
+          [exported.col1, exported.col2, exported.col3] = slide.columns;
+        }
+        if (slide.quote !== undefined) exported.quote = slide.quote;
+        if (slide.author !== undefined) exported.author = slide.author;
+        if (slide.image !== undefined) exported.image = slide.image;
+        if (slide.imageAlt !== undefined) exported.imageAlt = slide.imageAlt;
+        if (slide.textContent !== undefined) {
+          exported.textContent = slide.textContent;
+        }
+        if (slide.imageContent !== undefined) {
+          exported.imageContent = slide.imageContent;
+        }
+        return exported;
+      }),
       metadata: {
         totalSlides: this.presentation.state.slides.length,
         exportDate: new Date().toISOString(),
@@ -2766,7 +2846,9 @@ class ExportUtil {
     link.href = url;
     link.download = 'presentation.json';
     link.click();
-    URL.revokeObjectURL(url);
+
+    // Defer revoking so the download has time to start
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   /**
@@ -2806,59 +2888,31 @@ class ExportUtil {
    * @returns {Promise<string>} - Script tag string
    */
   async getInlineScript() {
-    const config = JSON.stringify(this.config, null, 2);
+    const {
+      source
+    } = this.config;
+    const isStatic = !source || source === 'html';
+    const exportConfig = _objectSpread2(_objectSpread2({}, this.config), {}, {
+      autoInit: false
+    });
+    const config = JSON.stringify(exportConfig, (key, value) => typeof value === 'function' ? undefined : value);
     let scriptContent = '';
-    const scripts = document.querySelectorAll('script');
-    for (const script of Array.from(scripts)) {
-      if (script.src && script.src.includes('swd.js')) {
-        try {
-          const response = await fetch(script.src);
-          if (response.ok) {
-            scriptContent = await response.text();
-            break;
-          }
-        } catch (e) {
-          // Fail gracefully to fallback
-        }
+    const swdScripts = Array.from(document.querySelectorAll('script')).filter(script => script.src && script.src.includes('swd.js'));
+    const responses = await Promise.all(swdScripts.map(async script => {
+      try {
+        const response = await fetch(script.src);
+        return response.ok ? await response.text() : '';
+      } catch (e) {
+        // Fail gracefully to fallback
+        return '';
       }
-    }
+    }));
+    scriptContent = responses.find(content => content) || '';
     if (!scriptContent) {
       scriptContent = "// SWD Library Fallback (Static view only)\nconsole.warn('SWD library javascript was not inlined');";
     }
-    return "<script>\n".concat(scriptContent, "\n(function() {\n  const container = document.querySelector('[data-swd-id]') || document.body.firstElementChild;\n  if (container && typeof SWD !== 'undefined') {\n    new SWD(container, ").concat(config, ");\n  }\n})();\n</script>");
-  }
-
-  /**
-   * Create export UI (optional helper)
-   * @returns {HTMLElement} - Export button container
-   */
-  createExportUI() {
-    const container = document.createElement('div');
-    container.className = 'swd-export-ui';
-    container.style.cssText = "\n      position: fixed;\n      bottom: 20px;\n      left: 20px;\n      display: flex;\n      gap: 10px;\n      z-index: 1000;\n    ";
-    const buttonStyle = "\n      padding: 10px 20px;\n      background: #0066cc;\n      color: white;\n      border: none;\n      border-radius: 5px;\n      cursor: pointer;\n      font-size: 14px;\n    ";
-
-    // PDF export button
-    const pdfBtn = document.createElement('button');
-    pdfBtn.textContent = 'Export to PDF';
-    pdfBtn.style.cssText = buttonStyle;
-    pdfBtn.onclick = () => this.toPDF();
-    container.appendChild(pdfBtn);
-
-    // HTML export button
-    const htmlBtn = document.createElement('button');
-    htmlBtn.textContent = 'Export to HTML';
-    htmlBtn.style.cssText = buttonStyle;
-    htmlBtn.onclick = () => this.downloadHTML();
-    container.appendChild(htmlBtn);
-
-    // JSON export button
-    const jsonBtn = document.createElement('button');
-    jsonBtn.textContent = 'Export to JSON';
-    jsonBtn.style.cssText = buttonStyle;
-    jsonBtn.onclick = () => this.downloadJSON();
-    container.appendChild(jsonBtn);
-    return container;
+    const initCode = isStatic ? "// Static snapshot export: slides are already rendered; no re-initialization" : "const deck = new SWD(container, ".concat(config, ");\n    deck.init().catch(function (e) { console.error('SWD export init failed:', e); });");
+    return "<script>\n".concat(scriptContent, "\n(function() {\n  // data-swd-id is stripped from the exported container to prevent the\n  // embedded library's autoInit() from creating a duplicate instance\n  const wrapper = document.querySelector('.swd-wrapper');\n  const container = wrapper ? wrapper.parentElement : null;\n  if (container && typeof SWD !== 'undefined') {\n    ").concat(initCode, "\n  }\n})();\n</script>");
   }
 }
 
@@ -3622,7 +3676,7 @@ class Overview {
     if (!this.active) return;
     const slideElement = event.currentTarget;
     const index = parseInt(slideElement.getAttribute('data-index'), 10);
-    if (!isNaN(index)) {
+    if (!Number.isNaN(index)) {
       event.preventDefault();
       event.stopPropagation();
       this.presentation.goTo(index);
@@ -3657,6 +3711,9 @@ class SWD extends EventEmitter {
       throw new Error('SWD: Container element not found');
     }
 
+    // Keep original container markup so destroy()/reload() can restore it
+    this.originalContent = this.container.innerHTML;
+
     // Merge configuration
     this.config = mergeConfig(DefaultConfig, options);
 
@@ -3668,6 +3725,7 @@ class SWD extends EventEmitter {
     // Initialize state
     this.state = {
       initialized: false,
+      initializing: false,
       slides: [],
       currentSlide: 0,
       isPlaying: false,
@@ -3689,7 +3747,9 @@ class SWD extends EventEmitter {
 
     // Auto-initialize if configured
     if (this.config.autoInit !== false) {
-      this.init();
+      // Async init: catch rejections so failed sources (markdownUrl/jsonUrl)
+      // surface via the 'error' event instead of an unhandled rejection
+      this.init().catch(() => {});
     }
   }
 
@@ -3701,6 +3761,11 @@ class SWD extends EventEmitter {
       console.warn('SWD: Presentation already initialized');
       return;
     }
+    if (this.state.initializing) {
+      console.warn('SWD: Initialization already in progress');
+      return;
+    }
+    this.state.initializing = true;
     try {
       this.emit('beforeInit', this);
 
@@ -3748,12 +3813,14 @@ class SWD extends EventEmitter {
 
       // Mark as initialized
       this.state.initialized = true;
+      this.state.initializing = false;
       this.emit('afterInit', this);
       this.emit('ready', this);
       if (this.config.dev) {
         // console.log('SWD: Presentation initialized successfully');
       }
     } catch (error) {
+      this.state.initializing = false;
       this.emit('error', error);
       throw error;
     }
@@ -3780,7 +3847,7 @@ class SWD extends EventEmitter {
    * @param {number} index - Slide index
    */
   goTo(index) {
-    if (!this.state.initialized) return;
+    if (!this.state.initialized) return undefined;
     return this.navigation.goTo(index);
   }
 
@@ -3819,7 +3886,9 @@ class SWD extends EventEmitter {
    */
   toggleFullscreen() {
     if (!this.state.initialized || !this.fullscreen) return;
-    this.fullscreen.toggle();
+    // Catch rejections (unsupported/blocked fullscreen) to avoid
+    // unhandled promise rejections; the warn is logged by the util
+    this.fullscreen.toggle().catch(() => {});
   }
 
   /**
@@ -3946,12 +4015,14 @@ class SWD extends EventEmitter {
       this.renderer.destroy();
     }
 
-    // Clear container
-    this.container.innerHTML = '';
+    // Restore original container markup and theme class
+    this.container.innerHTML = this.originalContent;
+    this.container.className = this.container.className.split(' ').filter(cls => !cls.startsWith('swd-theme-')).join(' ').trim();
 
     // Reset state
     this.state = {
       initialized: false,
+      initializing: false,
       slides: [],
       currentSlide: 0,
       isPlaying: false,
@@ -3959,10 +4030,39 @@ class SWD extends EventEmitter {
       isOverview: false
     };
 
+    // Reset component references
+    this.parser = null;
+    this.renderer = null;
+    this.navigation = null;
+    this.touchHandler = null;
+    this.fullscreen = null;
+    this.exportUtil = null;
+    this.transitions = null;
+    this.controls = null;
+    this.progress = null;
+    this.overview = null;
+
     // Remove all event listeners
     this.offAll();
-    this.emit('afterDestroy');
+    this.emit('afterDestroy', this);
     if (this.config.dev) ;
+  }
+
+  /**
+   * Reload the presentation, optionally with updated configuration.
+   * Restores the original container markup and re-runs the full pipeline.
+   * @param {Object} [options] - Configuration updates to apply before re-init
+   * @returns {Promise<void>}
+   */
+  async reload() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    if (this.state.initialized) {
+      this.destroy();
+    }
+    if (options && typeof options === 'object' && Object.keys(options).length > 0) {
+      this.config = mergeConfig(this.config, options);
+    }
+    return this.init();
   }
 
   /**

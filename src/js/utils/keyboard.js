@@ -7,198 +7,203 @@
  * Default keyboard shortcuts
  */
 export const defaultShortcuts = {
-  ArrowRight: 'next',
-  ArrowDown: 'next',
-  ArrowLeft: 'prev',
-  ArrowUp: 'prev',
-  Space: 'next',
-  ' ': 'next',
-  PageDown: 'next',
-  PageUp: 'prev',
-  Home: 'first',
-  End: 'last',
-  f: 'fullscreen',
-  F: 'fullscreen',
-  o: 'overview',
-  O: 'overview',
-  p: 'pause',
-  P: 'pause',
-  Escape: 'escape',
+    ArrowRight: 'next',
+    ArrowDown: 'next',
+    ArrowLeft: 'prev',
+    ArrowUp: 'prev',
+    ' ': 'next',
+    PageDown: 'next',
+    PageUp: 'prev',
+    Home: 'first',
+    End: 'last',
+    f: 'fullscreen',
+    F: 'fullscreen',
+    o: 'overview',
+    O: 'overview',
+    p: 'pause',
+    P: 'pause',
+    Escape: 'escape',
 };
 
 /**
  * Keyboard Handler class
  */
 class KeyboardHandler {
-  constructor(presentation, config = {}) {
-    this.presentation = presentation;
-    this.config = config;
-    this.enabled = true;
-    this.shortcuts = { ...defaultShortcuts, ...config.keyboardShortcuts };
-    this.boundHandleKeydown = this.handleKeydown.bind(this);
-  }
-
-  /**
-   * Initialize keyboard handler
-   */
-  init() {
-    if (this.config.keyboard !== false) {
-      document.addEventListener('keydown', this.boundHandleKeydown);
-    }
-  }
-
-  /**
-   * Handle keydown events
-   * @param {KeyboardEvent} event - Keyboard event
-   */
-  handleKeydown(event) {
-    if (!this.enabled) return;
-
-    // Skip if user is typing in an input field
-    if (this.isTypingContext(event.target)) {
-      return;
+    constructor(presentation, config = {}) {
+        this.presentation = presentation;
+        this.config = config;
+        this.enabled = true;
+        this.shortcuts = { ...defaultShortcuts, ...config.keyboardShortcuts };
+        this.boundHandleKeydown = this.handleKeydown.bind(this);
     }
 
-    const key = this.getKeyIdentifier(event);
-    const action = this.shortcuts[key];
-
-    if (action) {
-      event.preventDefault();
-      this.executeAction(action, event);
-    }
-  }
-
-  /**
-   * Check if target is an input context
-   * @param {HTMLElement} target - Event target
-   * @returns {boolean} - True if typing context
-   */
-  isTypingContext(target) {
-    if (!target || !target.tagName) return false;
-    const tagName = target.tagName.toLowerCase();
-    return (
-      tagName === 'input' ||
-      tagName === 'textarea' ||
-      tagName === 'select' ||
-      target.isContentEditable
-    );
-  }
-
-  /**
-   * Get key identifier from event
-   * @param {KeyboardEvent} event - Keyboard event
-   * @returns {string} - Key identifier
-   */
-  getKeyIdentifier(event) {
-    // Handle special keys with modifiers
-    if (event.shiftKey && event.key !== 'Shift') {
-      return `Shift+${event.key}`;
-    }
-    if (event.ctrlKey && event.key !== 'Control') {
-      return `Ctrl+${event.key}`;
-    }
-    if (event.altKey && event.key !== 'Alt') {
-      return `Alt+${event.key}`;
-    }
-    if (event.metaKey && event.key !== 'Meta') {
-      return `Meta+${event.key}`;
-    }
-
-    return event.key;
-  }
-
-  /**
-   * Execute keyboard action
-   * @param {string} action - Action name
-   * @param {KeyboardEvent} event - Keyboard event
-   */
-  executeAction(action, event) {
-    switch (action) {
-      case 'next':
-        this.presentation.next();
-        break;
-
-      case 'prev':
-        this.presentation.prev();
-        break;
-
-      case 'first':
-        this.presentation.goToFirst();
-        break;
-
-      case 'last':
-        this.presentation.goToLast();
-        break;
-
-      case 'fullscreen':
-        this.presentation.toggleFullscreen();
-        break;
-
-      case 'overview':
-        this.presentation.toggleOverview();
-        break;
-
-      case 'pause':
-        if (this.presentation.state.isPlaying) {
-          this.presentation.stop();
-        } else {
-          this.presentation.start();
+    /**
+     * Initialize keyboard handler
+     */
+    init() {
+        if (this.config.keyboard !== false) {
+            document.addEventListener('keydown', this.boundHandleKeydown);
         }
-        break;
-
-      case 'escape':
-        // Handle escape key
-        if (this.presentation.state.isFullscreen) {
-          this.presentation.toggleFullscreen();
-        } else if (this.presentation.state.isOverview) {
-          this.presentation.toggleOverview();
-        }
-        break;
-
-      default:
-        // Custom action
-        this.presentation.emit('keyboardAction', { action, event });
-        break;
     }
-  }
 
-  /**
-   * Add custom keyboard shortcut
-   * @param {string} key - Key identifier
-   * @param {string} action - Action name
-   */
-  addShortcut(key, action) {
-    this.shortcuts[key] = action;
-  }
+    /**
+     * Handle keydown events
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleKeydown(event) {
+        if (!this.enabled) return;
 
-  /**
-   * Remove keyboard shortcut
-   * @param {string} key - Key identifier
-   */
-  removeShortcut(key) {
-    delete this.shortcuts[key];
-  }
+        // Skip if user is typing in an input field
+        if (this.isTypingContext(event.target)) {
+            return;
+        }
 
-  /**
-   * Enable keyboard handler
-   */
-  enable() {
-    this.enabled = true;
-  }
+        const key = this.getKeyIdentifier(event);
+        const action = this.shortcuts[key];
 
-  /**
-   * Disable keyboard handler
-   */
-  disable() {
-    this.enabled = false;
-  }
+        if (action) {
+            event.preventDefault();
+            this.executeAction(action, event);
+        }
+    }
 
-  /**
-   * Destroy keyboard handler
-   */
-  destroy() {
-    document.removeEventListener('keydown', this.boundHandleKeydown);
-  }
+    /**
+     * Check if target is an input context
+     * @param {HTMLElement} target - Event target
+     * @returns {boolean} - True if typing context
+     */
+    isTypingContext(target) {
+        if (!target || !target.tagName) return false;
+        const tagName = target.tagName.toLowerCase();
+        return (
+            tagName === 'input' ||
+            tagName === 'textarea' ||
+            tagName === 'select' ||
+            target.isContentEditable
+        );
+    }
+
+    /**
+     * Get key identifier from event
+     * @param {KeyboardEvent} event - Keyboard event
+     * @returns {string} - Key identifier
+     */
+    getKeyIdentifier(event) {
+        const { key } = event;
+        const isLetterKey = key.length === 1 && /[a-zA-Z]/.test(key);
+
+        // Handle keys with modifiers
+        if (event.ctrlKey && key !== 'Control') {
+            return `Ctrl+${key}`;
+        }
+        if (event.altKey && key !== 'Alt') {
+            return `Alt+${key}`;
+        }
+        if (event.metaKey && key !== 'Meta') {
+            return `Meta+${key}`;
+        }
+
+        // Shift is only prefixed for non-letter keys: letters are already
+        // distinguished by case via event.key (e.g. shift+f produces 'F')
+        if (event.shiftKey && !isLetterKey && key !== 'Shift') {
+            return `Shift+${key}`;
+        }
+
+        return key;
+    }
+
+    /**
+     * Execute keyboard action
+     * @param {string} action - Action name
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    executeAction(action, event) {
+        switch (action) {
+            case 'next':
+                this.presentation.next();
+                break;
+
+            case 'prev':
+                this.presentation.prev();
+                break;
+
+            case 'first':
+                this.presentation.goToFirst();
+                break;
+
+            case 'last':
+                this.presentation.goToLast();
+                break;
+
+            case 'fullscreen':
+                this.presentation.toggleFullscreen();
+                break;
+
+            case 'overview':
+                this.presentation.toggleOverview();
+                break;
+
+            case 'pause':
+                if (this.presentation.state.isPlaying) {
+                    this.presentation.stop();
+                } else {
+                    this.presentation.start();
+                }
+                break;
+
+            case 'escape':
+                // Handle escape key
+                if (this.presentation.state.isFullscreen) {
+                    this.presentation.toggleFullscreen();
+                } else if (this.presentation.state.isOverview) {
+                    this.presentation.toggleOverview();
+                }
+                break;
+
+            default:
+                // Custom action
+                this.presentation.emit('keyboardAction', { action, event });
+                break;
+        }
+    }
+
+    /**
+     * Add custom keyboard shortcut
+     * @param {string} key - Key identifier
+     * @param {string} action - Action name
+     */
+    addShortcut(key, action) {
+        this.shortcuts[key] = action;
+    }
+
+    /**
+     * Remove keyboard shortcut
+     * @param {string} key - Key identifier
+     */
+    removeShortcut(key) {
+        delete this.shortcuts[key];
+    }
+
+    /**
+     * Enable keyboard handler
+     */
+    enable() {
+        this.enabled = true;
+    }
+
+    /**
+     * Disable keyboard handler
+     */
+    disable() {
+        this.enabled = false;
+    }
+
+    /**
+     * Destroy keyboard handler
+     */
+    destroy() {
+        document.removeEventListener('keydown', this.boundHandleKeydown);
+    }
 }
 
 export default KeyboardHandler;

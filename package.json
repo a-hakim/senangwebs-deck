@@ -1,10 +1,11 @@
 {
   "name": "senangwebs-deck",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A modern, lightweight JavaScript library for creating beautiful web-based presentations with multiple input formats (HTML, Markdown, JSON)",
   "main": "dist/swd.js",
   "module": "dist/swd.esm.js",
   "style": "dist/swd.css",
+  "types": "index.d.ts",
   "scripts": {
     "dev": "rollup -c rollup.config.mjs --watch",
     "build": "rollup -c rollup.config.mjs",

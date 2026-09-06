@@ -7,169 +7,177 @@
  * Progress class - Renders and updates progress bar
  */
 class Progress {
-  constructor(presentation, config = {}) {
-    this.presentation = presentation;
-    this.config = config;
-    this.progressElement = null;
-    this.progressBar = null;
-    this.slideNumberElement = null;
-  }
-
-  /**
-   * Initialize progress bar
-   */
-  init() {
-    if (this.config.progress === false) {
-      return;
+    constructor(presentation, config = {}) {
+        this.presentation = presentation;
+        this.config = config;
+        this.progressElement = null;
+        this.progressBar = null;
+        this.slideNumberElement = null;
     }
 
-    this.render();
-    this.attachEventListeners();
-  }
+    /**
+     * Initialize progress bar
+     */
+    init() {
+        if (this.config.progress === false) {
+            return;
+        }
 
-  /**
-   * Render progress bar UI
-   */
-  render() {
-    const { wrapper } = this.presentation;
-    if (!wrapper) return;
-
-    // Create progress container
-    this.progressElement = document.createElement('div');
-    this.progressElement.className = 'swd-progress';
-
-    // Get position from config
-    const position = this.config.progressPosition || 'bottom';
-    this.progressElement.setAttribute('data-position', position);
-
-    // Create progress bar
-    this.progressBar = document.createElement('div');
-    this.progressBar.className = 'swd-progress-bar';
-    this.progressBar.setAttribute('role', 'progressbar');
-    this.progressBar.setAttribute('aria-valuemin', '0');
-    this.progressBar.setAttribute('aria-valuemax', '100');
-
-    // Append bar to container
-    this.progressElement.appendChild(this.progressBar);
-
-    // Append to wrapper
-    wrapper.appendChild(this.progressElement);
-
-    // Create slide numbers element if configured
-    if (this.config.slideNumbers !== false) {
-      this.slideNumberElement = document.createElement('div');
-      this.slideNumberElement.className = 'swd-slide-number';
-      wrapper.appendChild(this.slideNumberElement);
+        this.render();
+        this.attachEventListeners();
     }
 
-    // Initial update
-    this.update();
-  }
+    /**
+     * Render progress bar UI
+     */
+    render() {
+        const { wrapper } = this.presentation;
+        if (!wrapper) return;
 
-  /**
-   * Attach event listeners
-   */
-  attachEventListeners() {
-    // Update progress on slide change
-    this.presentation.on('afterSlideChange', () => {
-      this.update();
-    });
+        // Create progress container
+        this.progressElement = document.createElement('div');
+        this.progressElement.className = 'swd-progress';
 
-    // Update on initialization
-    this.presentation.on('afterInit', () => {
-      this.update();
-    });
-  }
+        // Get position from config
+        const position = this.config.progressPosition || 'bottom';
+        this.progressElement.setAttribute('data-position', position);
 
-  /**
-   * Update progress bar based on current slide
-   */
-  update() {
-    if (!this.progressBar) return;
+        // Create progress bar
+        this.progressBar = document.createElement('div');
+        this.progressBar.className = 'swd-progress-bar';
+        this.progressBar.setAttribute('role', 'progressbar');
+        this.progressBar.setAttribute('aria-valuemin', '0');
+        this.progressBar.setAttribute('aria-valuemax', '100');
 
-    const { currentSlide, slides } = this.presentation.state;
-    const totalSlides = slides.length;
+        // Append bar to container
+        this.progressElement.appendChild(this.progressBar);
 
-    if (totalSlides === 0) return;
+        // Append to wrapper
+        wrapper.appendChild(this.progressElement);
 
-    // Calculate progress percentage
-    const progress = ((currentSlide + 1) / totalSlides) * 100;
+        // Create slide numbers element if configured
+        if (this.config.slideNumbers !== false) {
+            this.slideNumberElement = document.createElement('div');
+            this.slideNumberElement.className = 'swd-slide-number';
+            wrapper.appendChild(this.slideNumberElement);
+        }
 
-    // Update progress bar width
-    this.progressBar.style.width = `${progress}%`;
-
-    // Update ARIA attributes
-    this.progressBar.setAttribute('aria-valuenow', Math.round(progress));
-    this.progressBar.setAttribute('aria-valuetext', `Slide ${currentSlide + 1} of ${totalSlides}`);
-
-    // Update slide number UI
-    if (this.slideNumberElement) {
-      const format = this.config.slideNumberFormat || 'h/v';
-      let text = '';
-
-      switch (format) {
-        case 'c/t':
-        case 'h/v':
-          text = `${currentSlide + 1} / ${totalSlides}`;
-          break;
-        case 'c':
-          text = `${currentSlide + 1}`;
-          break;
-        case 'h.v':
-          text = `${currentSlide + 1}.${totalSlides}`;
-          break;
-        default:
-          text = `${currentSlide + 1} / ${totalSlides}`;
-      }
-
-      this.slideNumberElement.textContent = text;
+        // Initial update
+        this.update();
     }
-  }
 
-  /**
-   * Show progress bar
-   */
-  show() {
-    if (this.progressElement) {
-      this.progressElement.classList.remove('swd-progress-hidden');
+    /**
+     * Attach event listeners
+     */
+    attachEventListeners() {
+        // Update progress on slide change
+        this.presentation.on('afterSlideChange', () => {
+            this.update();
+        });
+
+        // Update on initialization
+        this.presentation.on('afterInit', () => {
+            this.update();
+        });
     }
-  }
 
-  /**
-   * Hide progress bar
-   */
-  hide() {
-    if (this.progressElement) {
-      this.progressElement.classList.add('swd-progress-hidden');
+    /**
+     * Update progress bar based on current slide
+     */
+    update() {
+        if (!this.progressBar) return;
+
+        const { currentSlide, slides } = this.presentation.state;
+        const totalSlides = slides.length;
+
+        if (totalSlides === 0) return;
+
+        // Calculate progress percentage
+        const progress = ((currentSlide + 1) / totalSlides) * 100;
+
+        // Update progress bar width
+        this.progressBar.style.width = `${progress}%`;
+
+        // Update ARIA attributes
+        this.progressBar.setAttribute('aria-valuenow', Math.round(progress));
+        this.progressBar.setAttribute(
+            'aria-valuetext',
+            `Slide ${currentSlide + 1} of ${totalSlides}`
+        );
+
+        // Update slide number UI
+        if (this.slideNumberElement) {
+            const format = this.config.slideNumberFormat || 'h/v';
+            let text = '';
+
+            switch (format) {
+                case 'c/t':
+                case 'h/v':
+                    text = `${currentSlide + 1} / ${totalSlides}`;
+                    break;
+                case 'c':
+                    text = `${currentSlide + 1}`;
+                    break;
+                case 'h.v':
+                    text = `${currentSlide + 1}.${totalSlides}`;
+                    break;
+                default:
+                    text = `${currentSlide + 1} / ${totalSlides}`;
+            }
+
+            this.slideNumberElement.textContent = text;
+        }
     }
-  }
 
-  /**
-   * Set progress manually (0-100)
-   * @param {number} percentage - Progress percentage
-   */
-  setProgress(percentage) {
-    if (!this.progressBar) return;
-
-    const clampedProgress = Math.max(0, Math.min(100, percentage));
-    this.progressBar.style.width = `${clampedProgress}%`;
-    this.progressBar.setAttribute('aria-valuenow', Math.round(clampedProgress));
-  }
-
-  /**
-   * Cleanup
-   */
-  destroy() {
-    if (this.progressElement && this.progressElement.parentNode) {
-      this.progressElement.parentNode.removeChild(this.progressElement);
+    /**
+     * Show progress bar
+     */
+    show() {
+        if (this.progressElement) {
+            this.progressElement.classList.remove('swd-progress-hidden');
+        }
     }
-    if (this.slideNumberElement && this.slideNumberElement.parentNode) {
-      this.slideNumberElement.parentNode.removeChild(this.slideNumberElement);
+
+    /**
+     * Hide progress bar
+     */
+    hide() {
+        if (this.progressElement) {
+            this.progressElement.classList.add('swd-progress-hidden');
+        }
     }
-    this.progressElement = null;
-    this.progressBar = null;
-    this.slideNumberElement = null;
-  }
+
+    /**
+     * Set progress manually (0-100)
+     * @param {number} percentage - Progress percentage
+     */
+    setProgress(percentage) {
+        if (!this.progressBar) return;
+
+        const clampedProgress = Math.max(0, Math.min(100, percentage));
+        this.progressBar.style.width = `${clampedProgress}%`;
+        this.progressBar.setAttribute(
+            'aria-valuenow',
+            Math.round(clampedProgress)
+        );
+    }
+
+    /**
+     * Cleanup
+     */
+    destroy() {
+        if (this.progressElement && this.progressElement.parentNode) {
+            this.progressElement.parentNode.removeChild(this.progressElement);
+        }
+        if (this.slideNumberElement && this.slideNumberElement.parentNode) {
+            this.slideNumberElement.parentNode.removeChild(
+                this.slideNumberElement
+            );
+        }
+        this.progressElement = null;
+        this.progressBar = null;
+        this.slideNumberElement = null;
+    }
 }
 
 export default Progress;

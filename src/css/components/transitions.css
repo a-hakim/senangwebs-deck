@@ -4,237 +4,249 @@
 
 /* Transition Variables */
 :root {
-  --swd-transition-speed: 500ms;
-  --swd-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --swd-transition-speed: 500ms;
+    --swd-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Enable transitions */
 .swd-transitions-enabled .swd-slide {
-  transition: all var(--swd-transition-speed) var(--swd-transition-timing);
+    transition: all var(--swd-transition-speed) var(--swd-transition-timing);
 }
 
 /* Transition speeds */
-.swd-wrapper[data-transition-speed="fast"] {
-  --swd-transition-speed: 300ms;
+.swd-wrapper[data-transition-speed='fast'] {
+    --swd-transition-speed: 300ms;
 }
 
-.swd-wrapper[data-transition-speed="normal"] {
-  --swd-transition-speed: 500ms;
+.swd-wrapper[data-transition-speed='normal'] {
+    --swd-transition-speed: 500ms;
 }
 
-.swd-wrapper[data-transition-speed="slow"] {
-  --swd-transition-speed: 800ms;
+.swd-wrapper[data-transition-speed='slow'] {
+    --swd-transition-speed: 800ms;
 }
 
 /* ===== SLIDE TRANSITION ===== */
-.swd-wrapper[data-transition="slide"] .swd-slide {
-  transition: transform var(--swd-transition-speed) var(--swd-transition-timing),
-              opacity var(--swd-transition-speed) var(--swd-transition-timing);
+.swd-wrapper[data-transition='slide'] .swd-slide {
+    transition:
+        transform var(--swd-transition-speed) var(--swd-transition-timing),
+        opacity var(--swd-transition-speed) var(--swd-transition-timing);
 }
 
 /* Slide Left (Forward) */
 .swd-slide.swd-transition-out.slide-left {
-  transform: translateX(-100%);
-  opacity: 0;
+    transform: translateX(-100%);
+    opacity: 0;
 }
 
 .swd-slide.swd-transition-in.slide-left {
-  transform: translateX(100%);
-  opacity: 0;
-  animation: slideInFromRight var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    transform: translateX(100%);
+    opacity: 0;
+    animation: slideInFromRight var(--swd-transition-speed)
+        var(--swd-transition-timing) forwards;
 }
 
 @keyframes slideInFromRight {
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* Slide Right (Backward) */
 .swd-slide.swd-transition-out.slide-right {
-  transform: translateX(100%);
-  opacity: 0;
+    transform: translateX(100%);
+    opacity: 0;
 }
 
 .swd-slide.swd-transition-in.slide-right {
-  transform: translateX(-100%);
-  opacity: 0;
-  animation: slideInFromLeft var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    transform: translateX(-100%);
+    opacity: 0;
+    animation: slideInFromLeft var(--swd-transition-speed)
+        var(--swd-transition-timing) forwards;
 }
 
 @keyframes slideInFromLeft {
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* ===== FADE TRANSITION ===== */
-.swd-wrapper[data-transition="fade"] .swd-slide {
-  transition: opacity var(--swd-transition-speed) var(--swd-transition-timing);
+.swd-wrapper[data-transition='fade'] .swd-slide {
+    transition: opacity var(--swd-transition-speed) var(--swd-transition-timing);
 }
 
 .swd-slide.swd-fade-out {
-  animation: fadeOut var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    animation: fadeOut var(--swd-transition-speed) var(--swd-transition-timing)
+        forwards;
 }
 
 .swd-slide.swd-fade-in {
-  opacity: 0;
-  z-index: 3; /* Ensure incoming slide is above the outgoing slide */
-  animation: fadeIn var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    opacity: 0;
+    z-index: 3; /* Ensure incoming slide is above the outgoing slide */
+    animation: fadeIn var(--swd-transition-speed) var(--swd-transition-timing)
+        forwards;
 }
 
 @keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeOut {
-  to {
-    opacity: 0;
-  }
+    to {
+        opacity: 0;
+    }
 }
 
 /* ===== ZOOM TRANSITION ===== */
-.swd-wrapper[data-transition="zoom"] .swd-slide {
-  transition: transform var(--swd-transition-speed) var(--swd-transition-timing),
-              opacity var(--swd-transition-speed) var(--swd-transition-timing);
+.swd-wrapper[data-transition='zoom'] .swd-slide {
+    transition:
+        transform var(--swd-transition-speed) var(--swd-transition-timing),
+        opacity var(--swd-transition-speed) var(--swd-transition-timing);
 }
 
 /* Zoom Out (old slide) */
 .swd-slide.swd-zoom-out:not(.swd-transition-in) {
-  animation: zoomToScaleDown var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    animation: zoomToScaleDown var(--swd-transition-speed)
+        var(--swd-transition-timing) forwards;
 }
 
 @keyframes zoomToScaleDown {
-  to {
-    transform: scale(0.8);
-    opacity: 0;
-  }
+    to {
+        transform: scale(0.8);
+        opacity: 0;
+    }
 }
 
 /* Zoom In (new slide - forward) */
 .swd-slide.swd-zoom-in {
-  transform: scale(1.2);
-  opacity: 0;
-  animation: zoomIn var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    transform: scale(1.2);
+    opacity: 0;
+    animation: zoomIn var(--swd-transition-speed) var(--swd-transition-timing)
+        forwards;
 }
 
 @keyframes zoomIn {
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* Zoom Out (new slide - backward) */
 .swd-slide.swd-zoom-out.swd-transition-in {
-  transform: scale(0.8);
-  opacity: 0;
-  animation: zoomOut var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    transform: scale(0.8);
+    opacity: 0;
+    animation: zoomOut var(--swd-transition-speed) var(--swd-transition-timing)
+        forwards;
 }
 
 @keyframes zoomOut {
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* ===== FLIP TRANSITION ===== */
-.swd-wrapper[data-transition="flip"] .swd-slide {
-  transition: transform var(--swd-transition-speed) var(--swd-transition-timing),
-              opacity var(--swd-transition-speed) var(--swd-transition-timing);
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
+.swd-wrapper[data-transition='flip'] .swd-slide {
+    transition:
+        transform var(--swd-transition-speed) var(--swd-transition-timing),
+        opacity var(--swd-transition-speed) var(--swd-transition-timing);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
 /* Flip Left (Forward) */
 .swd-slide.swd-flip-out.flip-left {
-  transform: rotateY(-90deg);
-  opacity: 0;
+    transform: rotateY(-90deg);
+    opacity: 0;
 }
 
 .swd-slide.swd-flip-in.flip-left {
-  transform: rotateY(90deg);
-  opacity: 0;
-  animation: flipInFromRight var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    transform: rotateY(90deg);
+    opacity: 0;
+    animation: flipInFromRight var(--swd-transition-speed)
+        var(--swd-transition-timing) forwards;
 }
 
 @keyframes flipInFromRight {
-  to {
-    transform: rotateY(0);
-    opacity: 1;
-  }
+    to {
+        transform: rotateY(0);
+        opacity: 1;
+    }
 }
 
 /* Flip Right (Backward) */
 .swd-slide.swd-flip-out.flip-right {
-  transform: rotateY(90deg);
-  opacity: 0;
+    transform: rotateY(90deg);
+    opacity: 0;
 }
 
 .swd-slide.swd-flip-in.flip-right {
-  transform: rotateY(-90deg);
-  opacity: 0;
-  animation: flipInFromLeft var(--swd-transition-speed) var(--swd-transition-timing) forwards;
+    transform: rotateY(-90deg);
+    opacity: 0;
+    animation: flipInFromLeft var(--swd-transition-speed)
+        var(--swd-transition-timing) forwards;
 }
 
 @keyframes flipInFromLeft {
-  to {
-    transform: rotateY(0);
-    opacity: 1;
-  }
+    to {
+        transform: rotateY(0);
+        opacity: 1;
+    }
 }
 
 /* ===== NO TRANSITION ===== */
-.swd-wrapper[data-transition="none"] .swd-slide {
-  transition: none;
+.swd-wrapper[data-transition='none'] .swd-slide {
+    transition: none;
 }
 
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
-  .swd-wrapper .swd-slide,
-  .swd-transitions-enabled .swd-slide {
-    transition: none !important;
-    animation: none !important;
-  }
-  
-  .swd-wrapper[data-transition] .swd-slide {
-    transition: none !important;
-  }
+    .swd-wrapper .swd-slide,
+    .swd-transitions-enabled .swd-slide {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    .swd-wrapper[data-transition] .swd-slide {
+        transition: none !important;
+    }
 }
 
 /* ===== MOBILE OPTIMIZATIONS ===== */
 @media (max-width: 768px) {
-  /* Faster transitions on mobile */
-  :root {
-    --swd-transition-speed: 350ms;
-  }
-  
-  /* Disable complex transitions on low-end devices */
-  .swd-wrapper[data-transition="flip"] .swd-slide,
-  .swd-wrapper[data-transition="zoom"] .swd-slide {
-    transform-style: flat;
-  }
+    /* Faster transitions on mobile */
+    :root {
+        --swd-transition-speed: 350ms;
+    }
+
+    /* Disable complex transitions on low-end devices */
+    .swd-wrapper[data-transition='flip'] .swd-slide,
+    .swd-wrapper[data-transition='zoom'] .swd-slide {
+        transform-style: flat;
+    }
 }
 
 /* ===== TRANSITION PERFORMANCE ===== */
 .swd-slide {
-  /* Use GPU acceleration */
-  will-change: transform, opacity;
-  
-  /* Force GPU layer */
-  transform: translateZ(0);
-  
-  /* Optimize rendering */
-  backface-visibility: hidden;
-  perspective: 1000px;
+    /* Use GPU acceleration */
+    will-change: transform, opacity;
+
+    /* Force GPU layer */
+    transform: translateZ(0);
+
+    /* Optimize rendering */
+    backface-visibility: hidden;
+    perspective: 1000px;
 }
 
 /* Remove will-change when not transitioning */
 .swd-slide.swd-slide-active:not(.swd-transition-in):not(.swd-transition-out) {
-  will-change: auto;
+    will-change: auto;
 }

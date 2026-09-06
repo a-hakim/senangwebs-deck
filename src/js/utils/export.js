@@ -7,79 +7,84 @@
  * Export utility class
  */
 class ExportUtil {
-  constructor(presentation, config = {}) {
-    this.presentation = presentation;
-    this.config = config;
-  }
-
-  /**
-   * Export presentation to PDF
-   * Uses browser's print functionality
-   */
-  toPDF() {
-    if (!this.config.export || this.config.export.pdf === false) {
-      console.warn('PDF export is disabled');
-      return;
+    constructor(presentation, config = {}) {
+        this.presentation = presentation;
+        this.config = config;
     }
 
-    // Store current state
-    const { currentSlide } = this.presentation.state;
+    /**
+     * Export presentation to PDF
+     * Uses browser's print functionality
+     */
+    toPDF() {
+        if (!this.config.export || this.config.export.pdf === false) {
+            console.warn('PDF export is disabled');
+            return;
+        }
 
-    // Add print class to container
-    this.presentation.container.classList.add('swd-print-mode');
+        // Store current state
+        const { currentSlide } = this.presentation.state;
 
-    // Show all slides
-    const slides = this.presentation.container.querySelectorAll('.swd-slide');
-    slides.forEach((slide) => {
-      slide.classList.add('swd-print-slide');
-      slide.classList.remove('past', 'future', 'active');
-    });
+        // Add print class to container
+        this.presentation.container.classList.add('swd-print-mode');
 
-    // Emit before export event
-    this.presentation.emit('beforeExportPDF');
-
-    // Trigger print dialog
-    setTimeout(() => {
-      window.print();
-
-      // Restore state after print dialog closes
-      setTimeout(() => {
-        this.presentation.container.classList.remove('swd-print-mode');
+        // Show all slides
+        const slides =
+            this.presentation.container.querySelectorAll('.swd-slide');
         slides.forEach((slide) => {
-          slide.classList.remove('swd-print-slide');
+            slide.classList.add('swd-print-slide');
+            slide.classList.remove('past', 'future', 'active');
         });
 
-        // Restore current slide
-        this.presentation.navigation.updateSlideDisplay(currentSlide);
+        // Emit before export event
+        this.presentation.emit('beforeExportPDF');
 
-        this.presentation.emit('afterExportPDF');
-      }, 100);
-    }, 100);
-  }
+        // Trigger print dialog
+        setTimeout(() => {
+            window.print();
 
-  /**
-   * Export presentation to standalone HTML
-   * @returns {Promise<string>} - HTML content
-   */
-  async toHTML() {
-    if (!this.config.export || this.config.export.html === false) {
-      console.warn('HTML export is disabled');
-      return null;
+            // Restore state after print dialog closes
+            setTimeout(() => {
+                this.presentation.container.classList.remove('swd-print-mode');
+                slides.forEach((slide) => {
+                    slide.classList.remove('swd-print-slide');
+                });
+
+                // Restore current slide
+                this.presentation.navigation.updateSlideDisplay(currentSlide);
+
+                this.presentation.emit('afterExportPDF');
+            }, 100);
+        }, 100);
     }
 
-    this.presentation.emit('beforeExportHTML');
+    /**
+     * Export presentation to standalone HTML
+     * @returns {Promise<string>} - HTML content
+     */
+    async toHTML() {
+        if (!this.config.export || this.config.export.html === false) {
+            console.warn('HTML export is disabled');
+            return null;
+        }
 
-    // Get container HTML
-    const containerHTML = this.presentation.container.outerHTML;
+        this.presentation.emit('beforeExportHTML');
 
-    // Get all CSS
-    const styles = this.getInlineStyles();
+        // Get container HTML; strip data-swd-id so the embedded library's
+        // autoInit() cannot find it (prevents double initialization)
+        const containerHTML = this.presentation.container.outerHTML.replace(
+            /\s*data-swd-id=(["'])[^"']*\1/,
+            ''
+        );
 
-    // Get SWD script (simplified version)
-    const script = await this.getInlineScript();
+        // Get all CSS
+        const styles = this.getInlineStyles();
 
-    // Build complete HTML
-    const html = `<!DOCTYPE html>
+        // Get SWD script (simplified version)
+        const script = await this.getInlineScript();
+
+        // Build complete HTML
+        const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -95,209 +100,205 @@ ${script}
 </body>
 </html>`;
 
-    this.presentation.emit('afterExportHTML', { html });
+        this.presentation.emit('afterExportHTML', { html });
 
-    return html;
-  }
-
-  /**
-   * Download HTML file
-   */
-  async downloadHTML() {
-    const html = await this.toHTML();
-    if (!html) return;
-
-    const blob = new Blob([html], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'presentation.html';
-    link.click();
-
-    URL.revokeObjectURL(url);
-  }
-
-  /**
-   * Export presentation data to JSON
-   * @returns {Object} - JSON data
-   */
-  toJSON() {
-    if (!this.config.export || this.config.export.json === false) {
-      console.warn('JSON export is disabled');
-      return null;
+        return html;
     }
 
-    this.presentation.emit('beforeExportJSON');
+    /**
+     * Download HTML file
+     */
+    async downloadHTML() {
+        const html = await this.toHTML();
+        if (!html) return;
 
-    const data = {
-      config: {
-        theme: this.config.theme,
-        transition: this.config.transition,
-        transitionSpeed: this.config.transitionSpeed,
-        aspectRatio: this.config.aspectRatio,
-      },
-      slides: this.presentation.state.slides.map((slide) => ({
-        index: slide.index,
-        layout: slide.layout,
-        background: slide.background,
-        overlay: slide.overlay,
-        content: slide.content,
-        attributes: slide.attributes,
-      })),
-      metadata: {
-        totalSlides: this.presentation.state.slides.length,
-        exportDate: new Date().toISOString(),
-        version: '1.0.0',
-      },
-    };
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
 
-    this.presentation.emit('afterExportJSON', { data });
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'presentation.html';
+        link.click();
 
-    return data;
-  }
+        // Defer revoking so the download has time to start
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
 
-  /**
-   * Download JSON file
-   */
-  downloadJSON() {
-    const data = this.toJSON();
-    if (!data) return;
+    /**
+     * Export presentation data to JSON
+     * @returns {Object} - JSON data
+     */
+    toJSON() {
+        if (!this.config.export || this.config.export.json === false) {
+            console.warn('JSON export is disabled');
+            return null;
+        }
 
-    const json = JSON.stringify(data, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
+        this.presentation.emit('beforeExportJSON');
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'presentation.json';
-    link.click();
+        const data = {
+            config: {
+                theme: this.config.theme,
+                transition: this.config.transition,
+                transitionSpeed: this.config.transitionSpeed,
+                aspectRatio: this.config.aspectRatio,
+            },
+            slides: this.presentation.state.slides.map((slide) => {
+                const exported = {
+                    index: slide.index,
+                    layout: slide.layout,
+                    background: slide.background,
+                    overlay: slide.overlay,
+                    content: slide.content,
+                    attributes: slide.attributes,
+                };
 
-    URL.revokeObjectURL(url);
-  }
+                // Preserve column/quote/image data so JSON export → re-import
+                // round-trips without losing layout information
+                if (slide.left !== undefined) exported.left = slide.left;
+                if (slide.right !== undefined) exported.right = slide.right;
+                if (slide.columns !== undefined) {
+                    [exported.col1, exported.col2, exported.col3] =
+                        slide.columns;
+                }
+                if (slide.quote !== undefined) exported.quote = slide.quote;
+                if (slide.author !== undefined) exported.author = slide.author;
+                if (slide.image !== undefined) exported.image = slide.image;
+                if (slide.imageAlt !== undefined)
+                    exported.imageAlt = slide.imageAlt;
+                if (slide.textContent !== undefined) {
+                    exported.textContent = slide.textContent;
+                }
+                if (slide.imageContent !== undefined) {
+                    exported.imageContent = slide.imageContent;
+                }
 
-  /**
-   * Get inline styles from stylesheets
-   * @returns {string} - CSS content
-   */
-  getInlineStyles() {
-    let styles = '';
+                return exported;
+            }),
+            metadata: {
+                totalSlides: this.presentation.state.slides.length,
+                exportDate: new Date().toISOString(),
+                version: '1.0.0',
+            },
+        };
 
-    try {
-      Array.from(document.styleSheets).forEach((sheet) => {
+        this.presentation.emit('afterExportJSON', { data });
+
+        return data;
+    }
+
+    /**
+     * Download JSON file
+     */
+    downloadJSON() {
+        const data = this.toJSON();
+        if (!data) return;
+
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'presentation.json';
+        link.click();
+
+        // Defer revoking so the download has time to start
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    /**
+     * Get inline styles from stylesheets
+     * @returns {string} - CSS content
+     */
+    getInlineStyles() {
+        let styles = '';
+
         try {
-          // Inline rules if they belong to swd.css or same-origin styles
-          if (!sheet.href || sheet.href.includes('swd.css') || sheet.href.startsWith(window.location.origin)) {
-            const rules = Array.from(sheet.cssRules || sheet.rules);
-            rules.forEach((rule) => {
-              styles += `${rule.cssText}\n`;
+            Array.from(document.styleSheets).forEach((sheet) => {
+                try {
+                    // Inline rules if they belong to swd.css or same-origin styles
+                    if (
+                        !sheet.href ||
+                        sheet.href.includes('swd.css') ||
+                        sheet.href.startsWith(window.location.origin)
+                    ) {
+                        const rules = Array.from(sheet.cssRules || sheet.rules);
+                        rules.forEach((rule) => {
+                            styles += `${rule.cssText}\n`;
+                        });
+                    }
+                } catch (e) {
+                    // Silent catch for cross-origin sheet access constraints
+                }
             });
-          }
         } catch (e) {
-          // Silent catch for cross-origin sheet access constraints
+            console.warn('Error reading stylesheet rules:', e);
         }
-      });
-    } catch (e) {
-      console.warn('Error reading stylesheet rules:', e);
+
+        // Get inline style tags
+        const styleTags = document.querySelectorAll('style');
+        styleTags.forEach((style) => {
+            styles += `${style.textContent}\n`;
+        });
+
+        return styles;
     }
 
-    // Get inline style tags
-    const styleTags = document.querySelectorAll('style');
-    styleTags.forEach((style) => {
-      styles += `${style.textContent}\n`;
-    });
+    /**
+     * Get inline script asynchronously
+     * @returns {Promise<string>} - Script tag string
+     */
+    async getInlineScript() {
+        const { source } = this.config;
+        const isStatic = !source || source === 'html';
+        const exportConfig = { ...this.config, autoInit: false };
+        const config = JSON.stringify(exportConfig, (key, value) =>
+            typeof value === 'function' ? undefined : value
+        );
+        let scriptContent = '';
 
-    return styles;
-  }
+        const swdScripts = Array.from(
+            document.querySelectorAll('script')
+        ).filter((script) => script.src && script.src.includes('swd.js'));
 
-  /**
-   * Get inline script asynchronously
-   * @returns {Promise<string>} - Script tag string
-   */
-  async getInlineScript() {
-    const config = JSON.stringify(this.config, null, 2);
-    let scriptContent = '';
+        const responses = await Promise.all(
+            swdScripts.map(async (script) => {
+                try {
+                    const response = await fetch(script.src);
+                    return response.ok ? await response.text() : '';
+                } catch (e) {
+                    // Fail gracefully to fallback
+                    return '';
+                }
+            })
+        );
 
-    const scripts = document.querySelectorAll('script');
-    for (const script of Array.from(scripts)) {
-      if (script.src && script.src.includes('swd.js')) {
-        try {
-          const response = await fetch(script.src);
-          if (response.ok) {
-            scriptContent = await response.text();
-            break;
-          }
-        } catch (e) {
-          // Fail gracefully to fallback
-        }
-      }
-    }
+        scriptContent = responses.find((content) => content) || '';
 
-    if (!scriptContent) {
-      scriptContent = `// SWD Library Fallback (Static view only)
+        if (!scriptContent) {
+            scriptContent = `// SWD Library Fallback (Static view only)
 console.warn('SWD library javascript was not inlined');`;
-    }
+        }
 
-    return `<script>
+        const initCode = isStatic
+            ? `// Static snapshot export: slides are already rendered; no re-initialization`
+            : `const deck = new SWD(container, ${config});
+    deck.init().catch(function (e) { console.error('SWD export init failed:', e); });`;
+
+        return `<script>
 ${scriptContent}
 (function() {
-  const container = document.querySelector('[data-swd-id]') || document.body.firstElementChild;
+  // data-swd-id is stripped from the exported container to prevent the
+  // embedded library's autoInit() from creating a duplicate instance
+  const wrapper = document.querySelector('.swd-wrapper');
+  const container = wrapper ? wrapper.parentElement : null;
   if (container && typeof SWD !== 'undefined') {
-    new SWD(container, ${config});
+    ${initCode}
   }
 })();
 </script>`;
-  }
-
-  /**
-   * Create export UI (optional helper)
-   * @returns {HTMLElement} - Export button container
-   */
-  createExportUI() {
-    const container = document.createElement('div');
-    container.className = 'swd-export-ui';
-    container.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      display: flex;
-      gap: 10px;
-      z-index: 1000;
-    `;
-
-    const buttonStyle = `
-      padding: 10px 20px;
-      background: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-    `;
-
-    // PDF export button
-    const pdfBtn = document.createElement('button');
-    pdfBtn.textContent = 'Export to PDF';
-    pdfBtn.style.cssText = buttonStyle;
-    pdfBtn.onclick = () => this.toPDF();
-    container.appendChild(pdfBtn);
-
-    // HTML export button
-    const htmlBtn = document.createElement('button');
-    htmlBtn.textContent = 'Export to HTML';
-    htmlBtn.style.cssText = buttonStyle;
-    htmlBtn.onclick = () => this.downloadHTML();
-    container.appendChild(htmlBtn);
-
-    // JSON export button
-    const jsonBtn = document.createElement('button');
-    jsonBtn.textContent = 'Export to JSON';
-    jsonBtn.style.cssText = buttonStyle;
-    jsonBtn.onclick = () => this.downloadJSON();
-    container.appendChild(jsonBtn);
-
-    return container;
-  }
+    }
 }
 
 export default ExportUtil;

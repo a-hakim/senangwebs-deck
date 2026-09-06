@@ -7,119 +7,119 @@
  * Default configuration for SWD presentations
  */
 export const DefaultConfig = {
-  // Source type: 'html', 'markdown', 'json'
-  source: 'html',
+    // Source type: 'html', 'markdown', 'json'
+    source: 'html',
 
-  // Data for JSON source
-  data: null,
+    // Data for JSON source
+    data: null,
 
-  // Markdown URL for external loading
-  markdownUrl: null,
+    // Markdown URL for external loading
+    markdownUrl: null,
 
-  // JSON URL for external loading
-  jsonUrl: null,
+    // JSON URL for external loading
+    jsonUrl: null,
 
-  // Theme
-  theme: 'light',
+    // Theme
+    theme: 'light',
 
-  // Slide transition
-  transition: 'slide', // 'slide', 'fade', 'zoom', 'flip', 'none'
+    // Slide transition
+    transition: 'slide', // 'slide', 'fade', 'zoom', 'flip', 'none'
 
-  // Transition speed
-  transitionSpeed: 'normal', // 'fast', 'normal', 'slow', or milliseconds
+    // Transition speed
+    transitionSpeed: 'normal', // 'fast', 'normal', 'slow', or milliseconds
 
-  // Slide aspect ratio
-  aspectRatio: '16:9', // '16:9', '4:3', '16:10'
+    // Slide aspect ratio (null = fill the container; '16:9', '4:3', '16:10')
+    aspectRatio: null,
 
-  // Auto-slide interval (ms, 0 = disabled)
-  autoSlide: 0,
+    // Auto-slide interval (ms, 0 = disabled)
+    autoSlide: 0,
 
-  // Pause auto-slide on hover
-  autoSlideStoppable: true,
+    // Pause auto-slide on hover
+    autoSlideStoppable: true,
 
-  // Loop slides
-  loop: false,
+    // Loop slides
+    loop: false,
 
-  // Enable keyboard navigation
-  keyboard: true,
+    // Enable keyboard navigation
+    keyboard: true,
 
-  // Enable touch/swipe navigation
-  touch: true,
+    // Enable touch/swipe navigation
+    touch: true,
 
-  // Enable mouse wheel navigation
-  mouseWheel: false,
+    // Enable mouse wheel navigation
+    mouseWheel: false,
 
-  // Show navigation controls
-  controls: true,
+    // Show navigation controls
+    controls: true,
 
-  // Control arrow position
-  controlsPosition: 'bottom-right', // 'bottom-right', 'bottom-left', 'edges'
+    // Control arrow position
+    controlsPosition: 'bottom-right', // 'bottom-right', 'bottom-left', 'edges'
 
-  // Show progress bar
-  progress: true,
+    // Show progress bar
+    progress: true,
 
-  // Progress bar position
-  progressPosition: 'bottom', // 'top', 'bottom'
+    // Progress bar position
+    progressPosition: 'bottom', // 'top', 'bottom'
 
-  // Show slide numbers
-  slideNumbers: true,
+    // Show slide numbers
+    slideNumbers: true,
 
-  // Slide number format
-  slideNumberFormat: 'h/v', // 'h/v', 'h.v', 'c/t', 'c'
+    // Slide number format
+    slideNumberFormat: 'h/v', // 'h/v', 'h.v', 'c/t', 'c'
 
-  // Enable overview mode
-  overview: true,
+    // Enable overview mode
+    overview: true,
 
-  // Enable fullscreen
-  fullscreen: true,
+    // Enable fullscreen
+    fullscreen: true,
 
-  // Enable URL hash navigation
-  hash: true,
+    // Enable URL hash navigation
+    hash: true,
 
-  // Enable history API
-  history: false,
+    // Enable history API
+    history: false,
 
-  // RTL mode
-  rtl: false,
+    // RTL mode
+    rtl: false,
 
-  // Fragment animations
-  fragments: true,
+    // Fragment animations
+    fragments: true,
 
-  // Fragment animation style
-  fragmentStyle: 'fade-in', // 'fade-in', 'slide-in', 'zoom-in'
+    // Fragment animation style
+    fragmentStyle: 'fade-in', // 'fade-in', 'slide-in', 'zoom-in'
 
-  // Parallax background
-  parallax: false,
+    // Parallax background
+    parallax: false,
 
-  // Auto-initialize
-  autoInit: true,
+    // Auto-initialize
+    autoInit: true,
 
-  // Auto-play options (for data attributes mapping)
-  autoplay: false,
-  autoplayDelay: 3000,
+    // Auto-play options (for data attributes mapping)
+    autoplay: false,
+    autoplayDelay: 3000,
 
-  // Plugins
-  plugins: [],
+    // Plugins
+    plugins: [],
 
-  // Custom keyboard shortcuts
-  keyboardShortcuts: {},
+    // Custom keyboard shortcuts
+    keyboardShortcuts: {},
 
-  // Accessibility
-  a11y: {
-    enabled: true,
-    announceSlideChanges: true,
-    focusVisible: true,
-  },
+    // Accessibility
+    a11y: {
+        enabled: true,
+        announceSlideChanges: true,
+        focusVisible: true,
+    },
 
-  // Export options
-  export: {
-    pdf: true,
-    html: true,
-    json: true,
-  },
+    // Export options
+    export: {
+        pdf: true,
+        html: true,
+        json: true,
+    },
 
-  // Development mode
-  dev: false,
+    // Development mode
+    dev: false,
 };
 
 /**
@@ -128,61 +128,67 @@ export const DefaultConfig = {
  * @throws {Error} - If configuration is invalid
  */
 export function validateConfig(config) {
-  if (!config || typeof config !== 'object') {
-    throw new Error('Configuration must be an object');
-  }
+    if (!config || typeof config !== 'object') {
+        throw new Error('Configuration must be an object');
+    }
 
-  // Validate source type
-  if (config.source && !['html', 'markdown', 'json'].includes(config.source)) {
-    throw new Error(
-      'Invalid source type. Must be "html", "markdown", or "json"'
-    );
-  }
+    // Validate source type
+    if (
+        config.source &&
+        !['html', 'markdown', 'json'].includes(config.source)
+    ) {
+        throw new Error(
+            'Invalid source type. Must be "html", "markdown", or "json"'
+        );
+    }
 
-  // Validate transition
-  const validTransitions = ['slide', 'fade', 'zoom', 'flip', 'none'];
-  if (config.transition && !validTransitions.includes(config.transition)) {
-    throw new Error(
-      `Invalid transition. Must be one of: ${validTransitions.join(', ')}`
-    );
-  }
+    // Validate transition
+    const validTransitions = ['slide', 'fade', 'zoom', 'flip', 'none'];
+    if (config.transition && !validTransitions.includes(config.transition)) {
+        throw new Error(
+            `Invalid transition. Must be one of: ${validTransitions.join(', ')}`
+        );
+    }
 
-  // Validate transition speed
-  const validSpeeds = ['fast', 'normal', 'slow'];
-  const isNamedSpeed =
-    typeof config.transitionSpeed === 'string' &&
-    validSpeeds.includes(config.transitionSpeed);
-  const isNumericSpeed =
-    typeof config.transitionSpeed === 'number' &&
-    Number.isFinite(config.transitionSpeed) &&
-    config.transitionSpeed >= 0;
+    // Validate transition speed
+    const validSpeeds = ['fast', 'normal', 'slow'];
+    const isNamedSpeed =
+        typeof config.transitionSpeed === 'string' &&
+        validSpeeds.includes(config.transitionSpeed);
+    const isNumericSpeed =
+        typeof config.transitionSpeed === 'number' &&
+        Number.isFinite(config.transitionSpeed) &&
+        config.transitionSpeed >= 0;
 
-  if (
-    config.transitionSpeed !== undefined &&
-    config.transitionSpeed !== null &&
-    config.transitionSpeed !== '' &&
-    !isNamedSpeed &&
-    !isNumericSpeed
-  ) {
-    throw new Error(
-      `Invalid transition speed. Must be one of: ${validSpeeds.join(', ')}, or a non-negative number of milliseconds`
-    );
-  }
+    if (
+        config.transitionSpeed !== undefined &&
+        config.transitionSpeed !== null &&
+        config.transitionSpeed !== '' &&
+        !isNamedSpeed &&
+        !isNumericSpeed
+    ) {
+        throw new Error(
+            `Invalid transition speed. Must be one of: ${validSpeeds.join(', ')}, or a non-negative number of milliseconds`
+        );
+    }
 
-  // Validate aspect ratio
-  const validRatios = ['16:9', '4:3', '16:10'];
-  if (config.aspectRatio && !validRatios.includes(config.aspectRatio)) {
-    throw new Error(
-      `Invalid aspect ratio. Must be one of: ${validRatios.join(', ')}`
-    );
-  }
+    // Validate aspect ratio
+    const validRatios = ['16:9', '4:3', '16:10'];
+    if (config.aspectRatio && !validRatios.includes(config.aspectRatio)) {
+        throw new Error(
+            `Invalid aspect ratio. Must be one of: ${validRatios.join(', ')}`
+        );
+    }
 
-  // Validate autoSlide
-  if (config.autoSlide !== undefined && typeof config.autoSlide !== 'number') {
-    throw new Error('autoSlide must be a number');
-  }
+    // Validate autoSlide
+    if (
+        config.autoSlide !== undefined &&
+        typeof config.autoSlide !== 'number'
+    ) {
+        throw new Error('autoSlide must be a number');
+    }
 
-  return true;
+    return true;
 }
 
 /**
@@ -192,21 +198,21 @@ export function validateConfig(config) {
  * @returns {Object} - Merged object
  */
 function deepMerge(target, source) {
-  const result = { ...target };
+    const result = { ...target };
 
-  Object.keys(source).forEach((key) => {
-    if (
-      source[key] &&
-      typeof source[key] === 'object' &&
-      !Array.isArray(source[key])
-    ) {
-      result[key] = deepMerge(result[key] || {}, source[key]);
-    } else {
-      result[key] = source[key];
-    }
-  });
+    Object.keys(source).forEach((key) => {
+        if (
+            source[key] &&
+            typeof source[key] === 'object' &&
+            !Array.isArray(source[key])
+        ) {
+            result[key] = deepMerge(result[key] || {}, source[key]);
+        } else {
+            result[key] = source[key];
+        }
+    });
 
-  return result;
+    return result;
 }
 
 /**
@@ -216,7 +222,7 @@ function deepMerge(target, source) {
  * @returns {Object} - Merged configuration
  */
 export function mergeConfig(defaults, userConfig = {}) {
-  const merged = deepMerge(defaults, userConfig);
-  validateConfig(merged);
-  return merged;
+    const merged = deepMerge(defaults, userConfig);
+    validateConfig(merged);
+    return merged;
 }

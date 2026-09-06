@@ -15,14 +15,14 @@ import imageLeft from './image-left.js';
 import fullImage from './full-image.js';
 
 export default {
-  default: defaultLayout,
-  cover,
-  center,
-  'two-cols': twoCols,
-  'three-cols': threeCols,
-  quote,
-  section,
-  'image-right': imageRight,
-  'image-left': imageLeft,
-  'full-image': fullImage,
+    default: defaultLayout,
+    cover,
+    center,
+    'two-cols': twoCols,
+    'three-cols': threeCols,
+    quote,
+    section,
+    'image-right': imageRight,
+    'image-left': imageLeft,
+    'full-image': fullImage,
 };

@@ -83,9 +83,9 @@ const deck = new SWD('#presentation', {
 
 #### `aspectRatio`
 - **Type:** `string`
-- **Default:** `'16:9'`
-- **Values:** `'16:9'`, `'4:3'`, `'16:10'`
-- **Description:** Slide aspect ratio
+- **Default:** `null`
+- **Values:** `null` (fill the container), `'16:9'`, `'4:3'`, `'16:10'`
+- **Description:** Slide aspect ratio. When set, slides are letterboxed inside the container at the chosen ratio
 
 #### `parallax`
 - **Type:** `boolean`
@@ -129,7 +129,7 @@ const deck = new SWD('#presentation', {
 #### `slideNumberFormat`
 - **Type:** `string`
 - **Default:** `'h/v'`
-- **Values:** `'h/v'` (horizontal/vertical), `'h.v'`, `'c/t'` (current/total), `'c'` (current only)
+- **Values:** `'h/v'` or `'c/t'` (current / total), `'h.v'` (current.total), `'c'` (current only)
 - **Description:** Format of the slide numbers
 
 ### Navigation Options
@@ -445,6 +445,19 @@ Clean up and destroy the presentation instance, restoring the container and remo
 deck.destroy();
 ```
 
+#### `reload(options)`
+Re-parse and re-render the presentation, optionally applying configuration updates. Restores the original container markup first.
+
+**Parameters:**
+- `options` (Object, optional) - Configuration updates merged into the current config
+
+**Returns:** `Promise<void>`
+
+```javascript
+await deck.reload();
+await deck.reload({ transition: 'fade' });
+```
+
 ## Events
 
 Listen to events using the custom `EventEmitter` methods:
@@ -639,9 +652,7 @@ Full-screen title slide.
 
 **Markdown Example:**
 ```markdown
----
-layout: cover
----
+<!-- layout: cover -->
 
 # Title
 ## Subtitle
@@ -676,14 +687,12 @@ Split content into left and right columns.
 
 **Markdown Example:**
 ```markdown
----
-layout: two-cols
----
+<!-- layout: two-cols -->
 
 ## Left Side
 Content here
 
-::right::
+<!-- column -->
 
 ## Right Side
 Content here
@@ -697,17 +706,16 @@ Three equal-width columns.
 
 **Markdown Example:**
 ```markdown
----
-layout: three-cols
----
+<!-- layout: three-cols -->
 
-::col-1::
 Column 1 content
 
-::col-2::
+<!-- column -->
+
 Column 2 content
 
-::col-3::
+<!-- column -->
+
 Column 3 content
 ```
 
@@ -733,10 +741,10 @@ Available themes:
 - `forest` - Calm natural palette for grounded content
 - `mono` - High-contrast monochrome for technical decks
 
-Change theme dynamically:
+Themes are set at initialization and cannot be changed dynamically:
 
 ```javascript
-deck.configure({ theme: 'dark' });
+const deck = new SWD('#presentation', { theme: 'dark' });
 ```
 
 ## Data Formats
@@ -756,10 +764,8 @@ deck.configure({ theme: 'dark' });
 ### Markdown Format
 
 ```markdown
----
-layout: cover
-background: gradient-blue
----
+<!-- layout: cover -->
+<!-- background: gradient-blue -->
 
 # Title
 ```
@@ -787,7 +793,7 @@ const myPlugin = {
   init(deck) {
     console.log('Plugin initialized');
     
-    deck.on('slideChanged', (data) => {
+    deck.on('afterSlideChange', (data) => {
       // Custom logic
     });
   }

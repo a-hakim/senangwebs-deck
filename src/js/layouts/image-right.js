@@ -4,49 +4,54 @@
  */
 
 const imageRightLayout = {
-  /**
-   * Render image-right layout
-   * @param {Object} slideData - Slide data
-   * @returns {HTMLElement} - Rendered content
-   */
-  render(slideData) {
-    const content = document.createElement('div');
-    content.className = 'swd-slide-content swd-layout-image-right';
+    /**
+     * Render image-right layout
+     * @param {Object} slideData - Slide data
+     * @returns {HTMLElement} - Rendered content
+     */
+    render(slideData) {
+        const content = document.createElement('div');
+        content.className = 'swd-slide-content swd-layout-image-right';
 
-    const textCol = document.createElement('div');
-    textCol.className = 'swd-col swd-col-text';
+        const textCol = document.createElement('div');
+        textCol.className = 'swd-col swd-col-text';
 
-    const imageCol = document.createElement('div');
-    imageCol.className = 'swd-col swd-col-image';
+        const imageCol = document.createElement('div');
+        imageCol.className = 'swd-col swd-col-image';
 
-    // Check if image and text are provided separately
-    if (slideData.image) {
-      textCol.innerHTML = slideData.content || '';
+        // Check if image and text are provided separately
+        if (slideData.imageContent) {
+            // Image column markup provided via [data-swd-image] (HTML source)
+            textCol.innerHTML =
+                slideData.textContent || slideData.content || '';
+            imageCol.innerHTML = slideData.imageContent;
+        } else if (slideData.image) {
+            textCol.innerHTML = slideData.content || '';
 
-      const img = document.createElement('img');
-      img.src = slideData.image;
-      img.alt = slideData.imageAlt || '';
-      imageCol.appendChild(img);
-    } else {
-      // Parse content for image tag
-      const contentStr = slideData.content || '';
-      const imgMatch = contentStr.match(/<img[^>]+>/);
+            const img = document.createElement('img');
+            img.src = slideData.image;
+            img.alt = slideData.imageAlt || '';
+            imageCol.appendChild(img);
+        } else {
+            // Parse content for image tag
+            const contentStr = slideData.content || '';
+            const imgMatch = contentStr.match(/<img[^>]+>/);
 
-      if (imgMatch) {
-        const [imgTag] = imgMatch;
-        const textContent = contentStr.replace(imgTag, '');
-        textCol.innerHTML = textContent;
-        imageCol.innerHTML = imgTag;
-      } else {
-        textCol.innerHTML = contentStr;
-      }
-    }
+            if (imgMatch) {
+                const [imgTag] = imgMatch;
+                const textContent = contentStr.replace(imgTag, '');
+                textCol.innerHTML = textContent;
+                imageCol.innerHTML = imgTag;
+            } else {
+                textCol.innerHTML = contentStr;
+            }
+        }
 
-    content.appendChild(textCol);
-    content.appendChild(imageCol);
+        content.appendChild(textCol);
+        content.appendChild(imageCol);
 
-    return content;
-  },
+        return content;
+    },
 };
 
 export default imageRightLayout;

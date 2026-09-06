@@ -3,29 +3,29 @@
  */
 
 .swd-layout-two-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  padding: 3rem;
-  align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    padding: 3rem;
+    align-items: center;
 }
 
 .swd-layout-two-cols .swd-col {
-  min-width: 0;
+    min-width: 0;
 }
 
 .swd-layout-two-cols .swd-col-left {
-  text-align: left;
+    text-align: left;
 }
 
 .swd-layout-two-cols .swd-col-right {
-  text-align: left;
+    text-align: left;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .swd-layout-two-cols {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
+    .swd-layout-two-cols {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 }
